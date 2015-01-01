@@ -21,4 +21,6 @@ void FreeLinkList(LinkList* pList);
 int  AddNode(LinkList* pList, void *pData);
 int  AddString(LinkList* pList, char* str);
 
+
+
 #endif
