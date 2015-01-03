@@ -11,6 +11,10 @@ int IsStringFloat(char* str);
 int IsStringWhitespace(char* str);
 int IsStringIdent(char* str);
 
+void ExitOnError(char* errorMessage);
+void Exit();
+void ShutDown();
+
 typedef struct _Op
 {
 	int iType;
@@ -51,8 +55,6 @@ typedef struct _FuncNode
 	int iParamCount;
 	int iLocalDataSize;
 };
-
-
 
 
 #endif
