@@ -1,7 +1,9 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
-#include <conio.h>
+#include <cctype>
+
+#include <termio.h>
 
 #define MAX_SOURCE_LINE_SIZE 4096
 #define MAX_COMMAND_SIZE     64
@@ -17,6 +19,36 @@ int    g_CurrentLine = 0;
 int    g_CurrentLineChar = 0;
 char** g_ppScripts;
 
+int _kbhit() {
+    static const int STDIN = 0;
+    static bool initialized = false;
+
+    if (! initialized) {
+        // Use termios to turn off line buffering
+        termios term;
+        tcgetattr(STDIN, &term);
+        term.c_lflag &= ~ICANON;
+        tcsetattr(STDIN, TCSANOW, &term);
+        setbuf(stdin, NULL);
+        initialized = true;
+    }
+
+    int bytesWaiting;
+    ioctl(STDIN, FIONREAD, &bytesWaiting);
+    return bytesWaiting;
+}
+
+
+char* strtoupper(char* str)
+{
+    char* p = str;
+    
+    *p = std::toupper(*p);
+    while (*p) 
+        p++;
+    
+    return str;
+}
 
 void GetCommand(char* pstrDestString) 
 {
@@ -36,7 +68,7 @@ void GetCommand(char* pstrDestString)
 	}
 	g_CurrentLineChar++;                  //Jump the space at the end of command
 	pstrDestString[commandSize] = '\0';
-	_strupr(pstrDestString);
+	strtoupper(pstrDestString);
 }
 
 int  GetInitParam()
@@ -134,12 +166,12 @@ void RunScript()
 	{
 		g_CurrentLineChar = 0;
 		GetCommand(pstrCommand);
-		if (_stricmp(pstrCommand, COMMAND_PRINTSTRING) == 0)
+		if (std::strcmp(pstrCommand, COMMAND_PRINTSTRING) == 0)
 		{
 			GetStringParam(pstrStringParam);
 			printf("\t%s\n", pstrStringParam);
 		}
-		else if (_stricmp(pstrCommand, COMMAND_PRINTSTRINGLOOP) == 0) 
+		else if (std::strcmp(pstrCommand, COMMAND_PRINTSTRINGLOOP) == 0) 
 		{
 			GetStringParam(pstrStringParam);
 			int loopCount = GetInitParam();
@@ -148,11 +180,11 @@ void RunScript()
 				printf("\t%d: %s\n", i, pstrStringParam);
 			}
 		}
-		else if (_stricmp(pstrCommand, COMMAND_NEWLINE) == 0) 
+		else if (std::strcmp(pstrCommand, COMMAND_NEWLINE) == 0) 
 		{
 			printf("\n");
 		}
-		else if (_stricmp(pstrCommand, COMMAND_WAITFORKEYPRESS) == 0) 
+		else if (std::strcmp(pstrCommand, COMMAND_WAITFORKEYPRESS) == 0) 
 		{
 			while (_kbhit()) 
 				_getch();
