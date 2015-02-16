@@ -44,7 +44,25 @@ typedef struct _FuncNode
 	int  iLocalDataSize;
 }FuncNode;
 
+typedef struct _SymbolNode
+{
+	int  iIndex;
+	char strIdentifier[MAX_INDENT_SIZE];
+	int  iSize;
+	int  iStackIndex;
+	int  iFuncIndex;
+}SymbolNode;
+
 int  AddString(LinkList* pList, char* str);
+
+FuncNode* GetFunctionByName(char* name);
 int  AddFunction(char* name, int entryPoint);
+void SetFunctionInfo(char* name, int paramNum, int localDataSize);
+
+SymbolNode* GetSymbolByIdent(char* identifier, int funcIndex);
+int  AddSymbol(char* identifier, int size, int stackIndex, int funcIndex);
+int GetStackIndexByIdent(char* identifier, int funcIndex);
+int GetSizeByIdent(char* identifier, int funcIndex);
+
 
 #endif

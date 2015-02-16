@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <strings.h>
 
 #include "ssbase_type.h"
 #include "sstype.h"
@@ -68,9 +69,7 @@ FuncNode* GetFunctionByName(char* name)
 	}
 	//Can not find the specific function
 	return NULL;
-}
-
-/*
+}/*
  *  Add Function into the global function table
  *  @param [in] name function's name
  *  @param [in] entryPoint function's entryPoint
@@ -109,6 +108,47 @@ void SetFunctionInfo(char* name, int paramNum, int localDataSize)
 	funcNode->iParamCount    = paramNum;
 	funcNode->iLocalDataSize = localDataSize;
 }
+
+SymbolNode *GetSymbolByIdent(char *identifier, int funcIndex)
+{
+	if (g_SymbolTable.iNodeCount == 0)
+		return NULL;
+	LinkListNode* throughNode = g_SymbolTable.pHead;
+	for (int i = 0; i < g_SymbolTable.iNodeCount; i++)
+	{
+		SymbolNode* currentSymbol = (SymbolNode*) throughNode->pData;
+		if (strcmp(currentSymbol->strIdentifier, identifier))
+			if (currentSymbol->iFuncIndex == funcIndex ||
+					currentSymbol->iStackIndex >= 0)
+				return currentSymbol;
+		throughNode = throughNode->pNext;
+	}
+	return NULL;
+}
+
+int AddSymbol(char *identifier, int size, int stackIndex, int funcIndex) {
+	if (GetSymbolByIdent(identifier, funcIndex))
+		return -1;
+	SymbolNode* newSymbol  = (SymbolNode*) malloc(sizeof(SymbolNode));
+	strcpy(newSymbol->strIdentifier, identifier);
+	newSymbol->iSize       = size;
+	newSymbol->iStackIndex = stackIndex;
+	newSymbol->iFuncIndex  = funcIndex;
+	newSymbol->iIndex      = AddNode(&g_SymbolTable, newSymbol);
+
+	return newSymbol->iIndex;
+}
+
+int GetStackIndexByIdent(char *identifier, int funcIndex) {
+	return GetSymbolByIdent(identifier, funcIndex)->iStackIndex;
+}
+
+int GetSizeByIdent(char *identifier, int funcIndex) {
+	return GetSymbolByIdent(identifier, funcIndex)->iSize;
+}
+
+
+
 
 /** @}*/ // Function Definition
 
