@@ -4,6 +4,8 @@ project(ScatterScript)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 set(SOURCE_FILES
+    scatter-asm/ssutil.cpp
+    scatter-asm/ssutil.h
     scatter-asm/ssbase_type.cpp
     scatter-asm/ssbase_type.h
     scatter-asm/sstype.cpp
