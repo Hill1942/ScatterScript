@@ -147,6 +147,37 @@ int GetSizeByIdent(char *identifier, int funcIndex) {
 	return GetSymbolByIdent(identifier, funcIndex)->iSize;
 }
 
+LabelNode *GetLabelByIdent(char *identifier, int funcIndex)
+{
+	if (g_LabelTable.iNodeCount == 0)
+		return NULL;
+
+	LinkListNode* throughNode = g_LabelTable.pHead;
+	for (int i = 0; i < g_LabelTable.iNodeCount; i++)
+	{
+		LabelNode* currentLabel = (LabelNode*) throughNode->pData;
+		if (strcpy(currentLabel->strIndentifier, identifier) == 0 &&
+				currentLabel->iFuncIndex == funcIndex)
+			return currentLabel;
+		throughNode = throughNode->pNext;
+	}
+	return NULL;
+}
+
+int AddLabel(char *identifier, int targetIndex, int funcIndex) {
+	if (GetLabelByIdent(identifier, funcIndex))
+		return -1;
+
+	LabelNode* newLabel    = (LabelNode*) malloc(sizeof(LabelNode));
+	strcpy(newLabel->strIndentifier, identifier);
+	newLabel->iFuncIndex   = funcIndex;
+	newLabel->iTargetIndex = targetIndex;
+	newLabel->iIndex       = AddNode(&g_LabelTable, newLabel);
+
+	return newLabel->iIndex;
+}
+
+
 
 
 

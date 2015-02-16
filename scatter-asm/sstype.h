@@ -53,6 +53,14 @@ typedef struct _SymbolNode
 	int  iFuncIndex;
 }SymbolNode;
 
+typedef struct _LabelNode
+{
+	int  iIndex;
+	char strIndentifier[MAX_INDENT_SIZE];
+	int  iTargetIndex;
+	int  iFuncIndex;
+}LabelNode;
+
 int  AddString(LinkList* pList, char* str);
 
 FuncNode* GetFunctionByName(char* name);
@@ -60,9 +68,12 @@ int  AddFunction(char* name, int entryPoint);
 void SetFunctionInfo(char* name, int paramNum, int localDataSize);
 
 SymbolNode* GetSymbolByIdent(char* identifier, int funcIndex);
-int  AddSymbol(char* identifier, int size, int stackIndex, int funcIndex);
+int AddSymbol(char* identifier, int size, int stackIndex, int funcIndex);
 int GetStackIndexByIdent(char* identifier, int funcIndex);
 int GetSizeByIdent(char* identifier, int funcIndex);
+
+LabelNode* GetLabelByIdent(char* identifier, int funcIndex);
+int AddLabel(char* identifier, int targetIndex, int funcIndex);
 
 
 #endif
