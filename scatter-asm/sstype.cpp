@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
-#include "sstype.h"
+#include "ssbase_type.h"
+
 
 void InitLinkList(LinkList* pList)
 {
@@ -64,4 +66,37 @@ int  AddNode(LinkList* pList, void* pData)
 	//return NewNode's index
 	return pList->iNodeCount - 1;
 }
+
+int  AddString(LinkList* pList, char* str)
+{
+	LinkListNode* pNode = pList->pHead;
+	for (int i = 0; i < pList->iNodeCount; i++)
+	{
+		if (strcmp((char*)pNode->pData, str) == 0)
+			return i;
+		pNode = pNode->pNext;
+	}
+	char* newStr =(char*) malloc(strlen(str) + 1);
+	strcpy(newStr, str);
+
+	return AddNode(pList, newStr);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

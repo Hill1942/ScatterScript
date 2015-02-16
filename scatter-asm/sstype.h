@@ -1,27 +1,50 @@
-#ifndef SSPRE_H
-#define SSPRE_H
+#ifndef SSTYPE_H
+#define SSTYPE_H
 
-#define TRUE  1
-#define FALSE 0
+#define MAX_INDENT_SIZE 4096
 
-typedef struct _LinkListNode
+typedef struct _Op
 {
-	void*          pData;
-	_LinkListNode* pNext;
+	int iType;
+	union
+	{
+		int iIntLiteral;
+		float fFloatLiteral;
+		int   iStringTableIndex;
+		int   iStackIndex;
+		int   iInstrIndex;
+		int   iFuncIndex;
+		int   iHostAPICallIndex;
+		int   iReg;
+	};
+	int iOffsetIndex;
+}Op;
 
-}LinkListNode;
-
-typedef struct _LinkList
+typedef struct _Instr
 {
-	LinkListNode* pHead;
-	LinkListNode* pTail;
-	int           iNodeCount;
+	int iOpcode;
+	int iOpCount;
+	Op* pOplist;
+}Instr;
 
-}LinkList;
+typedef struct _ScriptHeader
+{
+	int iStackSize;
+	int iGlobalDataSize;
+	int iIsMainFuncPresent;
+	int iMainFuncIndex;
+}ScriptHeader;
 
-void InitLinkList(LinkList* pList);
-void FreeLinkList(LinkList* pList);
-int  AddNode(LinkList* pList, void *pData);
+typedef struct _FuncNode
+{
+	int  iIndex;
+	char strName[MAX_INDENT_SIZE];
+	int  iEntryPoint;
+	int  iParamCount;
+	int  iLocalDataSize;
+}FuncNode;
+
 int  AddString(LinkList* pList, char* str);
+int  AddFunction(char* name, int entryPoint);
 
 #endif

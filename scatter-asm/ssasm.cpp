@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "ssbase_type.h"
 #include "sstype.h"
 #include "ssasm.h"
 
