@@ -1,7 +1,9 @@
 #ifndef SSTYPE_H
 #define SSTYPE_H
 
-#define MAX_INDENT_SIZE 4096
+#define MAX_INDENT_SIZE         256
+#define MAX_INSTR_LOOKUP_COUNT  256
+#define MAX_INSTR_MNEMONIC_SIZE 16
 
 typedef struct _Op
 {
@@ -20,12 +22,22 @@ typedef struct _Op
 	int iOffsetIndex;
 }Op;
 
+typedef int OpType;
+
 typedef struct _Instr
 {
 	int iOpcode;
 	int iOpCount;
 	Op* pOplist;
 }Instr;
+
+typedef struct _InstrLookup
+{
+	char strMnemonic[MAX_INDENT_SIZE];
+	int  iOpcode;
+	int  iOpcount;
+	OpType* pOplist;
+}InstrLookup;
 
 typedef struct _ScriptHeader
 {
@@ -75,5 +87,7 @@ int GetSizeByIdent(char* identifier, int funcIndex);
 LabelNode* GetLabelByIdent(char* identifier, int funcIndex);
 int AddLabel(char* identifier, int targetIndex, int funcIndex);
 
+int AddInstrLookup(char* mnemonic, int opCode, int opCount);
+void setOpType(int instrIndex, int opIndex, OpType opType);
 
 #endif

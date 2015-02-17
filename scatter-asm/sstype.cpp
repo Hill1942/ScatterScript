@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <strings.h>
 
+#include "ssutil.h"
 #include "ssbase_type.h"
 #include "sstype.h"
 
@@ -17,6 +17,8 @@ extern LinkList g_FunctionTable;
 extern LinkList g_StringTable;
 extern LinkList g_LabelTable;
 extern LinkList g_SymbolTable;
+
+extern InstrLookup g_InstrTable[MAX_INSTR_LOOKUP_COUNT];
 
 /*
  * @defgroup
@@ -177,9 +179,30 @@ int AddLabel(char *identifier, int targetIndex, int funcIndex) {
 	return newLabel->iIndex;
 }
 
+int AddInstrLookup(char* mnemonic, int opCode, int opCount)
+{
+	static int instrIndex = 0;
+	if (instrIndex > MAX_INSTR_LOOKUP_COUNT)
+		return -1;
 
+	strcpy(g_InstrTable[instrIndex].strMnemonic, mnemonic);
+	strtoupper(g_InstrTable[instrIndex].strMnemonic);
+	g_InstrTable[instrIndex].iOpcode  = opCode;
+	g_InstrTable[instrIndex].iOpcount = opCount;
 
+	g_InstrTable[instrIndex].pOplist  = (OpType*) malloc(opCount * sizeof(OpType));
 
+	int returnIndex = instrIndex;
+
+	instrIndex++;
+
+	return returnIndex;
+}
+
+void setOpType(int instrIndex, int opIndex, OpType opType)
+{
+	g_InstrTable[instrIndex].pOplist[opIndex] = opType;
+}
 
 /** @}*/ // Function Definition
 
