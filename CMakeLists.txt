@@ -10,6 +10,8 @@ set(SOURCE_FILES
     scatter-asm/ssbase_type.h
     scatter-asm/sstype.cpp
     scatter-asm/sstype.h
+    scatter-asm/sslexeme.cpp
+    scatter-asm/sslexeme.h
     scatter-asm/ssasm.cpp
     scatter-asm/ssasm.h
     LICENSE
