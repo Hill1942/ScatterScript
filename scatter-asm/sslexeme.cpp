@@ -3,13 +3,17 @@
 #include <stdlib.h>
 
 #include "ssutil.h""
-#include "ssbase_type.h""
+#include "ssbase_type.h"
+#include "sstype.h"
 #include "sslexeme.h"
+
 
 extern FILE*  g_SourceFile;
 extern char*  g_SourceFileName;
 extern int    g_SourceCodeLines;
 extern char** g_SourceCode;
+
+extern Lexer  g_Lexer;
 
 int IsCharNumeric(char cChar)
 {
@@ -240,3 +244,26 @@ void LoadSourceFile()
         }
     }
 }
+
+Token GetNextToken()
+{
+    g_Lexer.iIndex0 = g_Lexer.iIndex1;
+    if (g_Lexer.iIndex0 >= strlen(g_SourceCode[g_Lexer.iCurrentSourceLine]))
+    {
+
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

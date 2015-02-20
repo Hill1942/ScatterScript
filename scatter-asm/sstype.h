@@ -32,6 +32,7 @@ typedef struct _Op
 }Op;
 
 typedef int OpType;
+typedef int Token;
 
 typedef struct _Instr
 {
@@ -81,6 +82,15 @@ typedef struct _LabelNode
 	int  iTargetIndex;
 	int  iFuncIndex;
 }LabelNode;
+
+typedef struct _Lexer
+{
+	int iCurrentSourceLine;
+	unsigned int iIndex0;
+	unsigned int iIndex1;
+	Token currentToken;
+	int   iState;
+}Lexer;
 
 int  AddString(LinkList* pList, char* str);
 
