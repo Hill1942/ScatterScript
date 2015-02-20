@@ -247,10 +247,13 @@ void LoadSourceFile()
 
 Token GetNextToken()
 {
+    //When we read the source code line by line, we use two index to indicate the both ends of a source line.
+    //At first, the right end index equals to the left end index: they both are 0.
     g_Lexer.iIndex0 = g_Lexer.iIndex1;
     if (g_Lexer.iIndex0 >= strlen(g_SourceCode[g_Lexer.iCurrentSourceLine]))
     {
-
+        if (!SkipToNextLine())
+            return END_OF_TOKEN_STREAM;
     }
 }
 

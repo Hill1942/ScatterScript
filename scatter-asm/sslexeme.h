@@ -1,5 +1,5 @@
-#ifndef SSTYPE_H
-#define SSTYPE_H
+#ifndef SSLEXWME_H
+#define SSLEXWME_H
 
 #define TOKEN_TYPE_INT
 #define TOKEN_TYPE_FLOAT
