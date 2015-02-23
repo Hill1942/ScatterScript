@@ -50,7 +50,7 @@ int IsCharDelimiter(char cChar)
         return FALSE;
 }
 
-int IsStringInt(char* str)
+int IsStringInt(const char* str)
 {
     if (!str)
         return FALSE;
@@ -70,7 +70,7 @@ int IsStringInt(char* str)
             return FALSE;
     }
 }
-int IsStringFloat(char* str)
+int IsStringFloat(const char* str)
 {
     if (!str)
         return FALSE;
@@ -107,7 +107,7 @@ int IsStringFloat(char* str)
     else
         return FALSE;
 }
-int IsStringWhitespace(char* str)
+int IsStringWhitespace(const char* str)
 {
     if (!str)
         return FALSE;
@@ -122,7 +122,7 @@ int IsStringWhitespace(char* str)
     }
     return TRUE;
 }
-int IsStringIdent(char* str)
+int IsStringIdent(const char* str)
 {
     if (!str)
         return FALSE;
@@ -255,6 +255,151 @@ Token GetNextToken()
         if (!SkipToNextLine())
             return END_OF_TOKEN_STREAM;
     }
+
+    if (g_Lexer.iState == LEX_STATE_END_STRING)
+        g_Lexer.iState = LEX_STATE_NO_STRING;
+    //locate index to the first non-whitespace character of a source code line
+    if (g_Lexer.iState != LEX_STATE_IN_STRING)
+    {
+        while (TRUE)
+        {
+            if (!IsCharWhiteSpace((g_SourceCode[g_Lexer.iCurrentSourceLine][g_Lexer.iIndex0])))
+                break;
+            g_Lexer.iIndex0++;
+        }
+    }
+    g_Lexer.iIndex1 = g_Lexer.iIndex0;
+
+    //move iIndex1 to the location of next token end
+    while (TRUE)
+    {
+        if (g_Lexer.iState == LEX_STATE_IN_STRING)
+        {
+            if (g_Lexer.iIndex1 >= strlen(g_SourceCode[g_Lexer.iCurrentSourceLine]))
+            {
+                g_Lexer.currentToken = TOKEN_TYPE_INVALID;
+                return g_Lexer.currentToken;
+            }
+            if (g_SourceCode[g_Lexer.iCurrentSourceLine][g_Lexer.iIndex1] == '\\')
+            {
+                g_Lexer.iIndex1 += 2;
+                continue;
+            }
+            if (g_SourceCode[g_Lexer.iCurrentSourceLine][g_Lexer.iIndex1] == '"')
+                break;
+            g_Lexer.iIndex1++;
+        }
+        else
+        {
+            if (g_Lexer.iIndex1 >= strlen(g_SourceCode[g_Lexer.iCurrentSourceLine]))
+                break;
+            if (IsCharDelimiter(g_SourceCode[g_Lexer.iCurrentSourceLine][g_Lexer.iIndex1]))
+                break;
+            g_Lexer.iIndex1++;
+        }
+    }
+
+    if (g_Lexer.iIndex1 - g_Lexer.iIndex0 == 0)
+        g_Lexer.iIndex1++;
+
+    //Get the next lexeme
+    unsigned int currentTargetIndex = 0;
+    for (int i = g_Lexer.iIndex0; i < g_Lexer.iIndex1; i++)
+    {
+        if (g_Lexer.iState == LEX_STATE_IN_STRING)
+            if (g_SourceCode[g_Lexer.iCurrentSourceLine][i] == '\\')
+                i++;
+        g_Lexer.pCurrentLexeme[currentTargetIndex] = g_SourceCode[g_Lexer.iCurrentSourceLine][i];
+        currentTargetIndex++;
+    }
+    g_Lexer.pCurrentLexeme[currentTargetIndex] = '\0';
+    if (g_Lexer.iState != LEX_STATE_IN_STRING)
+        strtoupper(g_Lexer.pCurrentLexeme);
+
+    //Decide which token the lexeme is
+    g_Lexer.currentToken = TOKEN_TYPE_INVALID;
+    if (strlen(g_Lexer.pCurrentLexeme) > 1 || g_Lexer.pCurrentLexeme[0] != '"')
+    {
+        if (g_Lexer.iState == LEX_STATE_IN_STRING)
+        {
+            g_Lexer.currentToken = TOKEN_TYPE_STRING;
+            return TOKEN_TYPE_STRING;
+        }
+    }
+
+    if (strlen(g_Lexer.pCurrentLexeme) == 1)
+    {
+        switch (g_Lexer.pCurrentLexeme[0])
+        {
+            case '"':
+                switch (g_Lexer.iState)
+                {
+                    case LEX_STATE_NO_STRING:
+                        g_Lexer.iState = LEX_STATE_IN_STRING;
+                        break;
+                    case LEX_STATE_IN_STRING:
+                        g_Lexer.iState = LEX_STATE_END_STRING;
+                }
+                g_Lexer.currentToken = TOKEN_TYPE_QUATE;
+                break;
+            case ',':
+                g_Lexer.currentToken = TOKEN_TYPE_COMMA;
+                break;
+            case ':':
+                g_Lexer.currentToken = TOKEN_TYPE_COLON;
+                break;
+            case '[':
+                g_Lexer.currentToken = TOKEN_TYPE_OPEN_BRACKET;
+                break;
+            case ']':
+                g_Lexer.currentToken = TOKEN_TYPE_CLOSE_BRACKET;
+                break;
+            case '{':
+                g_Lexer.currentToken = TOKEN_TYPE_OPEN_BRACE;
+                break;
+            case '}':
+                g_Lexer.currentToken = TOKEN_TYPE_CLOSE_BRACE;
+                break;
+            case '\n':
+                g_Lexer.currentToken = TOKEN_TYPE_NEWLINE;
+                break;
+        }
+    }
+
+    if (IsStringInt(g_Lexer.pCurrentLexeme))
+        g_Lexer.currentToken = TOKEN_TYPE_INT;
+
+    if (IsStringFloat(g_Lexer.pCurrentLexeme))
+        g_Lexer.currentToken = TOKEN_TYPE_FLOAT;
+
+    if (IsStringIdent(g_Lexer.pCurrentLexeme))
+        g_Lexer.currentToken = TOKEN_TYPE_IDENT;
+
+    if (strcmp(g_Lexer.pCurrentLexeme, "SETSTACKSIZE") == 0)
+        g_Lexer.currentToken = TOKEN_TYPE_SETSTACKSIZE;
+
+    if (strcmp(g_Lexer.pCurrentLexeme, "VAR") == 0)
+        g_Lexer.currentToken = TOKEN_TYPE_VAR;
+
+    if (strcmp(g_Lexer.pCurrentLexeme, "FUNC") == 0)
+        g_Lexer.currentToken = TOKEN_TYPE_FUNC;
+
+    if (strcmp(g_Lexer.pCurrentLexeme, "PARAM") == 0)
+        g_Lexer.currentToken = TOKEN_TYPE_PARAM;
+
+    if (strcmp(g_Lexer.pCurrentLexeme, "_RETVAL") == 0)
+        g_Lexer.currentToken = TOKEN_TYPE_REG_RETVAL;
+
+    InstrLookup instrLookup;
+    if (GetInstrByMnemonic(g_Lexer.pCurrentLexeme, &instrLookup))
+        g_Lexer.currentToken = TOKEN_TYPE_INSTR;
+
+    return g_Lexer.currentToken;
+}
+
+char* GetCurrentLexeme()
+{
+    return g_Lexer.pCurrentLexeme;
 }
 
 
