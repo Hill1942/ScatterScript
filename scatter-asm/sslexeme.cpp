@@ -1,6 +1,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <strings.h>
 
 #include "ssutil.h""
 #include "ssbase_type.h"
@@ -243,6 +244,30 @@ void LoadSourceFile()
             g_SourceCode[i][newLineIdex + 2] = '\0';
         }
     }
+}
+
+char GetLookAheadChar()
+{
+    int currentSourceLine = g_Lexer.iCurrentSourceLine;
+    unsigned int index    = g_Lexer.iIndex1;
+
+    if (g_Lexer.iState != LEX_STATE_IN_STRING)
+    {
+        while (TRUE)
+        {
+            if (index >= strlen(g_SourceCode[currentSourceLine]))
+            {
+                currentSourceLine++;
+                if (currentSourceLine >= g_SourceCodeLines)
+                    return 0;
+                index = 0;
+            }
+            if (!IsCharWhiteSpace(g_SourceCode[currentSourceLine][index]))
+                break;
+            index++;
+        }
+    }
+    return g_SourceCode[currentSourceLine][index];
 }
 
 int SkipToNextLine()

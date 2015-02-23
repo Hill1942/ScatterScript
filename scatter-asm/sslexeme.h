@@ -49,4 +49,10 @@ int IsStringIdent(const char* str);
 
 void StrpComments(char* sourceLine);
 void TrimWhiteSpace(char* sourceLine);
+
+void LoadSourceFile();
+char GetLookAheadChar();
+int SkipToNextLine();
+Token GetNextToken();
+char* GetCurrentLexeme();
 #endif
