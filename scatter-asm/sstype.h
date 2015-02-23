@@ -110,5 +110,6 @@ int AddLabel(char* identifier, int targetIndex, int funcIndex);
 
 int AddInstrLookup(char* mnemonic, int opCode, int opCount);
 void setOpType(int instrIndex, int opIndex, OpType opType);
+int GetInstrByMnemonic(char* mnemonic, InstrLookup* instrLookup);
 
 #endif

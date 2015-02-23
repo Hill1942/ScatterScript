@@ -179,6 +179,19 @@ int AddLabel(char *identifier, int targetIndex, int funcIndex) {
 	return newLabel->iIndex;
 }
 
+int GetInstrByMnemonic(char* mnemonic, InstrLookup* instrLookup)
+{
+	for (int i = 0; i < MAX_INSTR_LOOKUP_COUNT; i++)
+	{
+		if (strcmp(g_InstrTable[i].strMnemonic, mnemonic) == 0)
+		{
+			*instrLookup = g_InstrTable[i];
+			return TRUE;
+		}
+	}
+	return FALSE;
+}
+
 int AddInstrLookup(char* mnemonic, int opCode, int opCount)
 {
 	static int instrIndex = 0;
