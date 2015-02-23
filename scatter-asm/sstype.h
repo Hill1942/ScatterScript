@@ -4,6 +4,7 @@
 #define MAX_INDENT_SIZE         256
 #define MAX_INSTR_LOOKUP_COUNT  256
 #define MAX_INSTR_MNEMONIC_SIZE 16
+#define MAX_LEXEME_SIZE         256
 
 #define OP_FLAG_TYPE_INT           1
 #define OP_FLAG_TYPE_FLOAT         2
@@ -89,6 +90,7 @@ typedef struct _Lexer
 	unsigned int iIndex0;
 	unsigned int iIndex1;
 	Token currentToken;
+	char  pCurrentLexeme[MAX_LEXEME_SIZE];
 	int   iState;
 }Lexer;
 
