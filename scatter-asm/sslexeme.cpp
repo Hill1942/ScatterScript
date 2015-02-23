@@ -245,6 +245,20 @@ void LoadSourceFile()
     }
 }
 
+int SkipToNextLine()
+{
+    g_Lexer.iCurrentSourceLine++;
+    if (g_Lexer.iCurrentSourceLine >= g_SourceCodeLines)
+        return FALSE;
+
+    g_Lexer.iIndex0 = 0;
+    g_Lexer.iIndex1 = 1;
+
+    g_Lexer.iState = LEX_STATE_NO_STRING;
+
+    return TRUE;
+}
+
 Token GetNextToken()
 {
     //When we read the source code line by line, we use two index to indicate the both ends of a source line.
