@@ -55,4 +55,6 @@ char GetLookAheadChar();
 int SkipToNextLine();
 Token GetNextToken();
 char* GetCurrentLexeme();
+
+void ResetLexer();
 #endif

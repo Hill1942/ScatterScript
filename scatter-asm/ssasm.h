@@ -41,5 +41,14 @@
 #define INSTR_PAUSE      31
 #define INSTR_EXIT       32
 
+void AssembleSourceFile();
+
+
+
+
+
+
+
+
 
 #endif

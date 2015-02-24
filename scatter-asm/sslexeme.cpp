@@ -441,6 +441,16 @@ char* GetCurrentLexeme()
     return g_Lexer.pCurrentLexeme;
 }
 
+void ResetLexer()
+{
+    g_Lexer.iCurrentSourceLine = 0;
+    g_Lexer.iIndex0 = 0;
+    g_Lexer.iIndex1 = 1;
+
+    g_Lexer.iState = LEX_STATE_NO_STRING;
+    g_Lexer.currentToken = TOKEN_TYPE_INVALID;
+}
+
 
 
 
