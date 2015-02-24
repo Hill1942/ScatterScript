@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="scatter-asm">
+      <UniqueIdentifier>{f3c1d70c-e44d-49fc-999c-55590db4fa83}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="scatter-asm\ssasm.cpp">
+      <Filter>scatter-asm</Filter>
+    </ClCompile>
+    <ClCompile Include="scatter-asm\ssbase_type.cpp">
+      <Filter>scatter-asm</Filter>
+    </ClCompile>
+    <ClCompile Include="scatter-asm\sslexeme.cpp">
+      <Filter>scatter-asm</Filter>
+    </ClCompile>
+    <ClCompile Include="scatter-asm\sstype.cpp">
+      <Filter>scatter-asm</Filter>
+    </ClCompile>
+    <ClCompile Include="scatter-asm\ssutil.cpp">
+      <Filter>scatter-asm</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="scatter-asm\ssasm.h">
+      <Filter>scatter-asm</Filter>
+    </ClInclude>
+    <ClInclude Include="scatter-asm\ssbase_type.h">
+      <Filter>scatter-asm</Filter>
+    </ClInclude>
+    <ClInclude Include="scatter-asm\sslexeme.h">
+      <Filter>scatter-asm</Filter>
+    </ClInclude>
+    <ClInclude Include="scatter-asm\sstype.h">
+      <Filter>scatter-asm</Filter>
+    </ClInclude>
+    <ClInclude Include="scatter-asm\ssutil.h">
+      <Filter>scatter-asm</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".gitignore" />
+  </ItemGroup>
+</Project>
