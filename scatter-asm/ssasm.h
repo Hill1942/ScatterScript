@@ -41,6 +41,56 @@
 #define INSTR_PAUSE      31
 #define INSTR_EXIT       32
 
+#define ERROR_MSG_INVALID_INPUT            \
+	"Invalid input"
+#define ERROR_MSG_LOCAL_SETSTACKSIZE       \
+	"SetStackSize can only appear in the global scope"
+#define ERROR_MSG_INVALID_STACK_SIZE        \
+	"Invalid stack size"
+#define ERROR_MSG_MULTIPLE_SETSTACKSIZE     \
+	"Multiple instances of SetStackSize illegal"
+#define ERROR_MSG_IDENT_EXPECTED 			\
+	"Indetifier expected"
+#define ERROR_MSG_INVALID_ARRAY_SIZE		\
+	"Invalid array size"
+#define ERROR_MSG_IDENT_REDEFINITION		\
+	"Identifier redefinition"
+#define ERROR_MSG_UNDEFINED_IDENT			\
+	"Undefined identifier"
+#define ERROR_MSG_NESTED_FUNC				\
+	"Nested functions illegal"
+#define ERROR_MSG_FUNC_REDEFINITION			\
+	"Function redefinition"
+#define ERROR_MSG_UNDEFINED_FUNC			\
+	"Undefined function"
+#define ERROR_MSG_GLOBAL_PARAM				\
+	"Parameters can only appear inside functions"
+#define ERROR_MSG_MAIN_PARAM				\
+	"_Main() functoin cannot accept param"
+#define ERROR_MSG_GLOBAL_LINE_LABEL			\
+	"Line labels can only appear inside functions"
+#define ERROR_MSG_LINE_LABEL_REDEFINITION	\
+	"Line label redefinition"
+#define ERROR_MSG_UNDEFINED_LINE_LABEL		\
+	"Undefined line label"
+#define ERROR_MSG_GLOBAL_INSTR				\
+	"Instructions can only appear inside functions"
+#define ERROR_MSG_INVALID_INSTR				\
+	"Invalid instruction"
+#define ERROR_MSG_INVALID_OP				\
+	"Invalid operand"
+#define ERROR_MSG_INVALID_STRING			\
+	"Invalid string"
+#define ERROR_MSG_INVALID_ARRAY_NOT_INDEXED	\
+	"Arrays must be indexed"
+#define ERROR_MSG_INVALID_ARRAY				\
+	"Invalid array"
+#define ERROR_MSG_INVALID_ARRAY_INDEX		\
+	"Invalid array index"
+
+
+
+
 void AssembleSourceFile();
 
 

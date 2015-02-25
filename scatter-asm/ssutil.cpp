@@ -19,10 +19,18 @@ char* strtoupper(char* str)
     return str;
 }
 
-void ExitOnError(char* errorMessage)
+void ExitOnError(const char* errorMessage)
 {
     printf("Fatal Error: %s.\n", errorMessage);
     Exit();
+}
+
+void ExitOnCodeError(const char* errorMessage)
+{
+
+}
+void ExitOnCharExpectedError(char c)
+{
 }
 
 void Exit()
