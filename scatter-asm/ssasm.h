@@ -41,6 +41,8 @@
 #define INSTR_PAUSE      31
 #define INSTR_EXIT       32
 
+#define MAIN_FUNC_NAME   "_Main"
+
 #define ERROR_MSG_INVALID_INPUT            \
 	"Invalid input"
 #define ERROR_MSG_LOCAL_SETSTACKSIZE       \

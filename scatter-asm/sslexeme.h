@@ -3,9 +3,9 @@
 
 #define OP_FLAG_TYPE_INT           1
 #define OP_FLAG_TYPE_FLOAT         2
-#define OP_FLAG_STRING             4
-#define OP_FLAG_MEM_REF            8
-#define OP_FLAG_LINE_LABEL         16
+#define OP_FLAG_TYPE_STRING        4
+#define OP_FLAG_TYPE_MEM_REF       8
+#define OP_FLAG_TYPE_LINE_LABEL    16
 #define OP_FLAG_TYPE_FUNC_NAME     32
 #define OP_FLAG_TYPE_HOST_API_CALL 64
 #define OP_FLAG_TYPE_REG           128
