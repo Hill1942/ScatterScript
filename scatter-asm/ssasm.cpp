@@ -160,7 +160,7 @@ void AssembleSourceFile()
 					if (!isInFunction)
 						ExitOnCodeError(ERROR_MSG_GLOBAL_PARAM);
 
-					if (strcmp(pCurrentFuncName, MAIN_FUNC_NAME) == 0)
+					if (strcmp(pCurrentFuncName, KW_MAIN_FUNC_NAME) == 0)
 						ExitOnCodeError(ERROR_MSG_MAIN_PARAM);
 
 					if (GetNextToken() != TOKEN_TYPE_IDENT)

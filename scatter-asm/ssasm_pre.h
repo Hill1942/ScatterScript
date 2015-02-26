@@ -99,8 +99,13 @@
 #define MAX_INSTR_MNEMONIC_SIZE     16
 #define MAX_LEXEME_SIZE             256
 
-#define MAIN_FUNC_NAME                      \
-    "_Main"
+#define KW_MAIN_FUNC_NAME           "_Main"
+#define KW_SET_STACK_SIZE           "SETSTACKSIZE"
+#define KW_VAR                      "VAR"
+#define KW_FUNCTION                 "FUNC"
+#define KW_PARAM                    "PARAM"
+#define KW_RETVAL                   "_RETVAL"
+
 #define ERROR_MSG_INVALID_INPUT             \
 	"Invalid input"
 #define ERROR_MSG_LOCAL_SETSTACKSIZE        \
