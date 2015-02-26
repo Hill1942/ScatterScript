@@ -41,6 +41,16 @@
 #define INSTR_PAUSE      31
 #define INSTR_EXIT       32
 
+#define OP_TYPE_INT                 0
+#define OP_TYPE_FLOAT               1
+#define OP_TYPE_STRING_INDEX        2
+#define OP_TYPE_ABS_STACK_INDEX     3
+#define OP_TYPE_REL_STACK_INDEX     4
+#define OP_TYPE_INSTR_INDEX         5
+#define OP_TYPE_FUNC_INDEX          6
+#define OP_TYPE_HOST_API_CALL_INDEX 7
+#define OP_TYPE_REG                 8
+
 #define MAIN_FUNC_NAME   "_Main"
 
 #define ERROR_MSG_INVALID_INPUT            \
