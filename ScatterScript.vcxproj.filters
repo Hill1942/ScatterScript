@@ -39,9 +39,6 @@
     <ClInclude Include="scatter-asm\sslexeme.h">
       <Filter>scatter-asm</Filter>
     </ClInclude>
-    <ClInclude Include="ssasm_pre.h">
-      <Filter>scatter-asm</Filter>
-    </ClInclude>
     <ClInclude Include="scatter-asm\ssutil.h">
       <Filter>scatter-asm</Filter>
     </ClInclude>
@@ -49,6 +46,9 @@
       <Filter>scatter-asm</Filter>
     </ClInclude>
     <ClInclude Include="scatter-asm\sslang.h">
+      <Filter>scatter-asm</Filter>
+    </ClInclude>
+    <ClInclude Include="scatter-asm\ssasm_pre.h">
       <Filter>scatter-asm</Filter>
     </ClInclude>
   </ItemGroup>

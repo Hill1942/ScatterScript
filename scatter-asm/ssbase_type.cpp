@@ -41,6 +41,27 @@ void FreeLinkList(LinkList* pList)
     }
 }
 
+int AddNode(LinkList* pList, void *pData)
+{
+	LinkListNode* pNewNode = (LinkListNode*) malloc(sizeof(LinkListNode));
+	pNewNode->pData = pData;
+	pNewNode->pNext = NULL;
+
+	if (!pList->iNodeCount)
+	{
+		pList->pHead = pNewNode;
+		pList->pTail = pNewNode;
+	}
+	else
+	{
+		pList->pTail->pNext = pNewNode;
+		pList->pTail = pNewNode;
+	}
+	pList->iNodeCount++;
+
+	return pList->iNodeCount - 1;
+}
+
 
 
 

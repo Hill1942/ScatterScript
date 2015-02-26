@@ -44,7 +44,7 @@ void AssembleSourceFile()
 	int currentFuncParamCount = 0;
 	int currentFuncLocalDataSize = 0;
 	char pCurrentFuncName[MAX_INDENT_SIZE];
-	FuncNode* pCurrentFunc;
+	FuncNode* pCurrentFunc = NULL;
 	InstrLookup currentInstr;
 
     while (TRUE)
@@ -241,7 +241,7 @@ void AssembleSourceFile()
 		case TOKEN_TYPE_CLOSE_BRACE:
 			{
 				isInFunction = FALSE;
-				if (strcmp(pCurrentFunc->strName, MAIN_FUNC_NAME) == 0)
+				if (strcmp(pCurrentFunc->strName, KW_MAIN_FUNC_NAME) == 0)
 				{
 					g_InstrStream[g_currentInstrIndex].iOpcode = INSTR_EXIT;
 					g_InstrStream[g_currentInstrIndex].iOpCount = 1;

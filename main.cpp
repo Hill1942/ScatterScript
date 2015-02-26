@@ -29,9 +29,7 @@ int g_InstrStreamSize;
 int g_IsSetStackSizeFound;
 int g_currentInstrIndex;
 
-
-
-extern InstrLookup g_InstrTable[MAX_INSTR_LOOKUP_COUNT];
+InstrLookup g_InstrTable[MAX_INSTR_LOOKUP_COUNT];
 
 int main(int argc, char* argv[])
 {

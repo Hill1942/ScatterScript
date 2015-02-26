@@ -176,7 +176,7 @@ void TrimWhiteSpace(char* sourceLine)
 
     if (strLength > 1)
     {
-        for (int currentIndex = 0; currentIndex < strLength; currentIndex++)
+        for (currentIndex = 0; currentIndex < strLength; currentIndex++)
         {
             if (!IsCharWhiteSpace(sourceLine[currentIndex]))
                 break;
