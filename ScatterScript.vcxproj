@@ -78,18 +78,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="scatter-asm\ssasm.cpp" />
     <ClCompile Include="scatter-asm\ssbase_type.cpp" />
     <ClCompile Include="scatter-asm\sslexeme.cpp" />
-    <ClCompile Include="scatter-asm\sstype.cpp" />
+    <ClCompile Include="scatter-asm\sslang.cpp" />
+    <ClCompile Include="scatter-asm\sssystem.cpp" />
     <ClCompile Include="scatter-asm\ssutil.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="scatter-asm\ssasm.h" />
     <ClInclude Include="scatter-asm\ssbase_type.h" />
     <ClInclude Include="scatter-asm\sslexeme.h" />
-    <ClInclude Include="scatter-asm\sstype.h" />
+    <ClInclude Include="scatter-asm\sslang.h" />
+    <ClInclude Include="scatter-asm\sssystem.h" />
     <ClInclude Include="scatter-asm\ssutil.h" />
+    <ClInclude Include="ssasm_pre.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />

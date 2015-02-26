@@ -4,6 +4,9 @@
     <Filter Include="scatter-asm">
       <UniqueIdentifier>{f3c1d70c-e44d-49fc-999c-55590db4fa83}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Test">
+      <UniqueIdentifier>{f3857c64-f34d-4830-a6ed-0211461469d8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="scatter-asm\ssasm.cpp">
@@ -15,10 +18,14 @@
     <ClCompile Include="scatter-asm\sslexeme.cpp">
       <Filter>scatter-asm</Filter>
     </ClCompile>
-    <ClCompile Include="scatter-asm\sstype.cpp">
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="scatter-asm\ssutil.cpp">
       <Filter>scatter-asm</Filter>
     </ClCompile>
-    <ClCompile Include="scatter-asm\ssutil.cpp">
+    <ClCompile Include="scatter-asm\sssystem.cpp">
+      <Filter>scatter-asm</Filter>
+    </ClCompile>
+    <ClCompile Include="scatter-asm\sslang.cpp">
       <Filter>scatter-asm</Filter>
     </ClCompile>
   </ItemGroup>
@@ -32,10 +39,16 @@
     <ClInclude Include="scatter-asm\sslexeme.h">
       <Filter>scatter-asm</Filter>
     </ClInclude>
-    <ClInclude Include="scatter-asm\sstype.h">
+    <ClInclude Include="ssasm_pre.h">
       <Filter>scatter-asm</Filter>
     </ClInclude>
     <ClInclude Include="scatter-asm\ssutil.h">
+      <Filter>scatter-asm</Filter>
+    </ClInclude>
+    <ClInclude Include="scatter-asm\sssystem.h">
+      <Filter>scatter-asm</Filter>
+    </ClInclude>
+    <ClInclude Include="scatter-asm\sslang.h">
       <Filter>scatter-asm</Filter>
     </ClInclude>
   </ItemGroup>
