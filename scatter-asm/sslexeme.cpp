@@ -3,9 +3,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "ssutil.h""
+#include "ssasm_pre.h"
+#include "ssutil.h"
 #include "ssbase_type.h"
-#include "sstype.h"
+#include "sslang.h"
+#include "sssystem.h"
 #include "sslexeme.h"
 
 
@@ -414,19 +416,19 @@ Token GetNextToken()
     if (IsStringIdent(g_Lexer.pCurrentLexeme))
         g_Lexer.currentToken = TOKEN_TYPE_IDENT;
 
-    if (strcmp(g_Lexer.pCurrentLexeme, "SETSTACKSIZE") == 0)
+    if (strcmp(g_Lexer.pCurrentLexeme, KW_SET_STACK_SIZE) == 0)
         g_Lexer.currentToken = TOKEN_TYPE_SETSTACKSIZE;
 
-    if (strcmp(g_Lexer.pCurrentLexeme, "VAR") == 0)
+    if (strcmp(g_Lexer.pCurrentLexeme, KW_VAR) == 0)
         g_Lexer.currentToken = TOKEN_TYPE_VAR;
 
-    if (strcmp(g_Lexer.pCurrentLexeme, "FUNC") == 0)
+    if (strcmp(g_Lexer.pCurrentLexeme, KW_FUNCTION) == 0)
         g_Lexer.currentToken = TOKEN_TYPE_FUNC;
 
-    if (strcmp(g_Lexer.pCurrentLexeme, "PARAM") == 0)
+    if (strcmp(g_Lexer.pCurrentLexeme, KW_PARAM) == 0)
         g_Lexer.currentToken = TOKEN_TYPE_PARAM;
 
-    if (strcmp(g_Lexer.pCurrentLexeme, "_RETVAL") == 0)
+    if (strcmp(g_Lexer.pCurrentLexeme, KW_RETVAL) == 0)
         g_Lexer.currentToken = TOKEN_TYPE_REG_RETVAL;
 
     InstrLookup instrLookup;

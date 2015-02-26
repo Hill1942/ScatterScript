@@ -2,9 +2,11 @@
 #include <string.h>
 #include <stdio.h>
 
+#include "ssasm_pre.h"
 #include "ssutil.h"
 #include "ssbase_type.h"
-#include "sstype.h"
+#include "sslang.h"
+#include "sssystem.h"
 #include "sslexeme.h"
 #include "ssasm.h"
 
@@ -122,7 +124,7 @@ void AssembleSourceFile()
 					int funcIndex = AddFunction(pFuncName, entryPoint);
 					if (funcIndex == -1)
 						ExitOnCodeError(ERROR_MSG_FUNC_REDEFINITION);
-					if (strcmp(pFuncName, MAIN_FUNC_NAME) == 0)
+					if (strcmp(pFuncName, KW_MAIN_FUNC_NAME) == 0)
 					{
 						g_ScriptHeader.iIsMainFuncPresent = TRUE;
 						g_ScriptHeader.iMainFuncIndex = funcIndex;

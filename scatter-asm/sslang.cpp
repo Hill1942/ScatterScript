@@ -2,9 +2,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "ssasm_pre.h"
 #include "ssutil.h"
 #include "ssbase_type.h"
-#include "sstype.h"
+#include "sslang.h"
+
 
 /*
  * @author  Yang Kaidi

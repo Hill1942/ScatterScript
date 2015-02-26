@@ -1,17 +1,12 @@
 #ifndef SSTYPE_H
 #define SSTYPE_H
 
-#define MAX_INDENT_SIZE         256
-#define MAX_INSTR_LOOKUP_COUNT  256
-#define MAX_INSTR_MNEMONIC_SIZE 16
-#define MAX_LEXEME_SIZE         256
-
 typedef struct _Op
 {
 	int iType;
 	union
 	{
-		int iIntLiteral;
+		int   iIntLiteral;
 		float fFloatLiteral;
 		int   iStringTableIndex;
 		int   iStackIndex;
