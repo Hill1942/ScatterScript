@@ -51,7 +51,17 @@
 #define OP_TYPE_HOST_API_CALL_INDEX 7
 #define OP_TYPE_REG                 8
 
+#define ASM_SOURCE_EXTENSION        ".ssam"
+#define	SOURCE_EXTENSION            ".ss"
+#define EXE_EXTENSION               ".sse"
+
+#define SSE_ID_STRING               "sse0"
+#define VERSION_MAJOR               0
+#define VERSION_MINOR               1
+
 #define MAIN_FUNC_NAME   "_Main"
+
+
 
 #define ERROR_MSG_INVALID_INPUT            \
 	"Invalid input"

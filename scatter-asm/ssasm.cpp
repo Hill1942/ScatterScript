@@ -1,11 +1,14 @@
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 #include "ssutil.h"
 #include "ssbase_type.h"
 #include "sstype.h"
 #include "sslexeme.h"
 #include "ssasm.h"
+
+extern char* g_ExeFileName;
 
 extern LinkList g_FunctionTable;
 extern LinkList g_StringTable;
@@ -467,6 +470,136 @@ void AssembleSourceFile()
 			break;
 	}
 }
+
+void BuildSSE() 
+{
+	FILE* pExeFile = fopen(g_ExeFileName, "wb");
+	if (! pExeFile)
+		ExitOnError("Could not open executable for output");
+	
+	fwrite(SSE_ID_STRING, 4, 1, pExeFile);
+
+	char versionMajor = VERSION_MAJOR;
+	char versionMinor = VERSION_MINOR;
+
+	fwrite(&versionMajor, 1, 1, pExeFile);
+	fwrite(&versionMinor, 1, 1, pExeFile);
+
+	fwrite(&g_ScriptHeader.iStackSize, 4, 1, pExeFile);
+	fwrite(&g_ScriptHeader.iGlobalDataSize, 4, 1, pExeFile);
+
+	char isMainExist = 0;
+	if (g_ScriptHeader.iIsMainFuncPresent)
+		isMainExist = 1;
+
+	fwrite(&isMainExist, 1, 1, pExeFile);
+
+	fwrite(&g_ScriptHeader.iMainFuncIndex, 4, 1, pExeFile);
+
+	for (int i = 0; i < g_InstrStreamSize; i++)
+	{
+		short opCode = g_InstrStream[i].iOpcode;
+		fwrite(&opCode, 2, 1, pExeFile);
+
+		char opCount = g_InstrStream[i].iOpCount;
+		fwrite(&opCount, 1, 1, pExeFile);
+
+		for (int j = 0; j < opCount; j++)
+		{
+			Op currentOp = g_InstrStream[i].pOplist[j];
+
+			char opType = currentOp.iType;
+			fwrite(&opType, 1, 1, pExeFile);
+
+			switch (currentOp.iType)
+			{
+			case OP_TYPE_INT:
+				fwrite(&currentOp.iIntLiteral, sizeof(int), 1, pExeFile);
+				break;
+
+			case OP_TYPE_FLOAT:
+				fwrite(&currentOp.fFloatLiteral, sizeof(float), 1, pExeFile);
+				break;
+
+			case OP_TYPE_ABS_STACK_INDEX:
+				fwrite(&currentOp.iStackIndex, sizeof(int), 1, pExeFile);
+				fwrite(&currentOp.iOffsetIndex, sizeof(int), 1, pExeFile);
+				break;
+
+			case OP_TYPE_FUNC_INDEX:
+				fwrite(&currentOp.iFuncIndex, sizeof(int), 1, pExeFile);
+				break;
+
+			case OP_TYPE_HOST_API_CALL_INDEX:
+				fwrite(&currentOp.iHostAPICallIndex, sizeof(int), 1, pExeFile);
+				break;;
+
+			case OP_TYPE_REG:
+				fwrite(&currentOp.iReg, sizeof(int), 1, pExeFile);
+				break;
+
+			default:
+				break;
+			}
+		}
+	}
+
+	int currentNode;
+	LinkListNode* pNode;
+
+	fwrite(&g_StringTable.iNodeCount, 4, 1, pExeFile);
+	
+	pNode = g_StringTable.pHead;
+
+	char paramCount;
+
+	for (int i = 0; i < g_StringTable.iNodeCount; i++)
+	{
+		char* currentString = (char*) pNode->pData;
+		int   currentStrLen = strlen(currentString);
+
+		fwrite(&currentStrLen, 4, 1, pExeFile);
+		fwrite(&currentString, currentStrLen, 1, pExeFile);
+
+		pNode = pNode->pNext;
+	}
+
+	fwrite(&g_FunctionTable.iNodeCount, 4, 1, pExeFile);
+
+	pNode = g_FunctionTable.pHead;
+
+	for (int i = 0; i < g_FunctionTable.iNodeCount; i++)
+	{
+		FuncNode* pFunc = (FuncNode*) pNode->pData;
+		fwrite(&pFunc->iEntryPoint, sizeof(int), 1, pExeFile);
+
+		paramCount = pFunc->iParamCount;
+		fwrite(&paramCount, 1, 1, pExeFile);
+
+		fwrite(&pFunc->iLocalDataSize, sizeof(int), 1, pExeFile);
+
+		pNode->pNext;
+	}
+
+	fwrite(&g_HostAPICallTable.iNodeCount, 4, 1, pExeFile);
+
+	pNode = g_HostAPICallTable.pHead;
+
+	for (int i = 0; i < g_HostAPICallTable.iNodeCount; i++)
+	{
+		char* currentHostAPICall = (char*) pNode->pData;
+		char  currentHostAPICallLen = strlen(currentHostAPICall);
+
+		fwrite(&currentHostAPICallLen, 1, 1, pExeFile);
+		fwrite(currentHostAPICall, currentHostAPICallLen, 1, pExeFile);
+
+		pNode = pNode->pNext;
+	}
+
+	fclose(pExeFile);
+}
+
+
 
 
 
