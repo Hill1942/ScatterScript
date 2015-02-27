@@ -480,7 +480,7 @@ void BuildSSE()
 		ExitOnError("Could not open executable for output");
 	
 	fwrite(SSE_ID_STRING, 4, 1, pExeFile);
-	printf("sse_id_string: %s.\n", SSE_ID_STRING);
+	printf("sse_id_string: %s\n", SSE_ID_STRING);
 
 	char versionMajor = VERSION_MAJOR;
 	char versionMinor = VERSION_MINOR;
@@ -504,6 +504,8 @@ void BuildSSE()
 		printf("main func exists, and the main func index is: %d\n", g_ScriptHeader.iMainFuncIndex);
 	else
 		printf("main func not exists\n");
+
+	printf("\n");
 
 	for (int i = 0; i < g_InstrStreamSize; i++)
 	{
@@ -562,10 +564,10 @@ void BuildSSE()
 			}
 		}
 
-		printf("end instr\n");
+		printf("\n");
 	}
 
-	printf("end all instrs\n");
+	printf("end all instrs\n\n");
 
 	int currentNode;
 	LinkListNode* pNode;
@@ -586,12 +588,12 @@ void BuildSSE()
 		printf("strlen: %d\n", currentStrLen);
 		printf("string: %s\n", currentString);
 
-		printf("end string\n");
+		printf("\n");
 
 		pNode = pNode->pNext;
 	}
 
-	printf("end all strings\n");
+	printf("end all strings\n\n");
 
 	fwrite(&g_FunctionTable.iNodeCount, 4, 1, pExeFile);
 	printf("function number: %d\n", g_FunctionTable.iNodeCount);
@@ -613,10 +615,10 @@ void BuildSSE()
 
 		pNode->pNext;
 
-		printf("end func\n");
+		printf("\n");
 	}
 
-	printf("end all functions\n");
+	printf("end all functions\n\n");
 
 	fwrite(&g_HostAPICallTable.iNodeCount, 4, 1, pExeFile);
 	printf("host api number: %d\n", g_HostAPICallTable.iNodeCount);
@@ -634,10 +636,10 @@ void BuildSSE()
 		printf("currentHostAPICall: %s\n", currentHostAPICall);
 
 		pNode = pNode->pNext;
-		printf("end host api\n");
+		printf("\n");
 	}
 
-	printf("end all host apis\n");
+	printf("end all host apis\n\n");
 
 	fclose(pExeFile);
 }
