@@ -65,8 +65,8 @@ FuncNode* GetFunctionByName(char* name)
 	LinkListNode* pCurrentNode = g_FunctionTable.pHead;
 	for (int i = 0; i < g_FunctionTable.iNodeCount; i++)
 	{
-		FuncNode* pCurrentFunc = (FuncNode*)pCurrentNode->pNext;
-		if (strcpy(pCurrentFunc->strName, name) == 0)
+		FuncNode* pCurrentFunc = (FuncNode*)pCurrentNode->pData;
+		if (strcmp(pCurrentFunc->strName, name) == 0)
 			return pCurrentFunc;
 		//Move to next node in table
 		pCurrentNode = pCurrentNode->pNext;
@@ -121,7 +121,7 @@ SymbolNode *GetSymbolByIdent(char *identifier, int funcIndex)
 	for (int i = 0; i < g_SymbolTable.iNodeCount; i++)
 	{
 		SymbolNode* currentSymbol = (SymbolNode*) throughNode->pData;
-		if (strcmp(currentSymbol->strIdentifier, identifier))
+		if (strcmp(currentSymbol->strIdentifier, identifier) == 0)
 			if (currentSymbol->iFuncIndex == funcIndex ||
 					currentSymbol->iStackIndex >= 0)
 				return currentSymbol;
@@ -201,7 +201,7 @@ int AddInstrLookup(char* mnemonic, int opCode, int opCount)
 		return -1;
 
 	strcpy(g_InstrTable[instrIndex].strMnemonic, mnemonic);
-	strtoupper(g_InstrTable[instrIndex].strMnemonic);
+	//strtoupper(g_InstrTable[instrIndex].strMnemonic);
 	g_InstrTable[instrIndex].iOpcode  = opCode;
 	g_InstrTable[instrIndex].iOpcount = opCount;
 

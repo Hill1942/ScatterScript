@@ -12,7 +12,7 @@
 
 
 extern FILE*  g_SourceFile;
-extern char*  g_SourceFileName;
+extern char   g_SourceFileName[MAX_FILENAME_SIZE];
 extern int    g_SourceCodeLines;
 extern char** g_SourceCode;
 
@@ -32,6 +32,13 @@ int IsCharWhiteSpace(char cChar)
     else
         return FALSE;
 }
+int IsCharReturnOrNewline(char cChar)
+{
+    if (cChar == '\r' || cChar == '\n')
+        return TRUE;
+    else
+        return FALSE;
+}
 int IsCharIdent(char cChar)
 {
     if ((cChar >= '0' && cChar <= '9') ||
@@ -47,7 +54,7 @@ int IsCharDelimiter(char cChar)
     if (cChar == ':' || cChar == ',' || cChar == '"' ||
             cChar == '[' || cChar == ']' ||
             cChar == '{' || cChar == '}' ||
-            IsCharWhiteSpace(cChar))
+            IsCharWhiteSpace(cChar) || IsCharReturnOrNewline(cChar))
         return TRUE;
     else
         return FALSE;
@@ -133,7 +140,7 @@ int IsStringIdent(const char* str)
     if (strlen(str) == 0)
         return FALSE;
 
-    if (str[0] >= '0' && str[9] <= '9')
+    if (str[0] >= '0' && str[0] <= '9')
         return FALSE;
 
     for (int i = 0; i < strlen(str); i++)
@@ -176,6 +183,7 @@ void TrimWhiteSpace(char* sourceLine)
 
     if (strLength > 1)
     {
+        //calculate the number of white space at left side
         for (currentIndex = 0; currentIndex < strLength; currentIndex++)
         {
             if (!IsCharWhiteSpace(sourceLine[currentIndex]))
@@ -199,7 +207,7 @@ void TrimWhiteSpace(char* sourceLine)
         {
             if (!IsCharWhiteSpace(sourceLine[currentIndex]))
             {
-                sourceLine[currentIndex + 1] = '\n';
+                sourceLine[currentIndex + 1] = '\0';
                 break;
             }
         }
@@ -279,7 +287,7 @@ int SkipToNextLine()
         return FALSE;
 
     g_Lexer.iIndex0 = 0;
-    g_Lexer.iIndex1 = 1;
+    g_Lexer.iIndex1 = 0;
 
     g_Lexer.iState = LEX_STATE_NO_STRING;
 
@@ -354,8 +362,8 @@ Token GetNextToken()
         currentTargetIndex++;
     }
     g_Lexer.pCurrentLexeme[currentTargetIndex] = '\0';
-    if (g_Lexer.iState != LEX_STATE_IN_STRING)
-        strtoupper(g_Lexer.pCurrentLexeme);
+	/*if (g_Lexer.iState != LEX_STATE_IN_STRING)
+	strtoupper(g_Lexer.pCurrentLexeme);*/
 
     //Decide which token the lexeme is
     g_Lexer.currentToken = TOKEN_TYPE_INVALID;
@@ -365,45 +373,6 @@ Token GetNextToken()
         {
             g_Lexer.currentToken = TOKEN_TYPE_STRING;
             return TOKEN_TYPE_STRING;
-        }
-    }
-
-    if (strlen(g_Lexer.pCurrentLexeme) == 1)
-    {
-        switch (g_Lexer.pCurrentLexeme[0])
-        {
-            case '"':
-                switch (g_Lexer.iState)
-                {
-                    case LEX_STATE_NO_STRING:
-                        g_Lexer.iState = LEX_STATE_IN_STRING;
-                        break;
-                    case LEX_STATE_IN_STRING:
-                        g_Lexer.iState = LEX_STATE_END_STRING;
-                }
-                g_Lexer.currentToken = TOKEN_TYPE_QUATE;
-                break;
-            case ',':
-                g_Lexer.currentToken = TOKEN_TYPE_COMMA;
-                break;
-            case ':':
-                g_Lexer.currentToken = TOKEN_TYPE_COLON;
-                break;
-            case '[':
-                g_Lexer.currentToken = TOKEN_TYPE_OPEN_BRACKET;
-                break;
-            case ']':
-                g_Lexer.currentToken = TOKEN_TYPE_CLOSE_BRACKET;
-                break;
-            case '{':
-                g_Lexer.currentToken = TOKEN_TYPE_OPEN_BRACE;
-                break;
-            case '}':
-                g_Lexer.currentToken = TOKEN_TYPE_CLOSE_BRACE;
-                break;
-            case '\n':
-                g_Lexer.currentToken = TOKEN_TYPE_NEWLINE;
-                break;
         }
     }
 
@@ -431,6 +400,48 @@ Token GetNextToken()
     if (strcmp(g_Lexer.pCurrentLexeme, KW_RETVAL) == 0)
         g_Lexer.currentToken = TOKEN_TYPE_REG_RETVAL;
 
+	if (strlen(g_Lexer.pCurrentLexeme) == 1)
+	{
+		switch (g_Lexer.pCurrentLexeme[0])
+		{
+		case '"':
+			switch (g_Lexer.iState)
+			{
+			case LEX_STATE_NO_STRING:
+				g_Lexer.iState = LEX_STATE_IN_STRING;
+				break;
+			case LEX_STATE_IN_STRING:
+				g_Lexer.iState = LEX_STATE_END_STRING;
+			}
+			g_Lexer.currentToken = TOKEN_TYPE_QUATE;
+			break;
+		case ',':
+			g_Lexer.currentToken = TOKEN_TYPE_COMMA;
+			break;
+		case ':':
+			g_Lexer.currentToken = TOKEN_TYPE_COLON;
+			break;
+		case '[':
+			g_Lexer.currentToken = TOKEN_TYPE_OPEN_BRACKET;
+			break;
+		case ']':
+			g_Lexer.currentToken = TOKEN_TYPE_CLOSE_BRACKET;
+			break;
+		case '{':
+			g_Lexer.currentToken = TOKEN_TYPE_OPEN_BRACE;
+			break;
+		case '}':
+			g_Lexer.currentToken = TOKEN_TYPE_CLOSE_BRACE;
+			break;
+		case '\n':
+			g_Lexer.currentToken = TOKEN_TYPE_NEWLINE;
+			break;
+		case '\r':
+			g_Lexer.currentToken = TOKEN_TYPE_NEWLINE;
+			break;
+		}
+	}
+
     InstrLookup instrLookup;
     if (GetInstrByMnemonic(g_Lexer.pCurrentLexeme, &instrLookup))
         g_Lexer.currentToken = TOKEN_TYPE_INSTR;
@@ -447,7 +458,7 @@ void ResetLexer()
 {
     g_Lexer.iCurrentSourceLine = 0;
     g_Lexer.iIndex0 = 0;
-    g_Lexer.iIndex1 = 1;
+    g_Lexer.iIndex1 = 0;
 
     g_Lexer.iState = LEX_STATE_NO_STRING;
     g_Lexer.currentToken = TOKEN_TYPE_INVALID;

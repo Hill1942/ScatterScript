@@ -1,6 +1,7 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "ssasm_pre.h"
 #include "ssutil.h"
@@ -9,7 +10,7 @@
 #include "sssystem.h"
 
 extern FILE*  g_SourceFile;
-extern char*  g_SourceFileName;
+extern char   g_SourceFileName[MAX_FILENAME_SIZE];
 extern int    g_SourceCodeLines;
 extern char** g_SourceCode;
 
@@ -18,6 +19,8 @@ extern LinkList g_StringTable;
 extern LinkList g_LabelTable;
 extern LinkList g_SymbolTable;
 extern LinkList g_HostAPICallTable;
+
+extern Lexer g_Lexer;
 
 void Init()
 {
@@ -324,10 +327,32 @@ void ExitOnError(const char* errorMessage)
 
 void ExitOnCodeError(const char* errorMessage)
 {
+	printf("Error: %s.\n\n", errorMessage);
+	printf("Line %d\n", g_Lexer.iCurrentSourceLine);
 
+	char sourceLine[MAX_SOURCE_LINE_SIZE];
+	strcpy(sourceLine, g_SourceCode[g_Lexer.iCurrentSourceLine]);
+
+	for (unsigned int i = 0; i < strlen(sourceLine); i++)
+		if (sourceLine[i] == '\t')
+			sourceLine[i] = ' ';
+
+	printf("%s", sourceLine);
+
+	for (unsigned int i = 0; i < g_Lexer.iIndex0; i++)
+		printf(" ");
+	printf("^\n");
+
+	printf("Cound not assemble exe file\n");
+
+	Exit();
 }
 
 void ExitOnCharExpectedError(char c)
 {
+	char* errorMsg = (char*) malloc(strlen("' ' expected"));
+	sprintf(errorMsg, "'%c' expected", c);
+
+	ExitOnCodeError(errorMsg);
 }
 

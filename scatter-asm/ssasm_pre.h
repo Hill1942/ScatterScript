@@ -98,13 +98,14 @@
 #define MAX_INSTR_LOOKUP_COUNT      256
 #define MAX_INSTR_MNEMONIC_SIZE     16
 #define MAX_LEXEME_SIZE             256
+#define MAX_FILENAME_SIZE           2048
 
-#define KW_MAIN_FUNC_NAME           "_Main"
-#define KW_SET_STACK_SIZE           "SETSTACKSIZE"
-#define KW_VAR                      "VAR"
-#define KW_FUNCTION                 "FUNC"
-#define KW_PARAM                    "PARAM"
-#define KW_RETVAL                   "_RETVAL"
+#define KW_MAIN_FUNC_NAME           "_main"
+#define KW_SET_STACK_SIZE           "setstacksize"
+#define KW_VAR                      "var"
+#define KW_FUNCTION                 "func"
+#define KW_PARAM                    "param"
+#define KW_RETVAL                   "_retval"
 
 #define ERROR_MSG_INVALID_INPUT             \
 	"Invalid input"

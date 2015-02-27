@@ -10,10 +10,10 @@
 #include "scatter-asm/ssasm.h"
 
 FILE*  g_SourceFile;
-char*  g_SourceFileName;
+char   g_SourceFileName[MAX_FILENAME_SIZE];
 int    g_SourceCodeLines;
 char** g_SourceCode;
-char*  g_ExeFileName;
+char   g_ExeFileName[MAX_FILENAME_SIZE];
 
 LinkList g_FunctionTable;
 LinkList g_StringTable;
