@@ -52,6 +52,7 @@ int main(int argc, char* argv[])
 		int ExtOffset = strrchr(g_SourceFileName, '.') - g_SourceFileName;
 		strncpy(g_ExeFileName, g_SourceFileName, ExtOffset);
 		g_ExeFileName[ExtOffset] = '\0';
+		strcat(g_ExeFileName, EXE_EXTENSION);
 	}
 
 	Init();
