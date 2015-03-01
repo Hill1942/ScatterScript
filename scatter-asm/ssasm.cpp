@@ -489,6 +489,8 @@ void BuildSSE()
 	fwrite(&versionMinor, 1, 1, pExeFile);
 	printf("version: %d.%d\n", versionMajor, versionMinor);
 
+	printf("-------------------------------Global Info--------------------------------\n");
+
 	fwrite(&g_ScriptHeader.iStackSize, 4, 1, pExeFile);
 	fwrite(&g_ScriptHeader.iGlobalDataSize, 4, 1, pExeFile);
 	printf("stackSize: %d\n", g_ScriptHeader.iStackSize);
@@ -505,7 +507,7 @@ void BuildSSE()
 	else
 		printf("main func not exists\n");
 
-	printf("\n");
+	printf("-------------------------------Instr Info--------------------------------\n");
 
 	for (int i = 0; i < g_InstrStreamSize; i++)
 	{
@@ -567,13 +569,13 @@ void BuildSSE()
 		printf("\n");
 	}
 
-	printf("end all instrs\n\n");
+	printf("-------------------------------String Info--------------------------------\n");
 
 	int currentNode;
 	LinkListNode* pNode;
 
 	fwrite(&g_StringTable.iNodeCount, 4, 1, pExeFile);
-	printf("string number: %d\n", g_StringTable.iNodeCount);
+	printf("string number: %d\n\n", g_StringTable.iNodeCount);
 	pNode = g_StringTable.pHead;
 
 	char paramCount;
@@ -593,10 +595,10 @@ void BuildSSE()
 		pNode = pNode->pNext;
 	}
 
-	printf("end all strings\n\n");
+	printf("-------------------------------Func Info--------------------------------\n");
 
 	fwrite(&g_FunctionTable.iNodeCount, 4, 1, pExeFile);
-	printf("function number: %d\n", g_FunctionTable.iNodeCount);
+	printf("function number: %d\n\n", g_FunctionTable.iNodeCount);
 
 	pNode = g_FunctionTable.pHead;
 
@@ -618,10 +620,10 @@ void BuildSSE()
 		printf("\n");
 	}
 
-	printf("end all functions\n\n");
+	printf("-------------------------------HostAPI Info--------------------------------\n");
 
 	fwrite(&g_HostAPICallTable.iNodeCount, 4, 1, pExeFile);
-	printf("host api number: %d\n", g_HostAPICallTable.iNodeCount);
+	printf("host api number: %d\n\n", g_HostAPICallTable.iNodeCount);
 
 	pNode = g_HostAPICallTable.pHead;
 
@@ -638,8 +640,6 @@ void BuildSSE()
 		pNode = pNode->pNext;
 		printf("\n");
 	}
-
-	printf("end all host apis\n\n");
 
 	fclose(pExeFile);
 }
