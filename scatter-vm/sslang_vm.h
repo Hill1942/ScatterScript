@@ -69,5 +69,5 @@ typedef struct _Script
 	RuntimeStack stack;
 	Func* pFuncTable;
 	HostAPICallTable hostAPICallTable;
-};
+}Script;
 #endif
