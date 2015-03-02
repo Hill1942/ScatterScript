@@ -7,6 +7,9 @@
     <Filter Include="Test">
       <UniqueIdentifier>{f3857c64-f34d-4830-a6ed-0211461469d8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="scatter-vm">
+      <UniqueIdentifier>{105e8f78-a093-44f2-bcb2-d678ac694f2c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="scatter-asm\ssasm.cpp">
@@ -27,6 +30,9 @@
     </ClCompile>
     <ClCompile Include="scatter-asm\sslang.cpp">
       <Filter>scatter-asm</Filter>
+    </ClCompile>
+    <ClCompile Include="scatter-vm\ss_lang_vm.cpp">
+      <Filter>scatter-vm</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -50,6 +56,9 @@
     </ClInclude>
     <ClInclude Include="scatter-asm\ssasm_pre.h">
       <Filter>scatter-asm</Filter>
+    </ClInclude>
+    <ClInclude Include="scatter-vm\sslang_vm.h">
+      <Filter>scatter-vm</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
