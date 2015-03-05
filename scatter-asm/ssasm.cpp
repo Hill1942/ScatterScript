@@ -651,89 +651,92 @@ void BuildSSE_Info()
 	if (! pExeFile)
 		ExitOnError("Could not open executable for output");
 	
-	char buf[64];
+	char buf1[MAX_INFO_LINE_SIZE];
+	char buf2[MAX_INFO_LINE_SIZE];
 	
-	fprintf(pExeFile, "%u   ;string", "a");
-	/*fwrite(SSE_ID_STRING, 4, 1, pExeFile);
-	printf("sse_id_string: %s\n", SSE_ID_STRING);
+	swrite(SSE_ID_STRING, 4, 1, buf1);
+	fprintf(pExeFile, "%-20s; magic number: %s\n", buf1, SSE_ID_STRING);
 
 	char versionMajor = VERSION_MAJOR;
 	char versionMinor = VERSION_MINOR;
+	char version[4];
+	version[0] = versionMajor + 48;
+	version[1] = '.';
+	version[2] = versionMinor + 48;
+	version[3] = '\0';
 
-	fwrite(&versionMajor, 1, 1, pExeFile);
-	fwrite(&versionMinor, 1, 1, pExeFile);
-	printf("version: %d.%d\n", versionMajor, versionMinor);
+	swrite(&versionMajor, 1, 1, buf1);
+	swrite(&versionMinor, 1, 1, buf2);
+	fprintf(pExeFile, "%-20s; version: %s\n", strcat(buf1, buf2), version);
 
-	printf("-------------------------------Global Info--------------------------------\n");
+	fprintf(pExeFile, "\n;-------------------------------Global Info--------------------------------\n");
 
-	fwrite(&g_ScriptHeader.iStackSize, 4, 1, pExeFile);
-	fwrite(&g_ScriptHeader.iGlobalDataSize, 4, 1, pExeFile);
-	printf("stackSize: %d\n", g_ScriptHeader.iStackSize);
-	printf("globalDataSize: %d\n", g_ScriptHeader.iGlobalDataSize);
+	swrite(&g_ScriptHeader.iStackSize,      4, 1, buf1);
+	swrite(&g_ScriptHeader.iGlobalDataSize, 4, 1, buf2);
+	fprintf(pExeFile, "%-20s; stack size: %d\n", buf1, g_ScriptHeader.iStackSize);
+	fprintf(pExeFile, "%-20s; global data size: %d\n", buf2, g_ScriptHeader.iGlobalDataSize);
 
 	char isMainExist = 0;
 	if (g_ScriptHeader.iIsMainFuncPresent)
 		isMainExist = 1;
 
-	fwrite(&isMainExist, 1, 1, pExeFile);
-	fwrite(&g_ScriptHeader.iMainFuncIndex, 4, 1, pExeFile);
-	if (isMainExist)
-		printf("main func exists, and the main func index is: %d\n", g_ScriptHeader.iMainFuncIndex);
-	else
-		printf("main func not exists\n");
+	swrite(&isMainExist, 1, 1, buf1);
+	swrite(&g_ScriptHeader.iMainFuncIndex, 4, 1, buf2);
+	fprintf(pExeFile, "%-20s; is main exist: %c\n", buf1, isMainExist + 48);
+	fprintf(pExeFile, "%-20s; main function index: %d\n", buf1, g_ScriptHeader.iMainFuncIndex);
 
-	printf("-------------------------------Instr Info--------------------------------\n");
+	fprintf(pExeFile, "\n;-------------------------------Instr Info--------------------------------\n");
 
 	for (int i = 0; i < g_InstrStreamSize; i++)
 	{
 		short opCode = g_InstrStream[i].iOpcode;
-		fwrite(&opCode, 2, 1, pExeFile);
-		printf("opCode: %d\n", opCode);
+		swrite(&opCode, sizeof(opCode), 1, buf1);
+		fprintf(pExeFile, "%-20s; opCode: %d\n", buf1, opCode);
 
 		char opCount = g_InstrStream[i].iOpCount;
-		fwrite(&opCount, 1, 1, pExeFile);
-		printf("opCount: %d\n", opCount);
+		swrite(&opCount, sizeof(opCount), 1, buf1);
+		fprintf(pExeFile, "%-20s; opCount: %d\n", buf1, opCount);
 
 		for (int j = 0; j < opCount; j++)
 		{
 			Op currentOp = g_InstrStream[i].pOplist[j];
 
 			char opType = currentOp.iType;
-			fwrite(&opType, 1, 1, pExeFile);
-			printf("opType: %d\n", opType);
+			swrite(&opType, sizeof(opType), 1, buf1);
+			fprintf(pExeFile, "%-20s; opType: %d\n", buf1, opType);
 
 			switch (currentOp.iType)
 			{
 			case OP_TYPE_INT:
-				fwrite(&currentOp.iIntLiteral, sizeof(int), 1, pExeFile);
-				printf("opIntLiteral: %d\n", currentOp.iIntLiteral);
+				swrite(&currentOp.iIntLiteral, sizeof(int), 1, buf1);
+				fprintf(pExeFile, "%-20s; opIntLiteral: %d\n", buf1, currentOp.iIntLiteral);
 				break;
 
 			case OP_TYPE_FLOAT:
-				fwrite(&currentOp.fFloatLiteral, sizeof(float), 1, pExeFile);
-				printf("opFloatLiteral: %f\n", currentOp.fFloatLiteral);
+				swrite(&currentOp.fFloatLiteral, sizeof(float), 1, buf1);
+				fprintf(pExeFile, "%-20s; opFloatLiteral: %f\n", buf1, currentOp.fFloatLiteral);
 				break;
 
 			case OP_TYPE_ABS_STACK_INDEX:
-				fwrite(&currentOp.iStackIndex, sizeof(int), 1, pExeFile);
-				fwrite(&currentOp.iOffsetIndex, sizeof(int), 1, pExeFile);
-				printf("opStackIndex: %d\n", currentOp.iStackIndex);
-				printf("opOffsetIndex: %d\n", currentOp.iOffsetIndex);
+				swrite(&currentOp.iStackIndex, sizeof(int), 1, buf1);
+				fprintf(pExeFile, "%-20s; opStackIndex: %d\n", buf1, currentOp.iStackIndex);
+				swrite(&currentOp.iOffsetIndex, sizeof(int), 1, buf1);
+				fprintf(pExeFile, "%-20s; opOffsetIndex: %d\n", buf1, currentOp.iOffsetIndex);
 				break;
 
 			case OP_TYPE_FUNC_INDEX:
-				fwrite(&currentOp.iFuncIndex, sizeof(int), 1, pExeFile);
-				printf("opFuncIndex: %d\n", currentOp.iFuncIndex);
+				swrite(&currentOp.iFuncIndex, sizeof(int), 1, buf1);
+				fprintf(pExeFile, "%-20s; opFuncIndex: %d\n", buf1, currentOp.iFuncIndex);
 				break;
 
 			case OP_TYPE_HOST_API_CALL_INDEX:
-				fwrite(&currentOp.iHostAPICallIndex, sizeof(int), 1, pExeFile);
-				printf("opHostApiIndex: %d\n", currentOp.iHostAPICallIndex);
-				break;;
+				swrite(&currentOp.iHostAPICallIndex, sizeof(int), 1, buf1);
+				fprintf(pExeFile, "%-20s; opHostApiIndex: %d\n", buf1, currentOp.iHostAPICallIndex);
+				break;
 
 			case OP_TYPE_REG:
-				fwrite(&currentOp.iReg, sizeof(int), 1, pExeFile);
-				printf("opReg: %d\n", currentOp.iReg);
+				swrite(&currentOp.iReg, sizeof(int), 1, buf1);
+				fprintf(pExeFile, "%-20s; opReg: %d\n", buf1, currentOp.iReg);
 				break;
 
 			default:
@@ -741,16 +744,17 @@ void BuildSSE_Info()
 			}
 		}
 
-		printf("\n");
+		fprintf(pExeFile, "\n");
 	}
 
-	printf("-------------------------------String Info--------------------------------\n");
+	fprintf(pExeFile, "\n;-------------------------------String Info--------------------------------\n");
 
 	int currentNode;
 	LinkListNode* pNode;
 
-	fwrite(&g_StringTable.iNodeCount, 4, 1, pExeFile);
-	printf("string number: %d\n\n", g_StringTable.iNodeCount);
+	swrite(&g_StringTable.iNodeCount, sizeof(int), 1, buf1);
+	fprintf(pExeFile, "%-20s; string numbers: %d\n", buf1, g_StringTable.iNodeCount);
+
 	pNode = g_StringTable.pHead;
 
 	char paramCount;
@@ -760,45 +764,46 @@ void BuildSSE_Info()
 		char* currentString = (char*) pNode->pData;
 		int   currentStrLen = strlen(currentString);
 
-		fwrite(&currentStrLen, 4, 1, pExeFile);
-		fwrite(&currentString, currentStrLen, 1, pExeFile);
-		printf("strlen: %d\n", currentStrLen);
-		printf("string: %s\n", currentString);
+		swrite(&currentStrLen, sizeof(int), 1, buf1);
+		fprintf(pExeFile, "%-20s; strlen: %d\n", buf1, currentStrLen);
 
-		printf("\n");
+		swrite(currentString, currentStrLen, 1, buf1);
+		fprintf(pExeFile, "%s; string: %s\n", buf1, currentString);
+
+		fprintf(pExeFile, "\n");
 
 		pNode = pNode->pNext;
 	}
 
-	printf("-------------------------------Func Info--------------------------------\n");
+	fprintf(pExeFile, "\n;-------------------------------Func Info--------------------------------\n");
 
-	fwrite(&g_FunctionTable.iNodeCount, 4, 1, pExeFile);
-	printf("function number: %d\n\n", g_FunctionTable.iNodeCount);
+	swrite(&g_FunctionTable.iNodeCount, sizeof(int), 1, buf1);
+	fprintf(pExeFile, "%-20s; function numbers: %d\n", buf1, g_FunctionTable.iNodeCount);
 
 	pNode = g_FunctionTable.pHead;
 
 	for (int i = 0; i < g_FunctionTable.iNodeCount; i++)
 	{
 		FuncNode* pFunc = (FuncNode*) pNode->pData;
-		fwrite(&pFunc->iEntryPoint, sizeof(int), 1, pExeFile);
-		printf("func entry point: %d\n", pFunc->iEntryPoint);
+		swrite(&pFunc->iEntryPoint, sizeof(int), 1, buf1);
+		fprintf(pExeFile, "%-20s; func entry point: %d\n", buf1, pFunc->iEntryPoint);
 
 		paramCount = pFunc->iParamCount;
-		fwrite(&paramCount, 1, 1, pExeFile);
-		printf("func paramCount: %d\n", paramCount);
+		swrite(&paramCount, 1, 1, buf1);
+		fprintf(pExeFile, "%-20s; func paramCount: %d\n", buf1, paramCount);
 
-		fwrite(&pFunc->iLocalDataSize, sizeof(int), 1, pExeFile);
-		printf("func localDataSize: %d\n", pFunc->iLocalDataSize);
+		swrite(&pFunc->iLocalDataSize, sizeof(int), 1, buf1);
+		fprintf(pExeFile, "%-20s; func localDataSize: %d\n", buf1, pFunc->iLocalDataSize);
 
 		pNode->pNext;
 
-		printf("\n");
+		fprintf(pExeFile, "\n");
 	}
 
-	printf("-------------------------------HostAPI Info--------------------------------\n");
+	fprintf(pExeFile, "\n;-------------------------------HostAPI Info--------------------------------\n");
 
-	fwrite(&g_HostAPICallTable.iNodeCount, 4, 1, pExeFile);
-	printf("host api number: %d\n\n", g_HostAPICallTable.iNodeCount);
+	swrite(&g_HostAPICallTable.iNodeCount, sizeof(int), 1, buf1);
+	fprintf(pExeFile, "%-20s; host api numbers: %d\n", buf1, g_HostAPICallTable.iNodeCount);
 
 	pNode = g_HostAPICallTable.pHead;
 
@@ -807,14 +812,15 @@ void BuildSSE_Info()
 		char* currentHostAPICall = (char*) pNode->pData;
 		char  currentHostAPICallLen = strlen(currentHostAPICall);
 
-		fwrite(&currentHostAPICallLen, 1, 1, pExeFile);
-		fwrite(currentHostAPICall, currentHostAPICallLen, 1, pExeFile);
-		printf("currentHostAPICallLen: \d\n", currentHostAPICallLen);
-		printf("currentHostAPICall: %s\n", currentHostAPICall);
+		swrite(&currentHostAPICallLen, 1, 1, buf1);
+		fprintf(pExeFile, "%-20s; currentHostAPICallLen: %d\n", buf1, currentHostAPICallLen);
+
+		swrite(currentHostAPICall, currentHostAPICallLen, 1, buf1);
+		fprintf(pExeFile, "%s; currentHostAPICall: %s\n", buf1, currentHostAPICall);
 
 		pNode = pNode->pNext;
-		printf("\n");
-	}*/
+		fprintf(pExeFile, "\n");
+	}
 
 	fclose(pExeFile);
 }

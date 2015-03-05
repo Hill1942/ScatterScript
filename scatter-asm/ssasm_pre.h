@@ -94,6 +94,7 @@
 #define LEX_STATE_END_STRING        2
 
 #define MAX_SOURCE_LINE_SIZE        4096
+#define MAX_INFO_LINE_SIZE          256
 #define MAX_INDENT_SIZE             256
 #define MAX_INSTR_LOOKUP_COUNT      256
 #define MAX_INSTR_MNEMONIC_SIZE     16

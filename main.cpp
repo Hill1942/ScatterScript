@@ -57,7 +57,7 @@ int main(int argc, char* argv[])
 	}
 
 	strcpy(g_ExeInfoFilename, g_ExeFileName);
-	strcat(g_ExeInfoFilename, "info");
+	strcat(g_ExeInfoFilename, ".info");
 
 	Init();
 
