@@ -18,23 +18,6 @@ typedef struct _Op
 	int iOffsetIndex;
 }Op;
 
-typedef struct _Value
-{
-	int iType;
-	union
-	{
-		int   iIntLiteral;
-		float fFloatLiteral;
-		char* strStringLiteral;
-		int   iStackIndex;
-		int   iInstrIndex;
-		int   iFuncIndex;
-		int   iHostAPICallIndex;
-		int   iReg;
-	};
-	int iOffsetIndex;
-}Value;
-
 typedef int OpType;
 typedef int Token;
 
@@ -52,21 +35,6 @@ typedef struct _InstrLookup
 	int  iOpcount;
 	OpType* pOplist;
 }InstrLookup;
-
-typedef struct _InstrStream
-{
-	Instr* pInstr;
-	int iSize;
-	int iCurrentInstr;
-}InstrStream;
-
-typedef struct _RuntimeStack
-{
-	Value* pElement;
-	int iSize;
-	int* iTopIndex;
-	int iFrameIndex;
-}RuntimeStack;
 
 typedef struct _ScriptHeader
 {

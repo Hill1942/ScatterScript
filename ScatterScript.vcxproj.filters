@@ -31,9 +31,10 @@
     <ClCompile Include="scatter-asm\sslang.cpp">
       <Filter>scatter-asm</Filter>
     </ClCompile>
-    <ClCompile Include="scatter-vm\ss_lang_vm.cpp">
+    <ClCompile Include="scatter-vm\sslang_vm.cpp">
       <Filter>scatter-vm</Filter>
     </ClCompile>
+    <ClCompile Include="vm.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="scatter-asm\ssasm.h">
@@ -58,6 +59,9 @@
       <Filter>scatter-asm</Filter>
     </ClInclude>
     <ClInclude Include="scatter-vm\sslang_vm.h">
+      <Filter>scatter-vm</Filter>
+    </ClInclude>
+    <ClInclude Include="scatter-vm\ssvm_pre.h">
       <Filter>scatter-vm</Filter>
     </ClInclude>
   </ItemGroup>

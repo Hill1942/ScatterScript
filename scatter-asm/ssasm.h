@@ -3,6 +3,7 @@
 
 void AssembleSourceFile();
 void BuildSSE();
+void BuildSSE_Info();
 
 
 #endif

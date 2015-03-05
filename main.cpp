@@ -14,6 +14,7 @@ char   g_SourceFileName[MAX_FILENAME_SIZE];
 int    g_SourceCodeLines;
 char** g_SourceCode;
 char   g_ExeFileName[MAX_FILENAME_SIZE];
+char   g_ExeInfoFilename[MAX_FILENAME_SIZE];
 
 LinkList g_FunctionTable;
 LinkList g_StringTable;
@@ -55,6 +56,9 @@ int main(int argc, char* argv[])
 		strcat(g_ExeFileName, EXE_EXTENSION);
 	}
 
+	strcpy(g_ExeInfoFilename, g_ExeFileName);
+	strcat(g_ExeInfoFilename, "info");
+
 	Init();
 
 	LoadSourceFile();
@@ -62,6 +66,8 @@ int main(int argc, char* argv[])
 	AssembleSourceFile();
 
 	BuildSSE();
+
+	BuildSSE_Info();
 
 	ShutDown();
 
