@@ -78,7 +78,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="asm_test.cpp" />
     <ClCompile Include="scatter-asm\ssasm.cpp" />
     <ClCompile Include="scatter-asm\ssbase_type.cpp" />
     <ClCompile Include="scatter-asm\sslexeme.cpp" />
@@ -86,7 +86,8 @@
     <ClCompile Include="scatter-asm\sssystem.cpp" />
     <ClCompile Include="scatter-asm\ssutil.cpp" />
     <ClCompile Include="scatter-vm\sslang_vm.cpp" />
-    <ClCompile Include="vm.cpp" />
+    <ClCompile Include="scatter-vm\ssvm.cpp" />
+    <ClCompile Include="vm_test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="scatter-asm\ssasm.h" />
@@ -97,6 +98,7 @@
     <ClInclude Include="scatter-asm\sssystem.h" />
     <ClInclude Include="scatter-asm\ssutil.h" />
     <ClInclude Include="scatter-vm\sslang_vm.h" />
+    <ClInclude Include="scatter-vm\ssvm.h" />
     <ClInclude Include="scatter-vm\ssvm_pre.h" />
   </ItemGroup>
   <ItemGroup>
