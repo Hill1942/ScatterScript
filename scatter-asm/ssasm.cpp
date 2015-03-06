@@ -510,6 +510,7 @@ void BuildSSE()
 
 	printf("-------------------------------Instr Info--------------------------------\n");
 
+	fwrite(&g_InstrStreamSize, 4, 1, pExeFile);
 	for (int i = 0; i < g_InstrStreamSize; i++)
 	{
 		short opCode = g_InstrStream[i].iOpcode;
@@ -539,8 +540,23 @@ void BuildSSE()
 				fwrite(&currentOp.fFloatLiteral, sizeof(float), 1, pExeFile);
 				printf("opFloatLiteral: %f\n", currentOp.fFloatLiteral);
 				break;
+				
+			case OP_TYPE_STRING_INDEX:
+				fwrite(&currentOp.iStringTableIndex, sizeof(int), 1, pExeFile);
+				printf("opStringIndex: %f\n", currentOp.iStringTableIndex);
+				break;
+
+			case OP_TYPE_INSTR_INDEX:
+				fwrite(&currentOp.iInstrIndex, sizeof(int), 1, pExeFile);
+				printf("opInstrIndex: %f\n", currentOp.iInstrIndex);
+				break;
 
 			case OP_TYPE_ABS_STACK_INDEX:
+				fwrite(&currentOp.iStackIndex, sizeof(int), 1, pExeFile);
+				printf("opStackIndex: %f\n", currentOp.iStackIndex);
+				break;
+
+			case OP_TYPE_REL_STACK_INDEX:
 				fwrite(&currentOp.iStackIndex, sizeof(int), 1, pExeFile);
 				fwrite(&currentOp.iOffsetIndex, sizeof(int), 1, pExeFile);
 				printf("opStackIndex: %d\n", currentOp.iStackIndex);
@@ -687,6 +703,8 @@ void BuildSSE_Info()
 
 	fprintf(pExeFile, "\n;-------------------------------Instr Info--------------------------------\n");
 
+	swrite(&g_InstrStreamSize, 4, 1, buf1);
+	fprintf(pExeFile, "%-20s; instr stream size: %d\n", buf1, g_InstrStreamSize);
 	for (int i = 0; i < g_InstrStreamSize; i++)
 	{
 		short opCode = g_InstrStream[i].iOpcode;
@@ -717,7 +735,22 @@ void BuildSSE_Info()
 				fprintf(pExeFile, "%-20s; opFloatLiteral: %f\n", buf1, currentOp.fFloatLiteral);
 				break;
 
+			case OP_TYPE_STRING_INDEX:
+				swrite(&currentOp.iStringTableIndex, sizeof(int), 1, buf1);
+				fprintf(pExeFile, "%-20s; opStringIndex: %f\n", buf1, currentOp.iStringTableIndex);
+				break;
+
+			case OP_TYPE_INSTR_INDEX:
+				swrite(&currentOp.iInstrIndex, sizeof(int), 1, buf1);
+				fprintf(pExeFile, "%-20s; opInstrIndex: %f\n", buf1, currentOp.iInstrIndex);
+				break;
+
 			case OP_TYPE_ABS_STACK_INDEX:
+				swrite(&currentOp.iStackIndex, sizeof(int), 1, buf1);
+				fprintf(pExeFile, "%-20s; opStackIndex: %f\n", buf1, currentOp.iStackIndex);
+				break;
+
+			case OP_TYPE_REL_STACK_INDEX:
 				swrite(&currentOp.iStackIndex, sizeof(int), 1, buf1);
 				fprintf(pExeFile, "%-20s; opStackIndex: %d\n", buf1, currentOp.iStackIndex);
 				swrite(&currentOp.iOffsetIndex, sizeof(int), 1, buf1);
