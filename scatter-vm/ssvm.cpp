@@ -179,3 +179,64 @@ int LoadScript(char* filename)
 
 	return LOAD_OK;
 }
+
+void ResetScript()
+{
+	
+}
+
+void CopyValue(Value* dest, Value value)
+{
+	*dest = value;
+}
+
+int ValueToInt(Value value)
+{
+	switch (value.iType)
+	{
+	case OP_TYPE_INT:
+		return value.iIntLiteral;
+	case OP_TYPE_FLOAT:
+		return (int)value.fFloatLiteral;
+	case OP_TYPE_STRING_INDEX:
+		return atoi(value.strStringLiteral);
+	default:
+		return 0;
+	}
+}
+
+float ValueToFloat(Value value)
+{
+	switch (value.iType)
+	{
+	case OP_TYPE_INT:
+		return (float) value.iIntLiteral;
+	case OP_TYPE_FLOAT:
+		return value.fFloatLiteral;
+	case OP_TYPE_STRING_INDEX:
+		return atof(value.strStringLiteral);
+	default:
+		return 0;
+	}
+}
+
+char* ValueToString(Value value)
+{
+	char* str;
+	if (value.iType != OP_TYPE_STRING_INDEX)
+		str = (char*) malloc(MAX_VALUE_STRING_SIZE + 1);
+
+	switch (value.iType)
+	{
+	case OP_TYPE_INT:
+		itoa(value.iIntLiteral, str, 10);
+		return str;
+	case OP_TYPE_FLOAT:
+		sprintf(str, "%f", value.fFloatLiteral);
+		return str;
+	case OP_TYPE_STRING_INDEX:
+		return value.strStringLiteral;
+	default:
+		return NULL;
+	}
+}
