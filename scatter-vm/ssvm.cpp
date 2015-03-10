@@ -185,6 +185,92 @@ void ResetScript()
 	
 }
 
+void RunScript()
+{
+	int isExitExeLoop = FALSE;
+	while (TRUE)
+	{
+		if (g_Script.iIsPaused)
+		{
+			if (GetCurrentTime() >= g_Script.iPauseEndTime)
+				g_Script.iIsPaused = FALSE;
+			else
+				continue;
+		}
+
+		int currentInstr = g_Script.instrStream.iCurrentInstr;
+		int opCode = g_Script.instrStream.pInstr[currentInstr].iOpcode;
+
+		printf("\t");
+		if (opCode < 10)
+			printf(" %d", opCode);
+		else
+			printf("%d", opCode);
+		printf(" %s", );
+
+		switch (opCode)
+		{
+		case INSTR_MOV:
+
+		case INSTR_ADD:
+		case INSTR_SUB:
+		case INSTR_MUL:
+		case INSTR_DIV:
+		case INSTR_MOD:
+		case INSTR_EXP:
+
+		case INSTR_AND:
+		case INSTR_OR:
+		case INSTR_XOR:
+		case INSTR_SHL:
+		case INSTR_SHR:
+			{
+				Value dest = GetOpValue(0);
+				Value source = GetOpValue(1);
+
+				switch (opCode)
+				{
+				case INSTR_MOV:
+					if (GetOpValuePointer(0) == GetOpValuePointer(1))
+						break;
+
+					CopyValue(&dest, source);
+					break;
+
+				case INSTR_ADD:
+
+				case INSTR_SUB:
+				case INSTR_MUL:
+				case INSTR_DIV:
+				case INSTR_MOD:
+				case INSTR_EXP:
+
+				case INSTR_AND:
+				case INSTR_OR:
+				case INSTR_XOR:
+				case INSTR_SHL:
+				case INSTR_SHR:
+				default:
+					break;
+				}
+			}
+
+
+		default:
+			break;
+		}
+
+		printf("\n");
+
+		if (currentInstr == g_Script.instrStream.iCurrentInstr)
+			g_Script.instrStream.iCurrentInstr++;
+
+		if (isExitExeLoop)
+			break;
+	}
+	
+}
+
 void CopyValue(Value* dest, Value value)
 {
 	*dest = value;
@@ -243,7 +329,7 @@ char* ValueToString(Value value)
 
 Value GetStackValue(int index)
 {
-	return g_Script.stack.pElement[GetOpValueAsStackIndex(index)];
+	return g_Script.stack.pElement[GET_POS_STACK_INDEX(index)];
 }
 
 int GetOpType(int opIndex);
@@ -268,6 +354,10 @@ int GetOpValueAsStackIndex(int opIndex)
 
 	switch (opValue.iType)
 	{
+	case OP_TYPE_ABS_STACK_INDEX:
+		return opValue.iStackIndex;
+	case OP_TYPE_REL_STACK_INDEX:
+
 
 
 	}
