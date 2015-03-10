@@ -240,3 +240,38 @@ char* ValueToString(Value value)
 		return NULL;
 	}
 }
+
+Value GetStackValue(int index)
+{
+	return g_Script.stack.pElement[GetOpValueAsStackIndex(index)];
+}
+
+int GetOpType(int opIndex);
+Value GetOpValue(int opIndex)
+{
+	int currentInstr = g_Script.instrStream.iCurrentInstr;
+	Value opValue = g_Script.instrStream.pInstr[currentInstr].pOplist[opIndex];
+
+	switch (opValue.iType)
+	{
+		
+	
+	}
+}
+int GetOpValueAsInt(int opIndex);
+float GetOpValueAsFloat(int opIndex);
+char* GetOpValueAsString(int opIndex);
+int GetOpValueAsStackIndex(int opIndex)
+{
+	int currentInstr = g_Script.instrStream.iCurrentInstr;
+	Value opValue = g_Script.instrStream.pInstr[currentInstr].pOplist[opIndex];
+
+	switch (opValue.iType)
+	{
+
+
+	}
+}
+int GetOpValueAsInstrIndex(int opIndex);
+int GetOpValueAsFuncIndex(int opIndex);
+char* GetOpValueASHostAPI(int opIndex);
