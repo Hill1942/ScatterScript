@@ -21,5 +21,9 @@ int GetOpValueAsInstrIndex(int opIndex);
 int GetOpValueAsFuncIndex(int opIndex);
 char* GetOpValueASHostAPI(int opIndex);
 
+void Push(Value value);
+Value Pop();
+void PushFrame(int size);
+void PopFrame(int size);
 
 

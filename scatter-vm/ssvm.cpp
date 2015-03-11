@@ -402,14 +402,144 @@ void RunScript()
 			}
 
 		case INSTR_JMP:
+			{
+				int nextInstr = GetOpValueAsInstrIndex(0);
+				g_Script.instrStream.iCurrentInstr = nextInstr;
+
+				break;
+			}
 		case INSTR_JE:
 		case INSTR_JNE:
 		case INSTR_JG:
 		case INSTR_JGE:
 		case INSTR_JL:
 		case INSTR_JLE:
+			{
+				Value op0 = GetOpValue(0);
+				Value op1 = GetOpValue(1);
+				int nextInstr = GetOpValueAsInstrIndex(2);
+
+				int isJump = FALSE;
+				switch (opCode)
+				{
+				case INSTR_JE:
+					{
+						switch (op0.iType)
+						{
+						case OP_TYPE_INT:
+							if (op0.iIntLiteral == op1.iIntLiteral)
+								isJump = TRUE;
+							break;
+						case OP_TYPE_FLOAT:
+							if (op0.fFloatLiteral == op1.fFloatLiteral)
+								isJump = TRUE;
+							break;
+						case OP_TYPE_STRING_INDEX:
+							if (strcmp(op0.strStringLiteral, op1.strStringLiteral) == 0)
+								isJump = TRUE;
+							break;
+						default:
+							break;
+						}
+					}
+				case INSTR_JNE:
+					{
+						switch (op0.iType)
+						{
+						case OP_TYPE_INT:
+							if (op0.iIntLiteral != op1.iIntLiteral)
+								isJump = TRUE;
+							break;
+						case OP_TYPE_FLOAT:
+							if (op0.fFloatLiteral != op1.fFloatLiteral)
+								isJump = TRUE;
+							break;
+						case OP_TYPE_STRING_INDEX:
+							if (strcmp(op0.strStringLiteral, op1.strStringLiteral) != 0)
+								isJump = TRUE;
+							break;
+						default:
+							break;
+						}
+					}
+				case INSTR_JG:
+					{
+						switch (op0.iType)
+						{
+						case OP_TYPE_INT:
+							if (op0.iIntLiteral > op1.iIntLiteral)
+								isJump = TRUE;
+							break;
+						case OP_TYPE_FLOAT:
+							if (op0.fFloatLiteral > op1.fFloatLiteral)
+								isJump = TRUE;
+							break;
+						default:
+							break;
+						}
+					}
+				case INSTR_JGE:
+					{
+						switch (op0.iType)
+						{
+						case OP_TYPE_INT:
+							if (op0.iIntLiteral >= op1.iIntLiteral)
+								isJump = TRUE;
+							break;
+						case OP_TYPE_FLOAT:
+							if (op0.fFloatLiteral >= op1.fFloatLiteral)
+								isJump = TRUE;
+							break;
+						default:
+							break;
+						}
+					}
+				case INSTR_JL:
+					{
+						switch (op0.iType)
+						{
+						case OP_TYPE_INT:
+							if (op0.iIntLiteral < op1.iIntLiteral)
+								isJump = TRUE;
+							break;
+						case OP_TYPE_FLOAT:
+							if (op0.fFloatLiteral < op1.fFloatLiteral)
+								isJump = TRUE;
+							break;
+						default:
+							break;
+						}
+					}
+				case INSTR_JLE:
+					{
+						switch (op0.iType)
+						{
+						case OP_TYPE_INT:
+							if (op0.iIntLiteral <= op1.iIntLiteral)
+								isJump = TRUE;
+							break;
+						case OP_TYPE_FLOAT:
+							if (op0.fFloatLiteral <= op1.fFloatLiteral)
+								isJump = TRUE;
+							break;
+						default:
+							break;
+						}
+					}
+				default:
+					break;
+				}
+
+				if (isJump)
+					g_Script.instrStream.iCurrentInstr = nextInstr;
+				break;
+			}
 
 		case INSTR_PUSH:
+			{
+				Value value = GetOpValue(0);
+				
+			}
 		case INSTR_POP:
 
 		case INSTR_CALL:
