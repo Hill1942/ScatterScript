@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 #include "ssvm_pre.h"
 #include "sslang_vm.h"
@@ -236,14 +237,12 @@ void RunScript()
 
 					CopyValue(&dest, source);
 					break;
-
 				case INSTR_ADD:
 					if (dest.iType == OP_TYPE_INT)
 						dest.iIntLiteral += GetOpValueAsInt(1);
 					else
 						dest.fFloatLiteral += GetOpValueAsFloat(1);
 					break;
-
 				case INSTR_SUB:
 					if (dest.iType == OP_TYPE_INT)
 						dest.iIntLiteral -= GetOpValueAsInt(1);
@@ -251,20 +250,141 @@ void RunScript()
 						dest.fFloatLiteral -= GetOpValueAsFloat(1);
 					break;
 				case INSTR_MUL:
+					if (dest.iType == OP_TYPE_INT)
+						dest.iIntLiteral *= GetOpValueAsInt(1);
+					else
+						dest.fFloatLiteral *= GetOpValueAsFloat(1);
+					break;
 				case INSTR_DIV:
+					if (dest.iType == OP_TYPE_INT)
+						dest.iIntLiteral /= GetOpValueAsInt(1);
+					else
+						dest.fFloatLiteral /= GetOpValueAsFloat(1);
+					break;
 				case INSTR_MOD:
+					if (dest.iType == OP_TYPE_INT)
+						dest.iIntLiteral %= GetOpValueAsInt(1);
+					break;
 				case INSTR_EXP:
+					if (dest.iType == OP_TYPE_INT)
+						dest.iIntLiteral = (int) pow((float)dest.iIntLiteral, GetOpValueAsInt(1));
+					else
+						dest.fFloatLiteral = (float) pow((float)dest.iIntLiteral, GetOpValueAsFloat(1));
+					break;
 
 				case INSTR_AND:
+					if (dest.iType == OP_TYPE_INT)
+						dest.iIntLiteral &= GetOpValueAsInt(1);
+					break;
 				case INSTR_OR:
+					if (dest.iType == OP_TYPE_INT)
+						dest.iIntLiteral |= GetOpValueAsInt(1);
+					break;
 				case INSTR_XOR:
+					if (dest.iType == OP_TYPE_INT)
+						dest.iIntLiteral ^= GetOpValueAsInt(1);
+					break;
 				case INSTR_SHL:
+					if (dest.iType == OP_TYPE_INT)
+						dest.iIntLiteral <<= GetOpValueAsInt(1);
+					break;
 				case INSTR_SHR:
+					if (dest.iType == OP_TYPE_INT)
+						dest.iIntLiteral >>= GetOpValueAsInt(1);
+					break;
 				default:
 					break;
 				}
+
+				*GetOpValuePointer(0) = dest;
 			}
 
+		case INSTR_NEG:
+		case INSTR_NOT:
+		case INSTR_INC:
+		case INSTR_DEC:
+			{
+				Value dest = GetOpValue(0);
+
+				switch (opCode)
+				{
+				case INSTR_NEG:
+					if (dest.iType == OP_TYPE_INT)
+						dest.iIntLiteral = -dest.iIntLiteral;
+					else
+						dest.fFloatLiteral = -dest.fFloatLiteral;
+					break;
+				case INSTR_NOT:
+					if (dest.iType == OP_TYPE_INT)
+						dest.iIntLiteral = ~dest.iIntLiteral;
+				case INSTR_INC:
+					if (dest.iType == OP_TYPE_INT)
+						dest.iIntLiteral++;
+					else
+						dest.fFloatLiteral++;
+					break;
+				case INSTR_DEC:
+					if (dest.iType == OP_TYPE_INT)
+						dest.iIntLiteral--;
+					else
+						dest.fFloatLiteral--;
+					break;
+				default:
+					break;
+				}
+
+				*GetOpValuePointer(0) = dest;
+			}
+
+		case INSTR_CONCAT:
+			{
+				Value dest = GetOpValue(0);
+
+				if (dest.iType != OP_TYPE_STRING_INDEX)
+					break;
+
+				char* appendString = GetOpValueAsString(1);
+				int newStringLength = strlen(dest.strStringLiteral) + strlen(appendString);
+				char* newString = (char*) malloc(newStringLength + 1);
+
+				strcpy(newString, dest.strStringLiteral);
+				strcat(newString, appendString);
+
+				//newString[newStringLength] = '\0';
+				free(dest.strStringLiteral);
+				dest.strStringLiteral = newString;
+
+				*GetOpValuePointer(0) = dest;
+				break;
+			}
+
+		case INSTR_GETCHAR:
+			{
+
+			}
+
+		case INSTR_SETCHAR:
+			{
+
+			}
+
+		case INSTR_JMP:
+		case INSTR_JE:
+		case INSTR_JNE:
+		case INSTR_JG:
+		case INSTR_JGE:
+		case INSTR_JL:
+		case INSTR_JLE:
+
+		case INSTR_PUSH:
+		case INSTR_POP:
+
+		case INSTR_CALL:
+		case INSTR_RET:
+		case INSTR_CALLHOST:
+
+		case INSTR_PAUSE:
+		case INSTR_EXIT:
 
 		default:
 			break;
