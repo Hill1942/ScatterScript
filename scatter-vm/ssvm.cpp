@@ -192,10 +192,10 @@ void RunScript()
 	{
 		if (g_Script.iIsPaused)
 		{
-			if (GetCurrentTime() >= g_Script.iPauseEndTime)
-				g_Script.iIsPaused = FALSE;
+			/*if (GetCurrentTime() >= g_Script.iPauseEndTime)
+			g_Script.iIsPaused = FALSE;
 			else
-				continue;
+			continue;*/
 		}
 
 		int currentInstr = g_Script.instrStream.iCurrentInstr;
@@ -206,7 +206,7 @@ void RunScript()
 			printf(" %d", opCode);
 		else
 			printf("%d", opCode);
-		printf(" %s", );
+		printf(" %s", "dd");
 
 		switch (opCode)
 		{
@@ -318,14 +318,14 @@ float ValueToFloat(Value value)
 
 char* ValueToString(Value value)
 {
-	char* str;
+	char* str = NULL;
 	if (value.iType != OP_TYPE_STRING_INDEX)
 		str = (char*) malloc(MAX_VALUE_STRING_SIZE + 1);
 
 	switch (value.iType)
 	{
 	case OP_TYPE_INT:
-		itoa(value.iIntLiteral, str, 10);
+		_itoa(value.iIntLiteral, str, 10);
 		return str;
 	case OP_TYPE_FLOAT:
 		sprintf(str, "%f", value.fFloatLiteral);
@@ -339,7 +339,7 @@ char* ValueToString(Value value)
 
 Value GetStackValue(int index)
 {
-	return g_Script.stack.pElement[GET_POS_STACK_INDEX(index)];
+	return g_Script.stack.pElement[GET_STACK_INDEX(index)];
 }
 
 int GetOpType(int opIndex);
@@ -353,10 +353,24 @@ Value GetOpValue(int opIndex)
 		
 	
 	}
+	return opValue;
 }
-int GetOpValueAsInt(int opIndex);
-float GetOpValueAsFloat(int opIndex);
-char* GetOpValueAsString(int opIndex);
+Value* GetOpValuePointer(int opIndex)
+{
+	return NULL;
+}
+int GetOpValueAsInt(int opIndex)
+{
+	return 0;
+}
+float GetOpValueAsFloat(int opIndex)
+{
+	return 0;
+}
+char* GetOpValueAsString(int opIndex)
+{
+	return 0;
+}
 int GetOpValueAsStackIndex(int opIndex)
 {
 	int currentInstr = g_Script.instrStream.iCurrentInstr;
@@ -367,11 +381,21 @@ int GetOpValueAsStackIndex(int opIndex)
 	case OP_TYPE_ABS_STACK_INDEX:
 		return opValue.iStackIndex;
 	case OP_TYPE_REL_STACK_INDEX:
-
+		break;
 
 
 	}
+	return 0;
 }
-int GetOpValueAsInstrIndex(int opIndex);
-int GetOpValueAsFuncIndex(int opIndex);
-char* GetOpValueASHostAPI(int opIndex);
+int GetOpValueAsInstrIndex(int opIndex)
+{
+	return 0;
+}
+int GetOpValueAsFuncIndex(int opIndex)
+{
+	return 0;
+}
+char* GetOpValueASHostAPI(int opIndex)
+{
+	return NULL;
+}

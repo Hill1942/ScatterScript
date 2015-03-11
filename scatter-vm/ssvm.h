@@ -4,6 +4,8 @@
 
 void ResetScript();
 
+void CopyValue(Value* dest, Value value);
+
 int ValueToInt(Value value);
 float ValueToFloat(Value value);
 char* ValueToString(Value value);

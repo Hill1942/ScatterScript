@@ -1,4 +1,6 @@
 #include "../scatter-asm/ssasm_pre.h"
+#define TRUE  1
+#define FALSE 0
 
 #define LOAD_OK                        0
 #define LOAD_ERROR_FAIL_FILE_OPEN      1
