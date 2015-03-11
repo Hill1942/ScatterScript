@@ -238,8 +238,18 @@ void RunScript()
 					break;
 
 				case INSTR_ADD:
+					if (dest.iType == OP_TYPE_INT)
+						dest.iIntLiteral += GetOpValueAsInt(1);
+					else
+						dest.fFloatLiteral += GetOpValueAsFloat(1);
+					break;
 
 				case INSTR_SUB:
+					if (dest.iType == OP_TYPE_INT)
+						dest.iIntLiteral -= GetOpValueAsInt(1);
+					else
+						dest.fFloatLiteral -= GetOpValueAsFloat(1);
+					break;
 				case INSTR_MUL:
 				case INSTR_DIV:
 				case INSTR_MOD:

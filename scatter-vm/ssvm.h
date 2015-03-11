@@ -1,4 +1,4 @@
-#define GET_POS_STACK_INDEX(index) \
+#define GET_STACK_INDEX(index) \
 	(index < 0 ? index += g_Script.stack.iFrameIndex : index)
 
 
