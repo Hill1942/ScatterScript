@@ -360,12 +360,45 @@ void RunScript()
 
 		case INSTR_GETCHAR:
 			{
+				Value dest = GetOpValue(0);
 
+				char* targetString = GetOpValueAsString(1);
+
+				char* newString;
+				if (dest.iType == OP_TYPE_STRING_INDEX)
+				{
+					if (strlen(dest.strStringLiteral) >= 1)
+					{
+						newString = dest.strStringLiteral;
+					}
+					else
+					{
+						free(dest.strStringLiteral);
+						newString = (char*) malloc(2);
+					}
+				}
+				else
+				{
+					newString = (char*) malloc(2);
+					dest.iType = OP_TYPE_STRING_INDEX;
+				}
+
+				int charIndex = GetOpValueAsInt(2);
+				newString[0] = targetString[charIndex];
+				newString[1] = '\0';
+
+				dest.strStringLiteral = newString;
+				*GetOpValuePointer(0) = dest;
 			}
 
 		case INSTR_SETCHAR:
 			{
+				int charIndex = GetOpValueAsInt(1);
+				char* targetString = GetOpValueAsString(2);
 
+				if (GetOpValue(0).iType != OP_TYPE_STRING_INDEX)
+					break;
+				GetOpValuePointer(0)->strStringLiteral[charIndex] = targetString[0];
 			}
 
 		case INSTR_JMP:
