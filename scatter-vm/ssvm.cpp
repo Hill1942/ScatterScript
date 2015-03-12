@@ -538,16 +538,66 @@ void RunScript()
 		case INSTR_PUSH:
 			{
 				Value value = GetOpValue(0);
-				
+				Push(value);
+				break;
 			}
 		case INSTR_POP:
+			{
+				*GetOpValuePointer(0) = Pop();
+				break;
+			}
 
 		case INSTR_CALL:
+			{
+				int targetFuncIndex = GetOpValueAsFuncIndex(0);
+				Func targetFunc = g_Script.pFuncTable[targetFuncIndex];
+
+				Value returnAddress;
+				returnAddress.iInstrIndex = g_Script.instrStream.iCurrentInstr + 1;
+				Push(returnAddress);
+
+				PushFrame(targetFunc.iLocalDataSize + 1);
+
+				Value targetFuncIndexValue;
+				targetFuncIndexValue.iFuncIndex = targetFuncIndex;
+				SetStackValue(g_Script.stack.iTopIndex - 1, targetFuncIndexValue);
+				
+				g_Script.instrStream.iCurrentInstr = targetFunc.iEntryPoint;
+				break;
+			}
 		case INSTR_RET:
+			{
+				Value targetFuncIndexValue = Pop();
+				Func targetFunc = g_Script.pFuncTable[targetFuncIndexValue.iFuncIndex];
+				int frameIndex = targetFuncIndexValue.iOffsetIndex;
+
+				Value returnAddress = GetStackValue(g_Script.stack.iTopIndex - (targetFunc.iLocalDataSize + 1));
+				
+				PopFrame(targetFunc.iStackFrameSize);
+
+				g_Script.stack.iFrameIndex = frameIndex;
+				g_Script.instrStream.iCurrentInstr = returnAddress.iInstrIndex;
+
+				break;
+			}
 		case INSTR_CALLHOST:
+			{
+				break;
+			}
 
 		case INSTR_PAUSE:
+			{
+				break;
+			}
 		case INSTR_EXIT:
+			{
+				Value exitCodeValue = GetOpValue(0);
+				int exitCode = exitCodeValue.iIntLiteral;
+
+				isExitExeLoop = TRUE;
+
+				break;
+			}
 
 		default:
 			break;
@@ -625,6 +675,11 @@ Value GetStackValue(int index)
 	return g_Script.stack.pElement[GET_STACK_INDEX(index)];
 }
 
+void SetStackValue(int index, Value value)
+{
+	g_Script.stack.pElement[GET_STACK_INDEX(index)] = value;
+}
+
 int GetOpType(int opIndex);
 Value GetOpValue(int opIndex)
 {
@@ -681,4 +736,20 @@ int GetOpValueAsFuncIndex(int opIndex)
 char* GetOpValueASHostAPI(int opIndex)
 {
 	return NULL;
+}
+
+void Push(Value value)
+{
+}
+Value Pop()
+{
+
+}
+void PushFrame(int size)
+{
+
+}
+void PopFrame(int size)
+{
+
 }

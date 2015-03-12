@@ -36,7 +36,7 @@ typedef struct _RuntimeStack
 {
 	Value* pElement;
 	int iSize;
-	int* iTopIndex;
+	int iTopIndex;
 	int iFrameIndex;
 }RuntimeStack;
 
