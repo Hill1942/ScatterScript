@@ -11,6 +11,50 @@
 
 extern Script g_Script;
 
+void Init()
+{
+	g_Script.iIsMainFuncExist = FALSE;
+	g_Script.iIsPaused = FALSE;
+
+	g_Script.instrStream.pInstr = NULL;
+	g_Script.stack.pElement = NULL;
+	g_Script.pFuncTable = NULL;
+	g_Script.hostAPICallTable.ppStrCalls = NULL;
+}
+
+void ShutDown()
+{
+	for (int i = 0; i < g_Script.instrStream.iSize; i++)
+	{
+		int opCount = g_Script.instrStream.pInstr[i].iOpCount;
+		Value* pOplist = g_Script.instrStream.pInstr[i].pOplist;
+
+		for (int j = 0; j < opCount; j++)
+			if (pOplist[j].strStringLiteral)
+				free(pOplist[j].strStringLiteral);
+	}
+
+	if (g_Script.instrStream.pInstr)
+		free(g_Script.instrStream.pInstr);
+
+	for (int i = 0; i < g_Script.stack.iSize; i++)
+		if (g_Script.stack.pElement[i].iType = OP_TYPE_STRING_INDEX)
+			free(g_Script.stack.pElement[i].strStringLiteral);
+
+	if (g_Script.stack.pElement)
+		free(g_Script.stack.pElement);
+
+	if (g_Script.pFuncTable)
+		free(g_Script.pFuncTable);
+
+	for (int i = 0; i < g_Script.hostAPICallTable.iSize; i++)
+		if (g_Script.hostAPICallTable.ppStrCalls[i])
+			free(g_Script.hostAPICallTable.ppStrCalls[i]);
+
+	if (g_Script.hostAPICallTable.ppStrCalls)
+		free(g_Script.hostAPICallTable.ppStrCalls);
+}
+
 int LoadScript(char* filename)
 {
 	FILE* pScriptFile = fopen(filename, "rb");
@@ -719,8 +763,11 @@ Value GetOpValue(int opIndex)
 	{
 	case OP_TYPE_ABS_STACK_INDEX:
 	case OP_TYPE_REL_STACK_INDEX:
-		int index = GetOpValueAsStackIndex(opIndex);
-		return GetStackValue(index);
+		{
+			int index = GetOpValueAsStackIndex(opIndex);
+			return GetStackValue(index);
+		}
+		
 
 	case OP_TYPE_REG:
 		return g_Script._RetVal;
@@ -737,8 +784,11 @@ Value* GetOpValuePointer(int opIndex)
 	{
 	case OP_TYPE_ABS_STACK_INDEX:
 	case OP_TYPE_REL_STACK_INDEX:
-		int index = GetOpValueAsStackIndex(opIndex);
-		return &g_Script.stack.pElement[GET_STACK_INDEX(index)];
+		{
+			int index = GetOpValueAsStackIndex(opIndex);
+			return &g_Script.stack.pElement[GET_STACK_INDEX(index)];
+		}
+		
 
 	case OP_TYPE_REG:
 		return &g_Script._RetVal;

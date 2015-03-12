@@ -49,6 +49,8 @@
 #define INSTR_PAUSE          31
 #define INSTR_EXIT           32
 
+#define INSTR_PRINT          33
+
 #define OP_TYPE_INT                 0
 #define OP_TYPE_FLOAT               1
 #define OP_TYPE_STRING_INDEX        2
@@ -108,6 +110,7 @@
 #define KW_FUNCTION                 "func"
 #define KW_PARAM                    "param"
 #define KW_RETVAL                   "_retval"
+#define KW_PRINT                    "_print"
 
 #define ERROR_MSG_INVALID_INPUT             \
 	"Invalid input"

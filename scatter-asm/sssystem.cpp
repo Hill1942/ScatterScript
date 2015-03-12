@@ -302,6 +302,13 @@ void InitInstrTable()
 		                     OP_FLAG_TYPE_STRING |
 		                     OP_FLAG_TYPE_MEM_REF |
 		                     OP_FLAG_TYPE_REG);
+
+	instrIndex = AddInstrLookup("_print", INSTR_PRINT, 1);
+	setOpType(instrIndex, 0, OP_FLAG_TYPE_INT |
+		                     OP_FLAG_TYPE_FLOAT |
+		                     OP_FLAG_TYPE_STRING |
+		                     OP_FLAG_TYPE_MEM_REF |
+		                     OP_FLAG_TYPE_REG);
 }
 
 void Exit()

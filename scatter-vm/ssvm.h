@@ -1,6 +1,9 @@
 #define GET_STACK_INDEX(index) \
 	(index < 0 ? index += g_Script.stack.iFrameIndex : index)
 
+void Init();
+void ShutDown();
+
 int LoadScript(char* filename);
 void ResetScript();
 void RunScript();
@@ -10,6 +13,9 @@ void CopyValue(Value* dest, Value source);
 int ValueToInt(Value value);
 float ValueToFloat(Value value);
 char* ValueToString(Value value);
+
+Value GetStackValue(int index);
+void SetStackValue(int index, Value value);
 
 int GetOpType(int opIndex);
 Value GetOpValue(int opIndex);
