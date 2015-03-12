@@ -543,17 +543,17 @@ void BuildSSE()
 				
 			case OP_TYPE_STRING_INDEX:
 				fwrite(&currentOp.iStringTableIndex, sizeof(int), 1, pExeFile);
-				printf("opStringIndex: %f\n", currentOp.iStringTableIndex);
+				printf("opStringIndex: %d\n", currentOp.iStringTableIndex);
 				break;
 
 			case OP_TYPE_INSTR_INDEX:
 				fwrite(&currentOp.iInstrIndex, sizeof(int), 1, pExeFile);
-				printf("opInstrIndex: %f\n", currentOp.iInstrIndex);
+				printf("opInstrIndex: %d\n", currentOp.iInstrIndex);
 				break;
 
 			case OP_TYPE_ABS_STACK_INDEX:
 				fwrite(&currentOp.iStackIndex, sizeof(int), 1, pExeFile);
-				printf("opStackIndex: %f\n", currentOp.iStackIndex);
+				printf("opStackIndex: %d\n", currentOp.iStackIndex);
 				break;
 
 			case OP_TYPE_REL_STACK_INDEX:
@@ -632,7 +632,7 @@ void BuildSSE()
 		fwrite(&pFunc->iLocalDataSize, sizeof(int), 1, pExeFile);
 		printf("func localDataSize: %d\n", pFunc->iLocalDataSize);
 
-		pNode->pNext;
+		pNode = pNode->pNext;
 
 		printf("\n");
 	}
@@ -737,17 +737,17 @@ void BuildSSE_Info()
 
 			case OP_TYPE_STRING_INDEX:
 				swrite(&currentOp.iStringTableIndex, sizeof(int), 1, buf1);
-				fprintf(pExeFile, "%-20s; opStringIndex: %f\n", buf1, currentOp.iStringTableIndex);
+				fprintf(pExeFile, "%-20s; opStringIndex: %d\n", buf1, currentOp.iStringTableIndex);
 				break;
 
 			case OP_TYPE_INSTR_INDEX:
 				swrite(&currentOp.iInstrIndex, sizeof(int), 1, buf1);
-				fprintf(pExeFile, "%-20s; opInstrIndex: %f\n", buf1, currentOp.iInstrIndex);
+				fprintf(pExeFile, "%-20s; opInstrIndex: %d\n", buf1, currentOp.iInstrIndex);
 				break;
 
 			case OP_TYPE_ABS_STACK_INDEX:
 				swrite(&currentOp.iStackIndex, sizeof(int), 1, buf1);
-				fprintf(pExeFile, "%-20s; opStackIndex: %f\n", buf1, currentOp.iStackIndex);
+				fprintf(pExeFile, "%-20s; opStackIndex: %d\n", buf1, currentOp.iStackIndex);
 				break;
 
 			case OP_TYPE_REL_STACK_INDEX:
@@ -828,7 +828,7 @@ void BuildSSE_Info()
 		swrite(&pFunc->iLocalDataSize, sizeof(int), 1, buf1);
 		fprintf(pExeFile, "%-20s; func localDataSize: %d\n", buf1, pFunc->iLocalDataSize);
 
-		pNode->pNext;
+		pNode = pNode->pNext;
 
 		fprintf(pExeFile, "\n");
 	}

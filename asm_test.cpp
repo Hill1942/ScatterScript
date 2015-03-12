@@ -32,44 +32,44 @@ int g_currentInstrIndex;
 
 InstrLookup g_InstrTable[MAX_INSTR_LOOKUP_COUNT];
 
-int main(int argc, char* argv[])
-{
-	if (argc < 2)
-	{
-		printf("Wrong usage!\n");
-		return 0;
-	}
-
-	strcpy(g_SourceFileName, argv[1]);
-
-	if (argv[2])
-	{
-		strcpy(g_ExeFileName, argv[2]);
-		if (! strstr(g_ExeFileName, EXE_EXTENSION))
-			strcat(g_ExeFileName, EXE_EXTENSION);
-	}
-	else
-	{
-		int ExtOffset = strrchr(g_SourceFileName, '.') - g_SourceFileName;
-		strncpy(g_ExeFileName, g_SourceFileName, ExtOffset);
-		g_ExeFileName[ExtOffset] = '\0';
-		strcat(g_ExeFileName, EXE_EXTENSION);
-	}
-
-	strcpy(g_ExeInfoFilename, g_ExeFileName);
-	strcat(g_ExeInfoFilename, ".info");
-
-	Init();
-
-	LoadSourceFile();
-
-	AssembleSourceFile();
-
-	BuildSSE();
-
-	BuildSSE_Info();
-
-	ShutDown();
-
-	return 0;
-}
+//int main(int argc, char* argv[])
+//{
+//	if (argc < 2)
+//	{
+//		printf("Wrong usage!\n");
+//		return 0;
+//	}
+//
+//	strcpy(g_SourceFileName, argv[1]);
+//
+//	if (argv[2])
+//	{
+//		strcpy(g_ExeFileName, argv[2]);
+//		if (! strstr(g_ExeFileName, EXE_EXTENSION))
+//			strcat(g_ExeFileName, EXE_EXTENSION);
+//	}
+//	else
+//	{
+//		int ExtOffset = strrchr(g_SourceFileName, '.') - g_SourceFileName;
+//		strncpy(g_ExeFileName, g_SourceFileName, ExtOffset);
+//		g_ExeFileName[ExtOffset] = '\0';
+//		strcat(g_ExeFileName, EXE_EXTENSION);
+//	}
+//
+//	strcpy(g_ExeInfoFilename, g_ExeFileName);
+//	strcat(g_ExeInfoFilename, ".info");
+//
+//	ASM_Init();
+//
+//	LoadSourceFile();
+//
+//	AssembleSourceFile();
+//
+//	BuildSSE();
+//
+//	BuildSSE_Info();
+//
+//	ASM_ShutDown();
+//
+//	return 0;
+//}

@@ -20,7 +20,7 @@ int main(int argc, char* argv[])
 	char* exeFilename = (char*) malloc(strlen(argv[1]) + 1);
 	strcpy(exeFilename, argv[1]);
 
-	Init();
+	VM_Init();
 
 	int errorCode = LoadScript(exeFilename);
 
@@ -48,4 +48,10 @@ int main(int argc, char* argv[])
 
 		return 0;
 	}
+
+	ResetScript();
+
+	RunScript();
+
+	VM_ShutDown();
 }

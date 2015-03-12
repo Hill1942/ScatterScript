@@ -11,7 +11,7 @@
 
 extern Script g_Script;
 
-void Init()
+void VM_Init()
 {
 	g_Script.iIsMainFuncExist = FALSE;
 	g_Script.iIsPaused = FALSE;
@@ -22,7 +22,7 @@ void Init()
 	g_Script.hostAPICallTable.ppStrCalls = NULL;
 }
 
-void ShutDown()
+void VM_ShutDown()
 {
 	for (int i = 0; i < g_Script.instrStream.iSize; i++)
 	{
@@ -128,9 +128,10 @@ int LoadScript(char* filename)
 				break;
 			case OP_TYPE_REL_STACK_INDEX:
 				fread(&pOplist[j].iStackIndex, sizeof(int), 1, pScriptFile);
+				fread(&pOplist[j].iOffsetIndex, sizeof(int), 1, pScriptFile);
 				break;
 			case OP_TYPE_FUNC_INDEX:
-				fread(&pOplist[j].iOffsetIndex, sizeof(int), 1, pScriptFile);
+				fread(&pOplist[j].iFuncIndex, sizeof(int), 1, pScriptFile);
 				break;
 			case OP_TYPE_HOST_API_CALL_INDEX:
 				fread(&pOplist[j].iHostAPICallIndex, sizeof(int), 1, pScriptFile);
@@ -265,12 +266,12 @@ void RunScript()
 		int currentInstr = g_Script.instrStream.iCurrentInstr;
 		int opCode = g_Script.instrStream.pInstr[currentInstr].iOpcode;
 
-		printf("\t");
+		/*	printf("\t");
 		if (opCode < 10)
-			printf(" %d", opCode);
+		printf(" %d", opCode);
 		else
-			printf("%d", opCode);
-		printf(" %s", "dd");
+		printf("%d", opCode);
+		printf(" %s", "dd");*/
 
 		switch (opCode)
 		{
@@ -645,6 +646,27 @@ void RunScript()
 			}
 		case INSTR_CALLHOST:
 			{
+				break;
+			}
+
+		case INSTR_PRINT:
+			{
+				Value value = GetOpValue(0);
+				switch(value.iType)
+				{
+				case OP_TYPE_INT:
+					printf("%d\n", value.iIntLiteral);
+					break;
+				case OP_TYPE_FLOAT:
+					printf("%f\n", value.fFloatLiteral);
+					break;
+				case OP_TYPE_STRING_INDEX:
+					printf("%s\n", value.strStringLiteral);
+					break;
+				default:
+					break;
+				}
+
 				break;
 			}
 

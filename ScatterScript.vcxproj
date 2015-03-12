@@ -14,6 +14,7 @@
     <ProjectGuid>{8700E8D1-05BF-4321-B0E6-FB90770F9896}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>ScatterScript</RootNamespace>
+    <ProjectName>ss</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

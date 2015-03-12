@@ -1,11 +1,11 @@
 #ifndef SSSYSTEM_H
 #define SSSYSTEM_H
 
-void Init();
+void ASM_Init();
 void InitInstrTable();
 
 void Exit();
-void ShutDown();
+void ASM_ShutDown();
 
 void ExitOnError(const char* errorMessage);
 void ExitOnCodeError(const char* errorMessage);

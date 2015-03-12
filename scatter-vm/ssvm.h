@@ -1,8 +1,8 @@
 #define GET_STACK_INDEX(index) \
 	(index < 0 ? index += g_Script.stack.iFrameIndex : index)
 
-void Init();
-void ShutDown();
+void VM_Init();
+void VM_ShutDown();
 
 int LoadScript(char* filename);
 void ResetScript();

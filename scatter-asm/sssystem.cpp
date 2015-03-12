@@ -22,7 +22,7 @@ extern LinkList g_HostAPICallTable;
 
 extern Lexer g_Lexer;
 
-void Init()
+void ASM_Init()
 {
 	InitInstrTable();
 
@@ -313,11 +313,11 @@ void InitInstrTable()
 
 void Exit()
 {
-	ShutDown();
+	ASM_ShutDown();
 	exit(0);
 }
 
-void ShutDown()
+void ASM_ShutDown()
 {
 	for (int i = 0; i < g_SourceCodeLines; i++)
 	{
