@@ -3,6 +3,8 @@
 #include <string.h>
 #include <math.h>
 
+#include <windows.h>
+
 #include "ssvm_pre.h"
 #include "sslang_vm.h"
 #include "ssvm.h"
@@ -183,7 +185,24 @@ int LoadScript(char* filename)
 
 void ResetScript()
 {
-	
+	int mainFuncIndex = g_Script.iMainFuncIndex;
+
+	if (g_Script.pFuncTable)
+	{
+		if (g_Script.iIsMainFuncExist)
+			g_Script.instrStream.iCurrentInstr = g_Script.pFuncTable[mainFuncIndex].iEntryPoint;
+	}
+
+	g_Script.stack.iTopIndex = 0;
+	g_Script.stack.iFrameIndex = 0;
+
+	for (int i = 0; i < g_Script.stack.iSize; i++)
+		g_Script.stack.pElement[i].iType = OP_TYPE_NULL;
+
+	g_Script.iIsPaused = FALSE;
+
+	PushFrame(g_Script.iGlobalDataSize);
+	PushFrame(g_Script.pFuncTable[mainFuncIndex].iStackFrameSize + 1);
 }
 
 void RunScript()
@@ -614,9 +633,19 @@ void RunScript()
 	
 }
 
-void CopyValue(Value* dest, Value value)
+void CopyValue(Value* dest, Value source)
 {
-	*dest = value;
+	if (dest->iType == OP_TYPE_STRING_INDEX)
+		free(dest->strStringLiteral);
+
+	*dest = source;
+
+	if (source.iType == OP_TYPE_STRING_INDEX)
+	{
+		dest->strStringLiteral = (char*) malloc(strlen(source.strStringLiteral) + 1);
+		strcpy(dest->strStringLiteral, source.strStringLiteral);
+	}
+
 }
 
 int ValueToInt(Value value)
@@ -680,7 +709,7 @@ void SetStackValue(int index, Value value)
 	g_Script.stack.pElement[GET_STACK_INDEX(index)] = value;
 }
 
-int GetOpType(int opIndex);
+
 Value GetOpValue(int opIndex)
 {
 	int currentInstr = g_Script.instrStream.iCurrentInstr;
@@ -688,26 +717,62 @@ Value GetOpValue(int opIndex)
 
 	switch (opValue.iType)
 	{
-		
-	
+	case OP_TYPE_ABS_STACK_INDEX:
+	case OP_TYPE_REL_STACK_INDEX:
+		int index = GetOpValueAsStackIndex(opIndex);
+		return GetStackValue(index);
+
+	case OP_TYPE_REG:
+		return g_Script._RetVal;
+
+	default:
+		return opValue;
 	}
-	return opValue;
 }
+
 Value* GetOpValuePointer(int opIndex)
 {
-	return NULL;
+	int opType = GetOpType(opIndex);
+	switch (opType)
+	{
+	case OP_TYPE_ABS_STACK_INDEX:
+	case OP_TYPE_REL_STACK_INDEX:
+		int index = GetOpValueAsStackIndex(opIndex);
+		return &g_Script.stack.pElement[GET_STACK_INDEX(index)];
+
+	case OP_TYPE_REG:
+		return &g_Script._RetVal;
+
+	default:
+		return NULL;
+	}
 }
+
+int GetOpType(int opIndex)
+{
+	return GetOpValue(opIndex).iType;
+}
+
 int GetOpValueAsInt(int opIndex)
 {
-	return 0;
+	Value value = GetOpValue(opIndex);
+	int valueInt = ValueToInt(value);
+
+	return valueInt;
 }
 float GetOpValueAsFloat(int opIndex)
 {
-	return 0;
+	Value value = GetOpValue(opIndex);
+	float valueFloat = ValueToFloat(value);
+
+	return valueFloat;
 }
 char* GetOpValueAsString(int opIndex)
 {
-	return 0;
+	Value value = GetOpValue(opIndex);
+	char* valueStr = ValueToString(value);
+
+	return valueStr;
 }
 int GetOpValueAsStackIndex(int opIndex)
 {
@@ -719,37 +784,63 @@ int GetOpValueAsStackIndex(int opIndex)
 	case OP_TYPE_ABS_STACK_INDEX:
 		return opValue.iStackIndex;
 	case OP_TYPE_REL_STACK_INDEX:
-		break;
+		int baseIndex = opValue.iStackIndex;
+		int offsetIndex = opValue.iOffsetIndex;
 
+		Value stackValue = GetStackValue(offsetIndex);
 
+		return baseIndex + stackValue.iIntLiteral;
 	}
 	return 0;
 }
 int GetOpValueAsInstrIndex(int opIndex)
 {
-	return 0;
+	Value value = GetOpValue(opIndex);
+
+	return value.iInstrIndex;
 }
 int GetOpValueAsFuncIndex(int opIndex)
 {
-	return 0;
+	Value value = GetOpValue(opIndex);
+
+	return value.iFuncIndex;
 }
 char* GetOpValueASHostAPI(int opIndex)
 {
-	return NULL;
+	Value value = GetOpValue(opIndex);
+
+	int hostAPIIndex = value.iHostAPICallIndex;
+	
+	return g_Script.hostAPICallTable.ppStrCalls[hostAPIIndex];
 }
 
 void Push(Value value)
 {
+	int topIndex = g_Script.stack.iTopIndex;
+	g_Script.stack.pElement[topIndex] = value;
+	g_Script.stack.iTopIndex++;
 }
 Value Pop()
 {
+	g_Script.stack.iTopIndex--;
+	int topIndex = g_Script.stack.iTopIndex;
 
+	Value value;
+	CopyValue(&value, g_Script.stack.pElement[topIndex]);
+
+	return value;
 }
 void PushFrame(int size)
 {
-
+	g_Script.stack.iTopIndex += size;
+	g_Script.stack.iFrameIndex = g_Script.stack.iTopIndex;
 }
 void PopFrame(int size)
 {
+	g_Script.stack.iTopIndex -= size;
+}
 
+int GetTime()
+{
+	return GetTickCount();
 }

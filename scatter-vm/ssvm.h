@@ -1,10 +1,11 @@
 #define GET_STACK_INDEX(index) \
 	(index < 0 ? index += g_Script.stack.iFrameIndex : index)
 
-
+int LoadScript(char* filename);
 void ResetScript();
+void RunScript();
 
-void CopyValue(Value* dest, Value value);
+void CopyValue(Value* dest, Value source);
 
 int ValueToInt(Value value);
 float ValueToFloat(Value value);
@@ -25,5 +26,7 @@ void Push(Value value);
 Value Pop();
 void PushFrame(int size);
 void PopFrame(int size);
+
+int GetTime();
 
 
