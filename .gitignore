@@ -1,6 +1,7 @@
 .idea/
 command-lang/
 Debug/
+bin/
 *.opensdf
 *.sdf
 *.suo
