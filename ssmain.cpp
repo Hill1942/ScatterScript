@@ -54,9 +54,9 @@ int main(int argc, char* argv[])
 		option[2] = '\0';
 		switch (option[1])
 		{
-		case 'a':
-			break;
 		case 'c':
+			break;
+		case 'a':
 			{
 				strcpy(g_SourceFileName, argv[2]);
 

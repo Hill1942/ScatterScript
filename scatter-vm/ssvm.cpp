@@ -30,7 +30,7 @@ void VM_ShutDown()
 		Value* pOplist = g_Script.instrStream.pInstr[i].pOplist;
 
 		for (int j = 0; j < opCount; j++)
-			if (pOplist[j].strStringLiteral)
+			if (pOplist[j].iType == OP_TYPE_STRING_INDEX)
 				free(pOplist[j].strStringLiteral);
 	}
 
@@ -38,7 +38,7 @@ void VM_ShutDown()
 		free(g_Script.instrStream.pInstr);
 
 	for (int i = 0; i < g_Script.stack.iSize; i++)
-		if (g_Script.stack.pElement[i].iType = OP_TYPE_STRING_INDEX)
+		if (g_Script.stack.pElement[i].iType == OP_TYPE_STRING_INDEX)
 			free(g_Script.stack.pElement[i].strStringLiteral);
 
 	if (g_Script.stack.pElement)
@@ -57,12 +57,12 @@ void VM_ShutDown()
 
 int LoadScript(char* filename)
 {
-	char exeFilename[MAX_FILENAME_SIZE];
+	/*char exeFilename[MAX_FILENAME_SIZE];
 	char* exeDir = "bin\\";
 	strcpy(exeFilename, exeDir);
-	strcat(exeFilename, filename);
+	strcat(exeFilename, filename);*/
 
-	FILE* pScriptFile = fopen(exeFilename, "rb");
+	FILE* pScriptFile = fopen(filename, "rb");
 	if (pScriptFile == NULL)
 		return LOAD_ERROR_FAIL_FILE_OPEN;
 
@@ -366,6 +366,8 @@ void RunScript()
 				}
 
 				*GetOpValuePointer(0) = dest;
+
+				break;
 			}
 
 		case INSTR_NEG:
@@ -403,6 +405,8 @@ void RunScript()
 				}
 
 				*GetOpValuePointer(0) = dest;
+
+				break;
 			}
 
 		case INSTR_CONCAT:
@@ -424,6 +428,7 @@ void RunScript()
 				dest.strStringLiteral = newString;
 
 				*GetOpValuePointer(0) = dest;
+
 				break;
 			}
 
@@ -468,6 +473,8 @@ void RunScript()
 				if (GetOpValue(0).iType != OP_TYPE_STRING_INDEX)
 					break;
 				GetOpValuePointer(0)->strStringLiteral[charIndex] = targetString[0];
+
+				break;
 			}
 
 		case INSTR_JMP:
@@ -601,6 +608,7 @@ void RunScript()
 
 				if (isJump)
 					g_Script.instrStream.iCurrentInstr = nextInstr;
+
 				break;
 			}
 
@@ -693,7 +701,7 @@ void RunScript()
 			break;
 		}
 
-		printf("\n");
+		//printf("\n");
 
 		if (currentInstr == g_Script.instrStream.iCurrentInstr)
 			g_Script.instrStream.iCurrentInstr++;
@@ -806,7 +814,8 @@ Value GetOpValue(int opIndex)
 
 Value* GetOpValuePointer(int opIndex)
 {
-	int opType = GetOpType(opIndex);
+
+	int opType = GetOpTypeFromInstr(opIndex);
 	switch (opType)
 	{
 	case OP_TYPE_ABS_STACK_INDEX:
@@ -825,9 +834,17 @@ Value* GetOpValuePointer(int opIndex)
 	}
 }
 
-int GetOpType(int opIndex)
+int GetOpTypeFromStack(int opIndex)
 {
 	return GetOpValue(opIndex).iType;
+}
+
+int GetOpTypeFromInstr(int opIndex)
+{
+	int currentInstr = g_Script.instrStream.iCurrentInstr;
+	Value opValue = g_Script.instrStream.pInstr[currentInstr].pOplist[opIndex];
+
+	return opValue.iType;
 }
 
 int GetOpValueAsInt(int opIndex)

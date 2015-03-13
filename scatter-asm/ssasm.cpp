@@ -476,12 +476,12 @@ void AssembleSourceFile()
 
 void BuildSSE() 
 {
-	char exeFilename[MAX_FILENAME_SIZE];
+	/*char exeFilename[MAX_FILENAME_SIZE];
 	char* exeDir = "bin\\";
 	strcpy(exeFilename, exeDir);
-	strcat(exeFilename, g_ExeFileName);
+	strcat(exeFilename, g_ExeFileName);*/
 
-	FILE* pExeFile = fopen(exeFilename, "wb");
+	FILE* pExeFile = fopen(g_ExeFileName, "wb");
 	if (! pExeFile)
 		ExitOnError("Could not open executable for output");
 	
@@ -668,12 +668,12 @@ void BuildSSE()
 
 void BuildSSE_Info() 
 {
-	char exeFilename[MAX_FILENAME_SIZE];
+	/*char exeFilename[MAX_FILENAME_SIZE];
 	char* exeDir = "bin\\";
 	strcpy(exeFilename, exeDir);
-	strcat(exeFilename, g_ExeInfoFilename);
+	strcat(exeFilename, g_ExeInfoFilename);*/
 
-	FILE* pExeFile = fopen(exeFilename, "w");
+	FILE* pExeFile = fopen(g_ExeInfoFilename, "w");
 	if (! pExeFile)
 		ExitOnError("Could not open executable for output");
 	

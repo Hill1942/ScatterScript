@@ -17,7 +17,10 @@ char* ValueToString(Value value);
 Value GetStackValue(int index);
 void SetStackValue(int index, Value value);
 
-int GetOpType(int opIndex);
+int GetOpTypeFromStack(int opIndex);
+
+int GetOpTypeFromInstr(int opIndex);
+
 Value GetOpValue(int opIndex);
 Value* GetOpValuePointer(int opIndex);
 int GetOpValueAsInt(int opIndex);
