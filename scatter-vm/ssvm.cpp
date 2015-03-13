@@ -57,7 +57,12 @@ void VM_ShutDown()
 
 int LoadScript(char* filename)
 {
-	FILE* pScriptFile = fopen(filename, "rb");
+	char exeFilename[MAX_FILENAME_SIZE];
+	char* exeDir = "bin\\";
+	strcpy(exeFilename, exeDir);
+	strcat(exeFilename, filename);
+
+	FILE* pScriptFile = fopen(exeFilename, "rb");
 	if (pScriptFile == NULL)
 		return LOAD_ERROR_FAIL_FILE_OPEN;
 
