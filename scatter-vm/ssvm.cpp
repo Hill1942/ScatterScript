@@ -90,7 +90,7 @@ int LoadScript(char* filename)
 	fread(&g_Script.iMainFuncIndex, 4, 1, pScriptFile);
 
 	fread(&g_Script.instrStream.iSize, 4, 1, pScriptFile);
-	g_Script.instrStream.pInstr = (Instr*) malloc(g_Script.instrStream.iSize * sizeof(Instr));
+	g_Script.instrStream.pInstr = (VM_Instr*) malloc(g_Script.instrStream.iSize * sizeof(VM_Instr));
 
 	for (int i = 0; i < g_Script.instrStream.iSize; i++)
 	{

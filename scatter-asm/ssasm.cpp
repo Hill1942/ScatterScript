@@ -21,7 +21,7 @@ extern LinkList g_HostAPICallTable;
 
 extern Lexer  g_Lexer;
 extern ScriptHeader g_ScriptHeader;
-extern Instr* g_InstrStream;
+extern ASM_Instr* g_InstrStream;
 
 extern int g_InstrStreamSize;
 extern int g_IsSetStackSizeFound;
@@ -211,7 +211,7 @@ void AssembleSourceFile()
 			break;
     }
 
-	g_InstrStream = (Instr*)malloc(g_InstrStreamSize * sizeof(Instr));
+	g_InstrStream = (ASM_Instr*)malloc(g_InstrStreamSize * sizeof(ASM_Instr));
 
 	for (int i = 0; i < g_InstrStreamSize; i++)
 		g_InstrStream[i].pOplist = NULL;
@@ -476,7 +476,12 @@ void AssembleSourceFile()
 
 void BuildSSE() 
 {
-	FILE* pExeFile = fopen(g_ExeFileName, "wb");
+	char exeFilename[MAX_FILENAME_SIZE];
+	char* exeDir = "bin\\";
+	strcpy(exeFilename, exeDir);
+	strcat(exeFilename, g_ExeFileName);
+
+	FILE* pExeFile = fopen(exeFilename, "wb");
 	if (! pExeFile)
 		ExitOnError("Could not open executable for output");
 	
@@ -663,7 +668,12 @@ void BuildSSE()
 
 void BuildSSE_Info() 
 {
-	FILE* pExeFile = fopen(g_ExeInfoFilename, "w");
+	char exeFilename[MAX_FILENAME_SIZE];
+	char* exeDir = "bin\\";
+	strcpy(exeFilename, exeDir);
+	strcat(exeFilename, g_ExeInfoFilename);
+
+	FILE* pExeFile = fopen(exeFilename, "w");
 	if (! pExeFile)
 		ExitOnError("Could not open executable for output");
 	

@@ -36,8 +36,7 @@
     <ClCompile Include="scatter-vm\ssvm.cpp">
       <Filter>scatter-vm</Filter>
     </ClCompile>
-    <ClCompile Include="vm_test.cpp" />
-    <ClCompile Include="asm_test.cpp" />
+    <ClCompile Include="ssmain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="scatter-asm\ssasm.h">

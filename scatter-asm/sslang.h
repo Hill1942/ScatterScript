@@ -21,12 +21,12 @@ typedef struct _Op
 typedef int OpType;
 typedef int Token;
 
-typedef struct _Instr
+typedef struct _ASM_Instr
 {
 	int iOpcode;
 	int iOpCount;
 	Op* pOplist;
-}Instr;
+}ASM_Instr;
 
 typedef struct _InstrLookup
 {

@@ -14,7 +14,7 @@
     <ProjectGuid>{8700E8D1-05BF-4321-B0E6-FB90770F9896}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>ScatterScript</RootNamespace>
-    <ProjectName>ss</ProjectName>
+    <ProjectName>ScatterScript</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -42,6 +42,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>.\bin</OutDir>
+    <TargetName>ss</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -79,7 +81,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="asm_test.cpp" />
     <ClCompile Include="scatter-asm\ssasm.cpp" />
     <ClCompile Include="scatter-asm\ssbase_type.cpp" />
     <ClCompile Include="scatter-asm\sslexeme.cpp" />
@@ -88,7 +89,7 @@
     <ClCompile Include="scatter-asm\ssutil.cpp" />
     <ClCompile Include="scatter-vm\sslang_vm.cpp" />
     <ClCompile Include="scatter-vm\ssvm.cpp" />
-    <ClCompile Include="vm_test.cpp" />
+    <ClCompile Include="ssmain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="scatter-asm\ssasm.h" />

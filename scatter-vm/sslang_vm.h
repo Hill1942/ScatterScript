@@ -18,16 +18,16 @@ typedef struct _Value
 	int iOffsetIndex;
 }Value;
 
-typedef struct _Instr
+typedef struct _VM_Instr
 {
 	int iOpcode;
 	int iOpCount;
 	Value* pOplist;
-}Instr;
+}VM_Instr;
 
 typedef struct _InstrStream
 {
-	Instr* pInstr;
+	VM_Instr* pInstr;
 	int iSize;
 	int iCurrentInstr;
 }InstrStream;
