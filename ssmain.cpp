@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "scatter-asm/ssasm_pre.h"d
+#include "scatter-asm/ssasm_pre.h"
 #include "scatter-asm/ssutil.h"
 #include "scatter-asm/ssbase_type.h"
 #include "scatter-asm/sslang.h"
