@@ -608,7 +608,7 @@ void BuildSSE()
 		int   currentStrLen = strlen(currentString);
 
 		fwrite(&currentStrLen, 4, 1, pExeFile);
-		fwrite(&currentString, currentStrLen, 1, pExeFile);
+		fwrite(currentString, currentStrLen, 1, pExeFile);
 		printf("strlen: %d\n", currentStrLen);
 		printf("string: %s\n", currentString);
 

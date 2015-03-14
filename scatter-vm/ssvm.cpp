@@ -178,7 +178,7 @@ int LoadScript(char* filename)
 				if (opList[j].iType == OP_TYPE_STRING_INDEX)
 				{
 					int stringIndex = opList[j].iIntLiteral;
-					char* temp = (char*) malloc(strlen(ppStringTable[stringIndex] + 1));
+					char* temp = (char*) malloc(strlen(ppStringTable[stringIndex]) + 1);
 					strcpy(temp, ppStringTable[stringIndex]);
 
 					opList[j].strStringLiteral = temp;
