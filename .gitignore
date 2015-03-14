@@ -1,10 +1,11 @@
 .idea/
 command-lang/
 Debug/
-bin/
 *.opensdf
 *.sdf
 *.suo
 *.ssam
 *.sse
 *.info
+*.ilk
+*.pdb
