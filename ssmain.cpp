@@ -38,6 +38,7 @@ int g_currentInstrIndex;
 InstrLookup g_InstrTable[MAX_INSTR_LOOKUP_COUNT];
 
 Script g_Script;
+Script g_Scripts[MAX_THREAD_NUMBER];
 
 
 void asm_run();
