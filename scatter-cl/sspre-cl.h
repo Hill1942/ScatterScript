@@ -1,5 +1,5 @@
 #ifndef SSPRE_CL_H
-#define <{1:}>SSPRE_CL_H
+#define SSPRE_CL_H
 
 #define MAX_LEXEME_SIZE                     1024
 #define MAX_OF_STATE_COUNT                  32

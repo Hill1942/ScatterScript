@@ -10,6 +10,9 @@
     <Filter Include="scatter-vm">
       <UniqueIdentifier>{105e8f78-a093-44f2-bcb2-d678ac694f2c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="scatter-cl">
+      <UniqueIdentifier>{522dbdd4-a4dd-4e10-bcc7-23e3cca20ec1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="scatter-asm\ssasm.cpp">
@@ -37,6 +40,9 @@
       <Filter>scatter-vm</Filter>
     </ClCompile>
     <ClCompile Include="ssmain.cpp" />
+    <ClCompile Include="scatter-cl\sscl.cpp">
+      <Filter>scatter-cl</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="scatter-asm\ssasm.h">
@@ -69,6 +75,13 @@
     <ClInclude Include="scatter-vm\ssvm.h">
       <Filter>scatter-vm</Filter>
     </ClInclude>
+    <ClInclude Include="scatter-cl\sscl.h">
+      <Filter>scatter-cl</Filter>
+    </ClInclude>
+    <ClInclude Include="scatter-cl\sspre-cl.h">
+      <Filter>scatter-cl</Filter>
+    </ClInclude>
+    <ClInclude Include="sspre.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />

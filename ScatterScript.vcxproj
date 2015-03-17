@@ -87,6 +87,7 @@
     <ClCompile Include="scatter-asm\sslang.cpp" />
     <ClCompile Include="scatter-asm\sssystem.cpp" />
     <ClCompile Include="scatter-asm\ssutil.cpp" />
+    <ClCompile Include="scatter-cl\sscl.cpp" />
     <ClCompile Include="scatter-vm\sslang_vm.cpp" />
     <ClCompile Include="scatter-vm\ssvm.cpp" />
     <ClCompile Include="ssmain.cpp" />
@@ -99,9 +100,12 @@
     <ClInclude Include="scatter-asm\sslang.h" />
     <ClInclude Include="scatter-asm\sssystem.h" />
     <ClInclude Include="scatter-asm\ssutil.h" />
+    <ClInclude Include="scatter-cl\sscl.h" />
+    <ClInclude Include="scatter-cl\sspre-cl.h" />
     <ClInclude Include="scatter-vm\sslang_vm.h" />
     <ClInclude Include="scatter-vm\ssvm.h" />
     <ClInclude Include="scatter-vm\ssvm_pre.h" />
+    <ClInclude Include="sspre.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />

@@ -40,6 +40,14 @@ InstrLookup g_InstrTable[MAX_INSTR_LOOKUP_COUNT];
 Script g_Script;
 Script g_Scripts[MAX_THREAD_NUMBER];
 
+char* g_StringSource_CL;
+char g_CurrentLexeme_CL[MAX_LEXEME_SIZE];
+
+int g_CurrentLexemeStart_CL;
+int g_CurrentLexemeEnd_CL;
+
+int g_CurrentOp_CL;
+
 
 void asm_run();
 void vm_run(char* exeFilename);
