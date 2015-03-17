@@ -15,81 +15,81 @@
 #define LEX_STATE_STRING_ESCAPE             9
 #define LEX_STATE_STRING_CLOSE_QUOTE        10
 
-#define token_type_end_of_stream            0
-#define token_type_int                      1
-#define token_type_float                    2
-#define token_type_ident                    3
-#define token_type_keyword_var              4
-#define token_type_keyword_true             5
-#define token_type_keyword_false            6
-#define token_type_keyword_if               7
-#define token_type_keyword_else             8
-#define token_type_keyword_break            9
-#define token_type_keyword_continue         10
-#define token_type_keyword_for              11
-#define token_type_keyword_while            12
-#define token_type_func                     13
-#define token_type_return                   14
+#define TOKEN_TYPE_END_OF_STREAM            0
+#define TOKEN_TYPE_INT                      1
+#define TOKEN_TYPE_FLOAT                    2
+#define TOKEN_TYPE_IDENT                    3
+#define TOKEN_TYPE_KEYWORD_VAR              4
+#define TOKEN_TYPE_KEYWORD_TRUE             5
+#define TOKEN_TYPE_KEYWORD_FALSE            6
+#define TOKEN_TYPE_KEYWORD_IF               7
+#define TOKEN_TYPE_KEYWORD_ELSE             8
+#define TOKEN_TYPE_KEYWORD_BREAK            9
+#define TOKEN_TYPE_KEYWORD_CONTINUE         10
+#define TOKEN_TYPE_KEYWORD_FOR              11
+#define TOKEN_TYPE_KEYWORD_WHILE            12
+#define TOKEN_TYPE_FUNC                     13
+#define TOKEN_TYPE_RETURN                   14
 
-#define token_type_op                       15
+#define TOKEN_TYPE_OP                       15
 
-#define token_type_delim_comma              16
-#define token_type_delim_open_paren         17
-#define token_type_delim_close_paren        18
-#define token_type_delim_open_brace         19
-#define token_type_delim_close_brace        20
+#define TOKEN_TYPE_DELIM_COMMA              16
+#define TOKEN_TYPE_DELIM_OPEN_PAREN         17
+#define TOKEN_TYPE_DELIM_CLOSE_PAREN        18
+#define TOKEN_TYPE_DELIM_OPEN_BRACE         19
+#define TOKEN_TYPE_DELIM_CLOSE_BRACE        20
 
-#define token_type_delim_comma              16
-#define token_type_delim_open_paren         17
-#define token_type_delim_close_paren        18
-#define token_type_delim_open_brace         19
-#define token_type_delim_close_brace        20
-#define token_type_delim_open_curly_brace   21
+#define TOKEN_TYPE_DELIM_COMMA              16
+#define TOKEN_TYPE_DELIM_OPEN_PAREN         17
+#define TOKEN_TYPE_DELIM_CLOSE_PAREN        18
+#define TOKEN_TYPE_DELIM_OPEN_BRACE         19
+#define TOKEN_TYPE_DELIM_CLOSE_BRACE        20
+#define TOKEN_TYPE_DELIM_OPEN_CURLY_BRACE   21
 #define TOKEN_TYPE_DELIM_CLOSE_CURLY_BRACE  22
-#define token_type_delim_semicolon          23
-#define token_type_string                   24
+#define TOKEN_TYPE_DELIM_SEMICOLON          23
+#define TOKEN_TYPE_STRING                   24
 
-#define op_type_add                         0
-#define op_type_sub                         1
-#define op_type_mul                         2
-#define op_type_div                         3
-#define op_type_mod                         4
-#define op_type_exp                         5
+#define OP_TYPE_ADD                         0
+#define OP_TYPE_SUB                         1
+#define OP_TYPE_MUL                         2
+#define OP_TYPE_DIV                         3
+#define OP_TYPE_MOD                         4
+#define OP_TYPE_EXP                         5
 
-#define op_type_inc                         6
-#define op_type_dec                         7
+#define OP_TYPE_INC                         6
+#define OP_TYPE_DEC                         7
 
-#define op_type_assign_add                  8
-#define op_type_assign_sub                  9
-#define op_type_assign_mul                  10
-#define op_type_assign_div                  11
-#define op_type_assign_mod                  12
-#define op_type_assign_exp                  13
+#define OP_TYPE_ASSIGN_ADD                  8
+#define OP_TYPE_ASSIGN_SUB                  9
+#define OP_TYPE_ASSIGN_MUL                  10
+#define OP_TYPE_ASSIGN_DIV                  11
+#define OP_TYPE_ASSIGN_MOD                  12
+#define OP_TYPE_ASSIGN_EXP                  13
 
-#define op_type_and                         14
-#define op_type_or                          15
-#define op_type_xor                         16
-#define op_type_not                         17
-#define op_type_shift_left                  18
-#define op_type_shift_right                 19
+#define OP_TYPE_AND                         14
+#define OP_TYPE_OR                          15
+#define OP_TYPE_XOR                         16
+#define OP_TYPE_NOT                         17
+#define OP_TYPE_SHIFT_LEFT                  18
+#define OP_TYPE_SHIFT_RIGHT                 19
 
-#define op_type_assign_and                  20
-#define op_type_assign_or                   21
-#define op_type_assign_xor                  22
-#define op_type_assign_not                  23
-#define op_type_assign_shift_left           24
-#define op_type_assign_shift_right          25
+#define OP_TYPE_ASSIGN_AND                  20
+#define OP_TYPE_ASSIGN_OR                   21
+#define OP_TYPE_ASSIGN_XOR                  22
+#define OP_TYPE_ASSIGN_NOT                  23
+#define OP_TYPE_ASSIGN_SHIFT_LEFT           24
+#define OP_TYPE_ASSIGN_SHIFT_RIGHT          25
 
-#define op_type_logical_and                 26
-#define op_type_logical_or                  27
-#define op_type_logical_not                 28
+#define OP_TYPE_LOGICAL_AND                 26
+#define OP_TYPE_LOGICAL_OR                  27
+#define OP_TYPE_LOGICAL_NOT                 28
 
-#define op_type_equal                       29
-#define op_type_not_equal                   30
-#define op_type_less                        31
-#define op_type_less_equal                  32
-#define op_type_greater                     33
-#define op_type_greater_equal               34
+#define OP_TYPE_EQUAL                       29
+#define OP_TYPE_NOT_EQUAL                   30
+#define OP_TYPE_LESS                        31
+#define OP_TYPE_LESS_EQUAL                  32
+#define OP_TYPE_GREATER                     33
+#define OP_TYPE_GREATER_EQUAL               34
 
 
 
