@@ -98,8 +98,8 @@ int main(int argc, char* argv[])
 		vm_run(exeFilename);
 	}
 
-	
-	
+
+
 }
 
 void asm_run()
