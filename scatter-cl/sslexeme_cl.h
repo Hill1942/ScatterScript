@@ -1,5 +1,5 @@
-#ifndef SSPRE_CL_H
-#define SSPRE_CL_H
+#ifndef SSLEXEME_CL_H
+#define SSLEXEME_CL_H
 
 #define MAX_LEXEME_SIZE                     1024
 #define MAX_OF_STATE_COUNT                  32
@@ -54,42 +54,39 @@
 #define OP_TYPE_MUL                         2
 #define OP_TYPE_DIV                         3
 #define OP_TYPE_MOD                         4
-#define OP_TYPE_EXP                         5
 
-#define OP_TYPE_INC                         6
-#define OP_TYPE_DEC                         7
+#define OP_TYPE_ASSIGN_ADD                  10
+#define OP_TYPE_ASSIGN_SUB                  11
+#define OP_TYPE_ASSIGN_MUL                  12
+#define OP_TYPE_ASSIGN_DIV                  13
+#define OP_TYPE_ASSIGN_MOD                  14
 
-#define OP_TYPE_ASSIGN_ADD                  8
-#define OP_TYPE_ASSIGN_SUB                  9
-#define OP_TYPE_ASSIGN_MUL                  10
-#define OP_TYPE_ASSIGN_DIV                  11
-#define OP_TYPE_ASSIGN_MOD                  12
-#define OP_TYPE_ASSIGN_EXP                  13
+#define OP_TYPE_AND                         21
+#define OP_TYPE_OR                          22
+#define OP_TYPE_XOR                         23
+#define OP_TYPE_NOT                         24
+#define OP_TYPE_SHIFT_LEFT                  25
+#define OP_TYPE_SHIFT_RIGHT                 26
 
-#define OP_TYPE_AND                         14
-#define OP_TYPE_OR                          15
-#define OP_TYPE_XOR                         16
-#define OP_TYPE_NOT                         17
-#define OP_TYPE_SHIFT_LEFT                  18
-#define OP_TYPE_SHIFT_RIGHT                 19
+#define OP_TYPE_ASSIGN_AND                  31
+#define OP_TYPE_ASSIGN_OR                   32
+#define OP_TYPE_ASSIGN_XOR                  33
+#define OP_TYPE_ASSIGN_SHIFT_LEFT           35
+#define OP_TYPE_ASSIGN_SHIFT_RIGHT          36
 
-#define OP_TYPE_ASSIGN_AND                  20
-#define OP_TYPE_ASSIGN_OR                   21
-#define OP_TYPE_ASSIGN_XOR                  22
-#define OP_TYPE_ASSIGN_NOT                  23
-#define OP_TYPE_ASSIGN_SHIFT_LEFT           24
-#define OP_TYPE_ASSIGN_SHIFT_RIGHT          25
+#define OP_TYPE_INC                         40
+#define OP_TYPE_DEC                         41
 
-#define OP_TYPE_LOGICAL_AND                 26
-#define OP_TYPE_LOGICAL_OR                  27
-#define OP_TYPE_LOGICAL_NOT                 28
+#define OP_TYPE_LOGICAL_AND                 50
+#define OP_TYPE_LOGICAL_OR                  51
+#define OP_TYPE_LOGICAL_NOT                 52
 
-#define OP_TYPE_EQUAL                       29
-#define OP_TYPE_NOT_EQUAL                   30
-#define OP_TYPE_LESS                        31
-#define OP_TYPE_LESS_EQUAL                  32
-#define OP_TYPE_GREATER                     33
-#define OP_TYPE_GREATER_EQUAL               34
+#define OP_TYPE_EQUAL                       61
+#define OP_TYPE_NOT_EQUAL                   62
+#define OP_TYPE_LESS                        63
+#define OP_TYPE_LESS_EQUAL                  64
+#define OP_TYPE_GREATER                     65
+#define OP_TYPE_GREATER_EQUAL               66
 
 
 typedef int Token;

@@ -1,8 +1,7 @@
-
 #include <string.h>
 #include "../sspre.h"
 #include "../ssutil.h"
-#include "sspre-cl.h"
+#include "sslexeme_cl.h"
 
 extern char* g_StringSource_CL;
 extern char g_CurrentLexeme_CL[MAX_LEXEME_SIZE];
@@ -61,7 +60,7 @@ Token GetNextToken_CL()
 
 				break;
 			}
-			
+
 		default:
 			break;
 		}

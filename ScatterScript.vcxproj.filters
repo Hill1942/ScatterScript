@@ -43,6 +43,9 @@
     <ClCompile Include="scatter-cl\sscl.cpp">
       <Filter>scatter-cl</Filter>
     </ClCompile>
+    <ClCompile Include="scatter-cl\sslexeme_cl.cpp">
+      <Filter>scatter-cl</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="scatter-asm\ssasm.h">
@@ -82,6 +85,10 @@
       <Filter>scatter-cl</Filter>
     </ClInclude>
     <ClInclude Include="sspre.h" />
+    <ClInclude Include="ssutil.h" />
+    <ClInclude Include="scatter-cl\sslexeme_cl.h">
+      <Filter>scatter-cl</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
