@@ -9,60 +9,151 @@ extern int g_CurrentLexemeStart_CL;
 extern int g_CurrentLexemeEnd_CL;
 extern int g_CurrentOp_CL;
 
+OpState g_OpChars0[MAX_OP_STATE_COUNT] = 
+{
+	{'+', 0, 2, 0},
+	{'-', 2, 2, 1},
+	{'*', 4, 1, 2},
+	{'/', 5, 1, 3},
+	{'%', 6, 1, 4},
+
+	{'&', 7, 2, 20},
+	{'|', 9, 2, 21},
+	{'~', 0, 0, 23},
+	{'^', 11, 2, 22},  //xor
+
+	{'<', 12, 2, 63},
+	{'>', 14, 2, 65},
+	{'=', 17, 1, 61},
+
+	{'!', 16, 1, 52}
+};
+
+OpState g_OpChars1[MAX_OP_STATE_COUNT] = 
+{
+	{'+', 0, 0, 40},   // ++  0
+	{'=', 0, 0, 10},   // +=  1
+	{'-', 0, 0, 41},   // --  2
+	{'=', 0, 0, 11},   // -=  3
+	{'=', 0, 0, 12},   // *=  4
+	{'=', 0, 0, 13},   // /=  5
+	{'=', 0, 0, 14},   // %=  6
+
+	{'=', 0, 0, 30},   // &=  7
+	{'&', 0, 0, 50},   // &&  8
+	{'=', 0, 0, 31},   // |=  9
+	{'|', 0, 0, 51},   // ||  10
+	{'=', 0, 0, 32},   // ^=  11
+
+	{'=', 0, 0, 64},   // <=  12
+	{'<', 0, 1, 24},   // <<  13
+	{'=', 0, 0, 66},   // >=  14
+	{'>', 0, 1, 25},   // >>  15
+	{'=', 0, 0, 62},   // !=  16
+	{'=', 0, 0, 61},   // ==  17
+
+};
+
+OpState g_opChars2[MAX_OP_STATE_COUNT] = 
+{
+	{'=', 0, 0, 33},   // <<=
+	{'=', 0, 0, 34}	   // >>=
+};
+
 void CL_InitLexer()
 {
 	g_CurrentLexemeStart_CL = 0;
 	g_CurrentLexemeEnd_CL  = 0;
 }
 
-OpState g_OpChars0[MAX_OP_STATE_COUNT] = 
+int IsCharOpChar(char c, int opCharsTableIndex)
 {
-	{'+', 0, 2, 0},
-	{'-', 0, 2, 1},
-	{'*', 0, 2, 2},
-	{'/', 0, 2, 3},
-	{'%', 0, 2, 4},
+	for (int i = 0; i < MAX_OP_STATE_COUNT; i++)
+	{
+		char opChar;
+		switch (opCharsTableIndex)
+		{
+		case 0:
+			opChar = g_OpChars0[i].cChar;
+			break;
+		case 1:
+			opChar = g_OpChars1[i].cChar;
+			break;
+		case 2:
+			opChar = g_opChars2[i].cChar;
+			break;
+		default:
+			break;
+		}
 
-	{'&', 0, 2, 20},
-	{'|', 0, 2, 21},
-	{'~', 0, 2, 23},
-	{'^', 0, 2, 22},  //xor
+		if (opChar == c)
+			return TRUE;
+	}
 
-	{'<', 0, 2, 63},
-	{'>', 0, 2, 65},
-	{'=', 0, 2, 61},
+	return FALSE;
+}
 
-	{'!', 0, 2, 52}
-};
-
-OpState g_OpChars1[MAX_OP_STATE_COUNT] = 
+int GetOpStateIndex(char c, int opCharsTableIndex, int nextStateIndex, int nextStateCount)
 {
-	{'+', 0, 2, 40},   // ++
-	{'=', 0, 2, 10},   // +=
-	{'-', 0, 2, 41},   // --
-	{'=', 0, 2, 11},   // -=
-	{'=', 0, 2, 12},   // *=
-	{'=', 0, 2, 13},   // /=
-	{'=', 0, 2, 14},   // %=
+	int startStateIndex;
+	int endStateIndex;
 
-	{'=', 0, 2, 30},   // &=
-	{'&', 0, 2, 50},   // &&
-	{'=', 0, 2, 31},   // |=
-	{'|', 0, 2, 51},   // ||
-	{'=', 0, 2, 32},   // ^=  
-					   
-	{'=', 0, 2, 64},   // <=
-	{'<', 0, 2, 24},   // <<
-	{'=', 0, 2, 66},   // >=
-	{'>', 0, 2, 25},   // >>
-	{'=', 0, 2, 62}	   // !=
-};
+	if (opCharsTableIndex == 0)
+	{
+		startStateIndex = 0;
+		endStateIndex   = MAX_OF_STATE_COUNT;
+	}
+	else
+	{
+		startStateIndex = nextStateIndex;
+		endStateIndex   = startStateIndex + nextStateCount;
+	}
 
-OpState g_opChars2[MAX_OP_STATE_COUNT] = 
+	for (int i = startStateIndex; i < endStateIndex; i++)
+	{
+		char opChar;
+		switch (opCharsTableIndex)
+		{
+		case 0:
+			opChar = g_OpChars0[i].cChar;
+			break;
+		case 1:
+			opChar = g_OpChars1[i].cChar;
+			break;
+		case 2:
+			opChar = g_opChars2[i].cChar;
+			break;
+		default:
+			break;
+		}
+
+		if (opChar == c)
+			return i;
+	}
+
+	return -1;
+}
+
+OpState GetOpState(int opCharsTableIndex, int opStateIndex)
 {
-	{'=', 0, 2, 33},	  // <<=
-	{'=', 0, 2, 34}	  // >>=
-};
+	OpState state;
+	switch (opCharsTableIndex)
+	{
+	case 0:
+		state = g_OpChars0[opStateIndex];
+		break;
+	case 1:
+		state = g_OpChars1[opStateIndex];
+		break;
+	case 2:
+		state = g_opChars2[opStateIndex];
+		break;
+	default:
+		break;
+	}
+
+	return state;
+}
 
 Token GetNextToken_CL()
 {
