@@ -1,3 +1,5 @@
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "../sspre.h"
 #include "../ssutil.h"
@@ -59,6 +61,12 @@ OpState g_opChars2[MAX_OP_STATE_COUNT] =
 	{'=', 0, 0, 33},   // <<=
 	{'=', 0, 0, 34}	   // >>=
 };
+
+void ExitOnInvalidInputError(char c)
+{
+	printf("Error: expected %c\n", c);
+	exit(0);
+}
 
 void CL_InitLexer()
 {
