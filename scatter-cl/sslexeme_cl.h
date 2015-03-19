@@ -38,12 +38,6 @@
 #define TOKEN_TYPE_DELIM_CLOSE_PAREN        18
 #define TOKEN_TYPE_DELIM_OPEN_BRACE         19
 #define TOKEN_TYPE_DELIM_CLOSE_BRACE        20
-
-#define TOKEN_TYPE_DELIM_COMMA              16
-#define TOKEN_TYPE_DELIM_OPEN_PAREN         17
-#define TOKEN_TYPE_DELIM_CLOSE_PAREN        18
-#define TOKEN_TYPE_DELIM_OPEN_BRACE         19
-#define TOKEN_TYPE_DELIM_CLOSE_BRACE        20
 #define TOKEN_TYPE_DELIM_OPEN_CURLY_BRACE   21
 #define TOKEN_TYPE_DELIM_CLOSE_CURLY_BRACE  22
 #define TOKEN_TYPE_DELIM_SEMICOLON          23
@@ -61,25 +55,25 @@
 #define OP_TYPE_ASSIGN_DIV                  13
 #define OP_TYPE_ASSIGN_MOD                  14
 
-#define OP_TYPE_AND                         21
-#define OP_TYPE_OR                          22
-#define OP_TYPE_XOR                         23
-#define OP_TYPE_NOT                         24
-#define OP_TYPE_SHIFT_LEFT                  25
-#define OP_TYPE_SHIFT_RIGHT                 26
+#define OP_TYPE_AND                         20
+#define OP_TYPE_OR                          21
+#define OP_TYPE_XOR                         22
+#define OP_TYPE_NOT                         23
+#define OP_TYPE_SHIFT_LEFT                  24
+#define OP_TYPE_SHIFT_RIGHT                 25
 
-#define OP_TYPE_ASSIGN_AND                  31
-#define OP_TYPE_ASSIGN_OR                   32
-#define OP_TYPE_ASSIGN_XOR                  33
-#define OP_TYPE_ASSIGN_SHIFT_LEFT           35
-#define OP_TYPE_ASSIGN_SHIFT_RIGHT          36
+#define OP_TYPE_ASSIGN_AND                  30
+#define OP_TYPE_ASSIGN_OR                   31
+#define OP_TYPE_ASSIGN_XOR                  32
+#define OP_TYPE_ASSIGN_SHIFT_LEFT           33
+#define OP_TYPE_ASSIGN_SHIFT_RIGHT          34
 
 #define OP_TYPE_INC                         40
 #define OP_TYPE_DEC                         41
 
-#define OP_TYPE_LOGICAL_AND                 50
-#define OP_TYPE_LOGICAL_OR                  51
-#define OP_TYPE_LOGICAL_NOT                 52
+#define OP_TYPE_LOGICAL_AND                 50  // &&
+#define OP_TYPE_LOGICAL_OR                  51  // ||
+#define OP_TYPE_LOGICAL_NOT                 52  // !
 
 #define OP_TYPE_EQUAL                       61
 #define OP_TYPE_NOT_EQUAL                   62
@@ -88,7 +82,18 @@
 #define OP_TYPE_GREATER                     65
 #define OP_TYPE_GREATER_EQUAL               66
 
+#define MAX_OP_STATE_COUNT                  32
+
 
 typedef int Token;
+
+typedef struct _OpState
+{
+	char cChar;
+	int  iSubStateIndex;
+	int  iSubStateCount;
+	int  iIndex;
+}OpState;
+
 
 #endif
