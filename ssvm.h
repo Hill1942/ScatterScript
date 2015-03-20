@@ -4,7 +4,7 @@
 namespace _vm
 {
 	#define GET_STACK_INDEX(index) \
-	(index < 0 ? index += svm.stack.iFrameIndex : index)
+	(index < 0 ? index += vm_script.stack.iFrameIndex : index)
 
 
 	int LoadScript(char* filename);

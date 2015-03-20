@@ -6,8 +6,6 @@
 #include "ssbase_type.h"
 #include "sslang.h"
 
-extern InstrLookup g_InstrTable[MAX_INSTR_LOOKUP_COUNT];
-
 namespace _asm_
 {
     int AddString(LinkList* pStringList, char* str)
@@ -139,30 +137,30 @@ namespace _asm_
 		return newLabel->iIndex;
 	}
 
-	int GetInstruction(LinkList* pInstrTable, char* name, InstrLookup* instrLookup)
+	int GetInstruction(InstrLookup instrLookupTable[], LinkList* pInstrTable, char* name, InstrLookup* instrLookup)
 	{
 		for (int i = 0; i < MAX_INSTR_LOOKUP_COUNT; i++)
 		{
-			if (strcmp(g_InstrTable[i].strMnemonic, name) == 0)
+			if (strcmp(instrLookupTable[i].strMnemonic, name) == 0)
 			{
-				*instrLookup = g_InstrTable[i];
+				*instrLookup = instrLookupTable[i];
 				return TRUE;
 			}
 		}
 		return FALSE;
 	}
 
-	int AddInstrLookup(InstrLookup instrLookup[], char* mnemonic, int opCode, int opCount)
+	int AddInstrLookup(InstrLookup instrLookupTable[], char* mnemonic, int opCode, int opCount)
 	{
 		static int instrIndex = 0;
 		if (instrIndex > MAX_INSTR_LOOKUP_COUNT)
 			return -1;
 
-		strcpy(instrLookup[instrIndex].strMnemonic, mnemonic);
-		instrLookup[instrIndex].iOpcode  = opCode;
-		instrLookup[instrIndex].iOpcount = opCount;
+		strcpy(instrLookupTable[instrIndex].strMnemonic, mnemonic);
+		instrLookupTable[instrIndex].iOpcode  = opCode;
+		instrLookupTable[instrIndex].iOpcount = opCount;
 
-		instrLookup[instrIndex].pOplist  = (OpType*) malloc(opCount * sizeof(OpType));
+		instrLookupTable[instrIndex].pOplist  = (OpType*) malloc(opCount * sizeof(OpType));
 
 		int returnIndex = instrIndex;
 
@@ -171,9 +169,9 @@ namespace _asm_
 		return returnIndex;
 	}
 
-	void setOpType(InstrLookup instrLookup[], int instrIndex, int opIndex, OpType opType)
+	void setOpType(InstrLookup instrLookupTable[], int instrIndex, int opIndex, OpType opType)
 	{
-		instrLookup[instrIndex].pOplist[opIndex] = opType;
+		instrLookupTable[instrIndex].pOplist[opIndex] = opType;
 	}
 
 }

@@ -474,13 +474,13 @@ namespace _asm_
     			ssam.lexer.currentToken = ASM_TOKEN_TYPE_OPEN_BRACKET;
     			break;
     		case ']':
-    			ssam.lexer.currentToken = ASM_TOKEN_TYPEOSE_BRACKET;
+    			ssam.lexer.currentToken = ASM_TOKEN_TYPE_CLOSE_BRACKET;
     			break;
     		case '{':
     			ssam.lexer.currentToken = ASM_TOKEN_TYPE_OPEN_BRACE;
     			break;
     		case '}':
-    			ssam.lexer.currentToken = ASM_TOKEN_TYPEOSE_BRACE;
+    			ssam.lexer.currentToken = ASM_TOKEN_TYPE_CLOSE_BRACE;
     			break;
     		case '\n':
     			ssam.lexer.currentToken = ASM_TOKEN_TYPE_NEWLINE;
@@ -621,7 +621,7 @@ namespace _cl
     
     	char currentChar;
     
-    	int  nextLexemeCharIndex;
+    	int  nextLexemeCharIndex = 0;
     	int  isAddCurrentChar;
     
     	int  isLexemeDone = FALSE;

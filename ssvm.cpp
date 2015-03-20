@@ -6,6 +6,7 @@
 #include <windows.h>
 
 #include "sspre.h"
+#include "ssbase_type.h"
 #include "sslang.h"
 #include "ssvm.h"
 
