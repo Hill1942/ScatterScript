@@ -1,97 +1,29 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="scatter-asm">
-      <UniqueIdentifier>{f3c1d70c-e44d-49fc-999c-55590db4fa83}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Test">
-      <UniqueIdentifier>{f3857c64-f34d-4830-a6ed-0211461469d8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="scatter-vm">
-      <UniqueIdentifier>{105e8f78-a093-44f2-bcb2-d678ac694f2c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="scatter-cl">
-      <UniqueIdentifier>{522dbdd4-a4dd-4e10-bcc7-23e3cca20ec1}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="scatter-asm\ssasm.cpp">
-      <Filter>scatter-asm</Filter>
-    </ClCompile>
-    <ClCompile Include="scatter-asm\ssbase_type.cpp">
-      <Filter>scatter-asm</Filter>
-    </ClCompile>
-    <ClCompile Include="scatter-asm\sslexeme.cpp">
-      <Filter>scatter-asm</Filter>
-    </ClCompile>
-    <ClCompile Include="scatter-asm\ssutil.cpp">
-      <Filter>scatter-asm</Filter>
-    </ClCompile>
-    <ClCompile Include="scatter-asm\sssystem.cpp">
-      <Filter>scatter-asm</Filter>
-    </ClCompile>
-    <ClCompile Include="scatter-asm\sslang.cpp">
-      <Filter>scatter-asm</Filter>
-    </ClCompile>
-    <ClCompile Include="scatter-vm\sslang_vm.cpp">
-      <Filter>scatter-vm</Filter>
-    </ClCompile>
-    <ClCompile Include="scatter-vm\ssvm.cpp">
-      <Filter>scatter-vm</Filter>
-    </ClCompile>
     <ClCompile Include="ssmain.cpp" />
-    <ClCompile Include="scatter-cl\sscl.cpp">
-      <Filter>scatter-cl</Filter>
-    </ClCompile>
-    <ClCompile Include="scatter-cl\sslexeme_cl.cpp">
-      <Filter>scatter-cl</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="scatter-asm\ssasm.h">
-      <Filter>scatter-asm</Filter>
-    </ClInclude>
-    <ClInclude Include="scatter-asm\ssbase_type.h">
-      <Filter>scatter-asm</Filter>
-    </ClInclude>
-    <ClInclude Include="scatter-asm\sslexeme.h">
-      <Filter>scatter-asm</Filter>
-    </ClInclude>
-    <ClInclude Include="scatter-asm\ssutil.h">
-      <Filter>scatter-asm</Filter>
-    </ClInclude>
-    <ClInclude Include="scatter-asm\sssystem.h">
-      <Filter>scatter-asm</Filter>
-    </ClInclude>
-    <ClInclude Include="scatter-asm\sslang.h">
-      <Filter>scatter-asm</Filter>
-    </ClInclude>
-    <ClInclude Include="scatter-asm\ssasm_pre.h">
-      <Filter>scatter-asm</Filter>
-    </ClInclude>
-    <ClInclude Include="scatter-vm\sslang_vm.h">
-      <Filter>scatter-vm</Filter>
-    </ClInclude>
-    <ClInclude Include="scatter-vm\ssvm_pre.h">
-      <Filter>scatter-vm</Filter>
-    </ClInclude>
-    <ClInclude Include="scatter-vm\ssvm.h">
-      <Filter>scatter-vm</Filter>
-    </ClInclude>
-    <ClInclude Include="scatter-cl\sscl.h">
-      <Filter>scatter-cl</Filter>
-    </ClInclude>
-    <ClInclude Include="scatter-cl\sspre-cl.h">
-      <Filter>scatter-cl</Filter>
-    </ClInclude>
-    <ClInclude Include="sspre.h" />
-    <ClInclude Include="ssutil.h" />
-    <ClInclude Include="scatter-cl\sslexeme_cl.h">
-      <Filter>scatter-cl</Filter>
-    </ClInclude>
+    <ClCompile Include="ssasm.cpp" />
+    <ClCompile Include="ssbase_type.cpp" />
+    <ClCompile Include="sscl.cpp" />
+    <ClCompile Include="sslang.cpp" />
+    <ClCompile Include="sslexeme.cpp" />
+    <ClCompile Include="sssystem.cpp" />
+    <ClCompile Include="ssvm.cpp" />
+    <ClCompile Include="ssutil.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
     <None Include="README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ssasm.h" />
+    <ClInclude Include="ssbase_type.h" />
+    <ClInclude Include="sscl.h" />
+    <ClInclude Include="sslang.h" />
+    <ClInclude Include="sslexeme.h" />
+    <ClInclude Include="sspre.h" />
+    <ClInclude Include="sssystem.h" />
+    <ClInclude Include="ssutil.h" />
+    <ClInclude Include="ssvm.h" />
   </ItemGroup>
 </Project>

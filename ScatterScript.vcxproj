@@ -81,38 +81,30 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="scatter-asm\ssasm.cpp" />
-    <ClCompile Include="scatter-asm\ssbase_type.cpp" />
-    <ClCompile Include="scatter-asm\sslexeme.cpp" />
-    <ClCompile Include="scatter-asm\sslang.cpp" />
-    <ClCompile Include="scatter-asm\sssystem.cpp" />
-    <ClCompile Include="scatter-asm\ssutil.cpp" />
-    <ClCompile Include="scatter-cl\sscl.cpp" />
-    <ClCompile Include="scatter-cl\sslexeme_cl.cpp" />
-    <ClCompile Include="scatter-vm\sslang_vm.cpp" />
-    <ClCompile Include="scatter-vm\ssvm.cpp" />
+    <ClCompile Include="ssasm.cpp" />
+    <ClCompile Include="ssbase_type.cpp" />
+    <ClCompile Include="sscl.cpp" />
+    <ClCompile Include="sslang.cpp" />
+    <ClCompile Include="sslexeme.cpp" />
     <ClCompile Include="ssmain.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="scatter-asm\ssasm.h" />
-    <ClInclude Include="scatter-asm\ssasm_pre.h" />
-    <ClInclude Include="scatter-asm\ssbase_type.h" />
-    <ClInclude Include="scatter-asm\sslexeme.h" />
-    <ClInclude Include="scatter-asm\sslang.h" />
-    <ClInclude Include="scatter-asm\sssystem.h" />
-    <ClInclude Include="scatter-asm\ssutil.h" />
-    <ClInclude Include="scatter-cl\sscl.h" />
-    <ClInclude Include="scatter-cl\sslexeme_cl.h" />
-    <ClInclude Include="scatter-cl\sspre-cl.h" />
-    <ClInclude Include="scatter-vm\sslang_vm.h" />
-    <ClInclude Include="scatter-vm\ssvm.h" />
-    <ClInclude Include="scatter-vm\ssvm_pre.h" />
-    <ClInclude Include="sspre.h" />
-    <ClInclude Include="ssutil.h" />
+    <ClCompile Include="sssystem.cpp" />
+    <ClCompile Include="ssutil.cpp" />
+    <ClCompile Include="ssvm.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
     <None Include="README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ssasm.h" />
+    <ClInclude Include="ssbase_type.h" />
+    <ClInclude Include="sscl.h" />
+    <ClInclude Include="sslang.h" />
+    <ClInclude Include="sslexeme.h" />
+    <ClInclude Include="sspre.h" />
+    <ClInclude Include="sssystem.h" />
+    <ClInclude Include="ssutil.h" />
+    <ClInclude Include="ssvm.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

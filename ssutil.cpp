@@ -1,6 +1,5 @@
 #include <ctype.h>
-#include <iostream>
-#include <sstream>
+#include <string.h>
 
 #include "ssutil.h"
 

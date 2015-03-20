@@ -20,7 +20,7 @@ void FreeLinkList(LinkList* pList)
 
         pCurrentNode = pList->pHead;
 
-        while (TRUE)
+        while (1)
         {
             pNextNode = pCurrentNode->pNext;
 

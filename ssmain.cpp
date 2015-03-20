@@ -2,51 +2,20 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "scatter-asm/ssasm_pre.h"
-#include "scatter-asm/ssutil.h"
-#include "scatter-asm/ssbase_type.h"
-#include "scatter-asm/sslang.h"
-#include "scatter-asm/sssystem.h"
-#include "scatter-asm/sslexeme.h"
-#include "scatter-asm/ssasm.h"
+#include "ssutil.h"
+#include "sspre.h"
+#include "ssbase_type.h"
+#include "sslang.h"
+#include "sssystem.h"
+#include "sslexeme.h"
+#include "ssasm.h"
+#include "ssvm.h"
 
-#include "scatter-vm/ssvm_pre.h"
-#include "scatter-vm/sslang_vm.h"
-#include "scatter-vm/ssvm.h"
+_asm_::ASM sasm;
+_vm::Script vm_script;
+_vm::Script vm_scripts[MAX_THREAD_NUMBER];
 
-FILE*  g_SourceFile;
-char   g_SourceFileName[MAX_FILENAME_SIZE];
-int    g_SourceCodeLines;
-char** g_SourceCode;
-char   g_ExeFileName[MAX_FILENAME_SIZE];
-char   g_ExeInfoFilename[MAX_FILENAME_SIZE];
-
-LinkList g_FunctionTable;
-LinkList g_StringTable;
-LinkList g_LabelTable;
-LinkList g_SymbolTable;
-LinkList g_HostAPICallTable;
-
-Lexer  g_Lexer;
-ScriptHeader g_ScriptHeader;
-ASM_Instr* g_InstrStream;
-
-int g_InstrStreamSize;
-int g_IsSetStackSizeFound;
-int g_currentInstrIndex;
-
-InstrLookup g_InstrTable[MAX_INSTR_LOOKUP_COUNT];
-
-Script g_Script;
-Script g_Scripts[MAX_THREAD_NUMBER];
-
-char* g_StringSource_CL;
-char g_CurrentLexeme_CL[MAX_LEXEME_SIZE];
-
-int g_CurrentLexemeStart_CL;
-int g_CurrentLexemeEnd_CL;
-
-int g_CurrentOp_CL;
+_cl::Lexer cl_lexer;
 
 
 void asm_run();
@@ -67,20 +36,20 @@ int main(int argc, char* argv[])
 			break;
 		case 'a':
 			{
-				strcpy(g_SourceFileName, argv[2]);
+				strcpy(sasm.sourceFileName, argv[2]);
 
 				if (argv[3])
 				{
-					strcpy(g_ExeFileName, argv[3]);
-					if (! strstr(g_ExeFileName, EXE_EXTENSION))
-						strcat(g_ExeFileName, EXE_EXTENSION);
+					strcpy(sasm.exeFileName, argv[3]);
+					if (! strstr(sasm.exeFileName, EXE_EXTENSION))
+						strcat(sasm.exeFileName, EXE_EXTENSION);
 				}
 				else
 				{
-					int ExtOffset = strrchr(g_SourceFileName, '.') - g_SourceFileName;
-					strncpy(g_ExeFileName, g_SourceFileName, ExtOffset);
-					g_ExeFileName[ExtOffset] = '\0';
-					strcat(g_ExeFileName, EXE_EXTENSION);
+					int ExtOffset = strrchr(sasm.sourceFileName, '.') - sasm.sourceFileName;
+					strncpy(sasm.exeFileName, sasm.sourceFileName, ExtOffset);
+					sasm.exeFileName[ExtOffset] = '\0';
+					strcat(sasm.exeFileName, EXE_EXTENSION);
 				}
 
 				asm_run();
@@ -105,49 +74,46 @@ int main(int argc, char* argv[])
 
 		vm_run(exeFilename);
 	}
-
-
-
 }
 
 void asm_run()
 {
-	strcpy(g_ExeInfoFilename, g_ExeFileName);
-	strcat(g_ExeInfoFilename, ".info");
+	strcpy(sasm.exeInfoFilename, sasm.exeFileName);
+	strcat(sasm.exeInfoFilename, ".info");
 
-	ASM_Init();
+	_asm_::Init();
 
-	LoadSourceFile();
+	_asm_::LoadSourceFile();
 
-	AssembleSourceFile();
+	_asm_::AssembleSourceFile();
 
-	BuildSSE();
+	_asm_::BuildSSE();
 
-	BuildSSE_Info();
+	_asm_::BuildSSE_Info();
 
-	ASM_ShutDown();
+	_asm_::ShutDown();
 }
 
 void vm_run(char* exeFilename)
 {
-	VM_Init();
+	_vm::Init();
 
-	int errorCode = LoadScript(exeFilename);
+	int errorCode = _vm::LoadScript(exeFilename);
 
-	if (errorCode != LOAD_OK)
+	if (errorCode != VM_LOAD_OK)
 	{
 		printf("Error: ");
 		switch (errorCode)
 		{
-		case LOAD_ERROR_FAIL_FILE_OPEN:
+		case VM_LOAD_ERROR_FAIL_FILE_OPEN:
 			printf("Can not open sse file");
 			break;
 
-		case LOAD_ERROR_INVALID_SSE:
+		case VM_LOAD_ERROR_INVALID_SSE:
 			printf("Invalid sse file");
 			break;
 
-		case LOAD_ERROR_UNSOPPORTED_VERSION:
+		case VM_LOAD_ERROR_UNSOPPORTED_VERSION:
 			printf("Unsupported sse version");
 			break;
 
@@ -157,11 +123,11 @@ void vm_run(char* exeFilename)
 		printf(".\n");
 	}
 
-	ResetScript();
+	_vm::ResetScript();
 
-	RunScript();
+	_vm::RunScript();
 
-	VM_ShutDown();
+	_vm::ShutDown();
 }
 void compile()
 {

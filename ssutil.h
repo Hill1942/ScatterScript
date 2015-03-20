@@ -1,9 +1,7 @@
-int IsCharNumeric(char cChar);
-int IsCharWhiteSpace(char cChar);
-int IsCharIdent(char cChar);
-int IsCharDelimiter(char cChar);
+#ifndef SSUTIL_H
+#define SSUTIL_H
 
-int IsStringInt(const char* str);
-int IsStringFloat(const char* str);
-int IsStringWhitespace(const char* str);
-int IsStringIdent(const char* str);
+char* strtoupper(char* str);
+void swrite(const void* src, size_t size, size_t count, char* buf);
+
+#endif
