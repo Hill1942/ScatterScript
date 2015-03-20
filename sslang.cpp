@@ -6,13 +6,15 @@
 #include "ssbase_type.h"
 #include "sslang.h"
 
+extern _asm_::ASM sasm;
+
 namespace _asm_
 {
-    int AddString(LinkList* pStringList, char* str)
+    int AddString(LinkList* pStringTable, char* str)
     {
     	//Look through the linklist to find whether the string has been already in the list.
-    	LinkListNode* pNode = pStringList->pHead;
-    	for (int i = 0; i < pStringList->iNodeCount; i++)
+    	LinkListNode* pNode = pStringTable->pHead;
+    	for (int i = 0; i < pStringTable->iNodeCount; i++)
     	{
     		if (strcmp((char*)pNode->pData, str) == 0)
     			return i;
@@ -22,7 +24,7 @@ namespace _asm_
     	char* newStr =(char*) malloc(strlen(str) + 1);
     	strcpy(newStr, str);
     
-    	return AddNode(pStringList, newStr);
+    	return AddNode(pStringTable, newStr);
     }
 
 	FuncNode* GetFunctionByName(LinkList* pFunctionTable, char* name)
@@ -47,7 +49,7 @@ namespace _asm_
 	int AddFunction(LinkList* pFunctionTable, char* name, int entryPoint)
 	{
 		//if the function already exists in table, return -1
-		if (GetFunctionByName(name))
+		if (GetFunctionByName(&sasm.functionTable, name))
 			return -1;
 		//create a new function according to the name and entryPoint;
 		FuncNode* newFunc = (FuncNode*) malloc(sizeof(FuncNode));
@@ -64,7 +66,7 @@ namespace _asm_
 	void SetFunctionInfo(char* name, int paramNum, int localDataSize)
 	{
 		//Get the function according to the name;
-		FuncNode* funcNode       = GetFunctionByName(name);
+		FuncNode* funcNode       = GetFunctionByName(&sasm.functionTable, name);
 		funcNode->iParamCount    = paramNum;
 		funcNode->iLocalDataSize = localDataSize;
 	}
@@ -87,7 +89,7 @@ namespace _asm_
 	}
 
 	int AddSymbol(LinkList* pSymbolTable, char *identifier, int size, int stackIndex, int funcIndex) {
-		if (GetSymbolByIdent(identifier, funcIndex))
+		if (GetSymbol(&sasm.symbolTable, identifier, funcIndex))
 			return -1;
 		SymbolNode* newSymbol  = (SymbolNode*) malloc(sizeof(SymbolNode));
 		strcpy(newSymbol->strIdentifier, identifier);
@@ -100,11 +102,11 @@ namespace _asm_
 	}
 
 	int GetStackIndexByIdent(char *identifier, int funcIndex) {
-		return GetSymbolByIdent(identifier, funcIndex)->iStackIndex;
+		return GetSymbol(&sasm.symbolTable, identifier, funcIndex)->iStackIndex;
 	}
 
 	int GetSizeByIdent(char *identifier, int funcIndex) {
-		return GetSymbolByIdent(identifier, funcIndex)->iSize;
+		return GetSymbol(&sasm.symbolTable, identifier, funcIndex)->iSize;
 	}
 
 	LabelNode *GetLabel(LinkList* pLabelTable, char *identifier, int funcIndex)
@@ -125,7 +127,7 @@ namespace _asm_
 	}
 
 	int AddLabel(LinkList* pLabelTable, char *identifier, int targetIndex, int funcIndex) {
-		if (GetLabelByIdent(identifier, funcIndex))
+		if (GetLabel(&sasm.labelTable, identifier, funcIndex))
 			return -1;
 
 		LabelNode* newLabel    = (LabelNode*) malloc(sizeof(LabelNode));
@@ -137,7 +139,7 @@ namespace _asm_
 		return newLabel->iIndex;
 	}
 
-	int GetInstruction(InstrLookup instrLookupTable[], LinkList* pInstrTable, char* name, InstrLookup* instrLookup)
+	int GetInstruction(InstrLookup instrLookupTable[], char* name, InstrLookup* instrLookup)
 	{
 		for (int i = 0; i < MAX_INSTR_LOOKUP_COUNT; i++)
 		{

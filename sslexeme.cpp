@@ -10,7 +10,7 @@
 #include "sssystem.h"
 #include "sslexeme.h"
 
-extern _asm_::ASM ssam;
+extern _asm_::ASM sasm;
 extern _cl::Lexer cl_lexer;
 
 _cl::OpState g_OpChars0[MAX_OP_STATE_COUNT] = 
@@ -265,30 +265,30 @@ namespace _asm_
 {
     void LoadSourceFile()
     {
-        if (! (ssam.sourceFile = fopen(ssam.sourceFileName, "rb")))
+        if (! (sasm.sourceFile = fopen(sasm.sourceFileName, "rb")))
             ExitOnError("Could not open source file");
     
-        while (!feof(ssam.sourceFile))
+        while (!feof(sasm.sourceFile))
         {
-            if (fgetc(ssam.sourceFile) == '\n')
-                ssam.sourceCodeLines++;
+            if (fgetc(sasm.sourceFile) == '\n')
+                sasm.sourceCodeLines++;
         }
-        ssam.sourceCodeLines++;
+        sasm.sourceCodeLines++;
     
-        rewind(ssam.sourceFile);
+        rewind(sasm.sourceFile);
     
-        if (! (ssam.sourceCode = (char**)malloc(ssam.sourceCodeLines * sizeof(char*))))
+        if (! (sasm.sourceCode = (char**)malloc(sasm.sourceCodeLines * sizeof(char*))))
             ExitOnError("Could not allocate space for source code");
     
-        for (int i = 0; i < ssam.sourceCodeLines; i++)
+        for (int i = 0; i < sasm.sourceCodeLines; i++)
         {
-            if (! (ssam.sourceCode[i] = (char*)malloc(MAX_SOURCE_LINE_SIZE + 1)))
+            if (! (sasm.sourceCode[i] = (char*)malloc(MAX_SOURCE_LINE_SIZE + 1)))
                 ExitOnError("Could not allocate space for source code");
     
-            fgets(ssam.sourceCode[i], MAX_SOURCE_LINE_SIZE, ssam.sourceFile);
+            fgets(sasm.sourceCode[i], MAX_SOURCE_LINE_SIZE, sasm.sourceFile);
     
-            StripComments(ssam.sourceCode[i]);
-            TrimWhiteSpace(ssam.sourceCode[i]);
+            StripComments(sasm.sourceCode[i]);
+            TrimWhiteSpace(sasm.sourceCode[i]);
     
             // Make sure to add a new newline if it was removed by the stripping of the
             // comments and whitespace. We do this by checking the character right before
@@ -296,49 +296,49 @@ namespace _asm_
             // by one and add it. We use strlen () to find the position of the newline
             // easily.
     
-            int newLineIdex = strlen(ssam.sourceCode[i]) - 1;
-            if (ssam.sourceCode[i][newLineIdex] != '\n' )
+            int newLineIdex = strlen(sasm.sourceCode[i]) - 1;
+            if (sasm.sourceCode[i][newLineIdex] != '\n' )
             {
-                ssam.sourceCode[i][newLineIdex + 1] = '\n';
-                ssam.sourceCode[i][newLineIdex + 2] = '\0';
+                sasm.sourceCode[i][newLineIdex + 1] = '\n';
+                sasm.sourceCode[i][newLineIdex + 2] = '\0';
             }
         }
     }
     
     char GetLookAheadChar()
     {
-        int currentSourceLine = ssam.lexer.iCurrentSourceLine;
-        unsigned int index    = ssam.lexer.iIndex1;
+        int currentSourceLine = sasm.lexer.iCurrentSourceLine;
+        unsigned int index    = sasm.lexer.iIndex1;
     
-        if (ssam.lexer.iState != ASM_LEX_STATE_IN_STRING)
+        if (sasm.lexer.iState != ASM_LEX_STATE_IN_STRING)
         {
             while (TRUE)
             {
-                if (index >= strlen(ssam.sourceCode[currentSourceLine]))
+                if (index >= strlen(sasm.sourceCode[currentSourceLine]))
                 {
                     currentSourceLine++;
-                    if (currentSourceLine >= ssam.sourceCodeLines)
+                    if (currentSourceLine >= sasm.sourceCodeLines)
                         return 0;
                     index = 0;
                 }
-                if (!IsCharWhiteSpace(ssam.sourceCode[currentSourceLine][index]))
+                if (!IsCharWhiteSpace(sasm.sourceCode[currentSourceLine][index]))
                     break;
                 index++;
             }
         }
-        return ssam.sourceCode[currentSourceLine][index];
+        return sasm.sourceCode[currentSourceLine][index];
     }
     
     int SkipToNextLine()
     {
-        ssam.lexer.iCurrentSourceLine++;
-        if (ssam.lexer.iCurrentSourceLine >= ssam.sourceCodeLines)
+        sasm.lexer.iCurrentSourceLine++;
+        if (sasm.lexer.iCurrentSourceLine >= sasm.sourceCodeLines)
             return FALSE;
     
-        ssam.lexer.iIndex0 = 0;
-        ssam.lexer.iIndex1 = 0;
+        sasm.lexer.iIndex0 = 0;
+        sasm.lexer.iIndex1 = 0;
     
-        ssam.lexer.iState = ASM_LEX_STATE_NO_STRING;
+        sasm.lexer.iState = ASM_LEX_STATE_NO_STRING;
     
         return TRUE;
     }
@@ -347,170 +347,170 @@ namespace _asm_
     {
         //When we read the source code line by line, we use two index to indicate the both ends of a source line.
         //At first, the right end index equals to the left end index: they both are 0.
-        ssam.lexer.iIndex0 = ssam.lexer.iIndex1;
-        if (ssam.lexer.iIndex0 >= strlen(ssam.sourceCode[ssam.lexer.iCurrentSourceLine]))
+        sasm.lexer.iIndex0 = sasm.lexer.iIndex1;
+        if (sasm.lexer.iIndex0 >= strlen(sasm.sourceCode[sasm.lexer.iCurrentSourceLine]))
         {
             if (!SkipToNextLine())
                 return ASM_END_OF_TOKEN_STREAM;
         }
     
-        if (ssam.lexer.iState == ASM_LEX_STATE_END_STRING)
-            ssam.lexer.iState = ASM_LEX_STATE_NO_STRING;
+        if (sasm.lexer.iState == ASM_LEX_STATE_END_STRING)
+            sasm.lexer.iState = ASM_LEX_STATE_NO_STRING;
         //locate index to the first non-whitespace character of a source code line
-        if (ssam.lexer.iState != ASM_LEX_STATE_IN_STRING)
+        if (sasm.lexer.iState != ASM_LEX_STATE_IN_STRING)
         {
             while (TRUE)
             {
-                if (!IsCharWhiteSpace((ssam.sourceCode[ssam.lexer.iCurrentSourceLine][ssam.lexer.iIndex0])))
+                if (!IsCharWhiteSpace((sasm.sourceCode[sasm.lexer.iCurrentSourceLine][sasm.lexer.iIndex0])))
                     break;
-                ssam.lexer.iIndex0++;
+                sasm.lexer.iIndex0++;
             }
         }
-        ssam.lexer.iIndex1 = ssam.lexer.iIndex0;
+        sasm.lexer.iIndex1 = sasm.lexer.iIndex0;
     
         //move iIndex1 to the location of next token end
         while (TRUE)
         {
-            if (ssam.lexer.iState == ASM_LEX_STATE_IN_STRING)
+            if (sasm.lexer.iState == ASM_LEX_STATE_IN_STRING)
             {
-                if (ssam.lexer.iIndex1 >= strlen(ssam.sourceCode[ssam.lexer.iCurrentSourceLine]))
+                if (sasm.lexer.iIndex1 >= strlen(sasm.sourceCode[sasm.lexer.iCurrentSourceLine]))
                 {
-                    ssam.lexer.currentToken = ASM_TOKEN_TYPE_INVALID;
-                    return ssam.lexer.currentToken;
+                    sasm.lexer.currentToken = ASM_TOKEN_TYPE_INVALID;
+                    return sasm.lexer.currentToken;
                 }
-                if (ssam.sourceCode[ssam.lexer.iCurrentSourceLine][ssam.lexer.iIndex1] == '\\')
+                if (sasm.sourceCode[sasm.lexer.iCurrentSourceLine][sasm.lexer.iIndex1] == '\\')
                 {
-                    ssam.lexer.iIndex1 += 2;
+                    sasm.lexer.iIndex1 += 2;
                     continue;
                 }
-                if (ssam.sourceCode[ssam.lexer.iCurrentSourceLine][ssam.lexer.iIndex1] == '"')
+                if (sasm.sourceCode[sasm.lexer.iCurrentSourceLine][sasm.lexer.iIndex1] == '"')
                     break;
-                ssam.lexer.iIndex1++;
+                sasm.lexer.iIndex1++;
             }
             else
             {
-                if (ssam.lexer.iIndex1 >= strlen(ssam.sourceCode[ssam.lexer.iCurrentSourceLine]))
+                if (sasm.lexer.iIndex1 >= strlen(sasm.sourceCode[sasm.lexer.iCurrentSourceLine]))
                     break;
-                if (IsCharDelimiter(ssam.sourceCode[ssam.lexer.iCurrentSourceLine][ssam.lexer.iIndex1]))
+                if (IsCharDelimiter(sasm.sourceCode[sasm.lexer.iCurrentSourceLine][sasm.lexer.iIndex1]))
                     break;
-                ssam.lexer.iIndex1++;
+                sasm.lexer.iIndex1++;
             }
         }
     
-        if (ssam.lexer.iIndex1 - ssam.lexer.iIndex0 == 0)
-            ssam.lexer.iIndex1++;
+        if (sasm.lexer.iIndex1 - sasm.lexer.iIndex0 == 0)
+            sasm.lexer.iIndex1++;
     
         //Get the next lexeme
         unsigned int currentTargetIndex = 0;
-        for (int i = ssam.lexer.iIndex0; i < ssam.lexer.iIndex1; i++)
+        for (int i = sasm.lexer.iIndex0; i < sasm.lexer.iIndex1; i++)
         {
-            if (ssam.lexer.iState == ASM_LEX_STATE_IN_STRING)
-                if (ssam.sourceCode[ssam.lexer.iCurrentSourceLine][i] == '\\')
+            if (sasm.lexer.iState == ASM_LEX_STATE_IN_STRING)
+                if (sasm.sourceCode[sasm.lexer.iCurrentSourceLine][i] == '\\')
                     i++;
-            ssam.lexer.pCurrentLexeme[currentTargetIndex] = ssam.sourceCode[ssam.lexer.iCurrentSourceLine][i];
+            sasm.lexer.pCurrentLexeme[currentTargetIndex] = sasm.sourceCode[sasm.lexer.iCurrentSourceLine][i];
             currentTargetIndex++;
         }
-        ssam.lexer.pCurrentLexeme[currentTargetIndex] = '\0';
-    	/*if (ssam.lexer.iState != ASM_LEX_STATE_IN_STRING)
-    	strtoupper(ssam.lexer.pCurrentLexeme);*/
+        sasm.lexer.pCurrentLexeme[currentTargetIndex] = '\0';
+    	/*if (sasm.lexer.iState != ASM_LEX_STATE_IN_STRING)
+    	strtoupper(sasm.lexer.pCurrentLexeme);*/
     
         //Decide which token the lexeme is
-        ssam.lexer.currentToken = ASM_TOKEN_TYPE_INVALID;
-        if (strlen(ssam.lexer.pCurrentLexeme) > 1 || ssam.lexer.pCurrentLexeme[0] != '"')
+        sasm.lexer.currentToken = ASM_TOKEN_TYPE_INVALID;
+        if (strlen(sasm.lexer.pCurrentLexeme) > 1 || sasm.lexer.pCurrentLexeme[0] != '"')
         {
-            if (ssam.lexer.iState == ASM_LEX_STATE_IN_STRING)
+            if (sasm.lexer.iState == ASM_LEX_STATE_IN_STRING)
             {
-                ssam.lexer.currentToken = ASM_TOKEN_TYPE_STRING;
+                sasm.lexer.currentToken = ASM_TOKEN_TYPE_STRING;
                 return ASM_TOKEN_TYPE_STRING;
             }
         }
     
-        if (IsStringInt(ssam.lexer.pCurrentLexeme))
-            ssam.lexer.currentToken = ASM_TOKEN_TYPE_INT;
+        if (IsStringInt(sasm.lexer.pCurrentLexeme))
+            sasm.lexer.currentToken = ASM_TOKEN_TYPE_INT;
     
-        if (IsStringFloat(ssam.lexer.pCurrentLexeme))
-            ssam.lexer.currentToken = ASM_TOKEN_TYPE_FLOAT;
+        if (IsStringFloat(sasm.lexer.pCurrentLexeme))
+            sasm.lexer.currentToken = ASM_TOKEN_TYPE_FLOAT;
     
-        if (IsStringIdent(ssam.lexer.pCurrentLexeme))
-            ssam.lexer.currentToken = ASM_TOKEN_TYPE_IDENT;
+        if (IsStringIdent(sasm.lexer.pCurrentLexeme))
+            sasm.lexer.currentToken = ASM_TOKEN_TYPE_IDENT;
     
-        if (strcmp(ssam.lexer.pCurrentLexeme, ASM_KW_SET_STACK_SIZE) == 0)
-            ssam.lexer.currentToken = ASM_TOKEN_TYPE_SETSTACKSIZE;
+        if (strcmp(sasm.lexer.pCurrentLexeme, ASM_KW_SET_STACK_SIZE) == 0)
+            sasm.lexer.currentToken = ASM_TOKEN_TYPE_SETSTACKSIZE;
     
-        if (strcmp(ssam.lexer.pCurrentLexeme, ASM_KW_VAR) == 0)
-            ssam.lexer.currentToken = ASM_TOKEN_TYPE_VAR;
+        if (strcmp(sasm.lexer.pCurrentLexeme, ASM_KW_VAR) == 0)
+            sasm.lexer.currentToken = ASM_TOKEN_TYPE_VAR;
     
-        if (strcmp(ssam.lexer.pCurrentLexeme, ASM_KW_FUNCTION) == 0)
-            ssam.lexer.currentToken = ASM_TOKEN_TYPE_FUNC;
+        if (strcmp(sasm.lexer.pCurrentLexeme, ASM_KW_FUNCTION) == 0)
+            sasm.lexer.currentToken = ASM_TOKEN_TYPE_FUNC;
     
-        if (strcmp(ssam.lexer.pCurrentLexeme, ASM_KW_PARAM) == 0)
-            ssam.lexer.currentToken = ASM_TOKEN_TYPE_PARAM;
+        if (strcmp(sasm.lexer.pCurrentLexeme, ASM_KW_PARAM) == 0)
+            sasm.lexer.currentToken = ASM_TOKEN_TYPE_PARAM;
     
-        if (strcmp(ssam.lexer.pCurrentLexeme, ASM_KW_RETVAL) == 0)
-            ssam.lexer.currentToken = ASM_TOKEN_TYPE_REG_RETVAL;
+        if (strcmp(sasm.lexer.pCurrentLexeme, ASM_KW_RETVAL) == 0)
+            sasm.lexer.currentToken = ASM_TOKEN_TYPE_REG_RETVAL;
     
-    	if (strlen(ssam.lexer.pCurrentLexeme) == 1)
+    	if (strlen(sasm.lexer.pCurrentLexeme) == 1)
     	{
-    		switch (ssam.lexer.pCurrentLexeme[0])
+    		switch (sasm.lexer.pCurrentLexeme[0])
     		{
     		case '"':
-    			switch (ssam.lexer.iState)
+    			switch (sasm.lexer.iState)
     			{
     			case ASM_LEX_STATE_NO_STRING:
-    				ssam.lexer.iState = ASM_LEX_STATE_IN_STRING;
+    				sasm.lexer.iState = ASM_LEX_STATE_IN_STRING;
     				break;
     			case ASM_LEX_STATE_IN_STRING:
-    				ssam.lexer.iState = ASM_LEX_STATE_END_STRING;
+    				sasm.lexer.iState = ASM_LEX_STATE_END_STRING;
     			}
-    			ssam.lexer.currentToken = ASM_TOKEN_TYPE_QUATE;
+    			sasm.lexer.currentToken = ASM_TOKEN_TYPE_QUATE;
     			break;
     		case ',':
-    			ssam.lexer.currentToken = ASM_TOKEN_TYPE_COMMA;
+    			sasm.lexer.currentToken = ASM_TOKEN_TYPE_COMMA;
     			break;
     		case ':':
-    			ssam.lexer.currentToken = ASM_TOKEN_TYPE_COLON;
+    			sasm.lexer.currentToken = ASM_TOKEN_TYPE_COLON;
     			break;
     		case '[':
-    			ssam.lexer.currentToken = ASM_TOKEN_TYPE_OPEN_BRACKET;
+    			sasm.lexer.currentToken = ASM_TOKEN_TYPE_OPEN_BRACKET;
     			break;
     		case ']':
-    			ssam.lexer.currentToken = ASM_TOKEN_TYPE_CLOSE_BRACKET;
+    			sasm.lexer.currentToken = ASM_TOKEN_TYPE_CLOSE_BRACKET;
     			break;
     		case '{':
-    			ssam.lexer.currentToken = ASM_TOKEN_TYPE_OPEN_BRACE;
+    			sasm.lexer.currentToken = ASM_TOKEN_TYPE_OPEN_BRACE;
     			break;
     		case '}':
-    			ssam.lexer.currentToken = ASM_TOKEN_TYPE_CLOSE_BRACE;
+    			sasm.lexer.currentToken = ASM_TOKEN_TYPE_CLOSE_BRACE;
     			break;
     		case '\n':
-    			ssam.lexer.currentToken = ASM_TOKEN_TYPE_NEWLINE;
+    			sasm.lexer.currentToken = ASM_TOKEN_TYPE_NEWLINE;
     			break;
     		case '\r':
-    			ssam.lexer.currentToken = ASM_TOKEN_TYPE_NEWLINE;
+    			sasm.lexer.currentToken = ASM_TOKEN_TYPE_NEWLINE;
     			break;
     		}
     	}
     
         InstrLookup instrLookup;
-        if (GetInstrByMnemonic(ssam.lexer.pCurrentLexeme, &instrLookup))
-            ssam.lexer.currentToken = ASM_TOKEN_TYPE_INSTR;
+        if (GetInstruction(sasm.instrLookup, sasm.lexer.pCurrentLexeme, &instrLookup))
+            sasm.lexer.currentToken = ASM_TOKEN_TYPE_INSTR;
     
-        return ssam.lexer.currentToken;
+        return sasm.lexer.currentToken;
     }
     
     char* GetCurrentLexeme()
     {
-        return ssam.lexer.pCurrentLexeme;
+        return sasm.lexer.pCurrentLexeme;
     }
     
     void ResetLexer()
     {
-        ssam.lexer.iCurrentSourceLine = 0;
-        ssam.lexer.iIndex0 = 0;
-        ssam.lexer.iIndex1 = 0;
+        sasm.lexer.iCurrentSourceLine = 0;
+        sasm.lexer.iIndex0 = 0;
+        sasm.lexer.iIndex1 = 0;
     
-        ssam.lexer.iState = ASM_LEX_STATE_NO_STRING;
-        ssam.lexer.currentToken = ASM_TOKEN_TYPE_INVALID;
+        sasm.lexer.iState = ASM_LEX_STATE_NO_STRING;
+        sasm.lexer.currentToken = ASM_TOKEN_TYPE_INVALID;
     }
     
 }

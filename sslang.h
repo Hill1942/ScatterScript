@@ -111,23 +111,23 @@ namespace _asm_
 		InstrLookup  instrLookup[MAX_INSTR_LOOKUP_COUNT];
 	};
 
-	int  AddString(LinkList* pList, char* str);
+	int AddString(LinkList* pStringTable, char* str);
 
-	FuncNode* GetFunctionByName(char* name);
-	int  AddFunction(char* name, int entryPoint);
+	FuncNode* GetFunctionByName(LinkList* pFunctionTable, char* name);
+	int AddFunction(LinkList* pFunctionTable, char* name, int entryPoint);
 	void SetFunctionInfo(char* name, int paramNum, int localDataSize);
 
-	SymbolNode* GetSymbolByIdent(char* identifier, int funcIndex);
-	int AddSymbol(char* identifier, int size, int stackIndex, int funcIndex);
-	int GetStackIndexByIdent(char* identifier, int funcIndex);
-	int GetSizeByIdent(char* identifier, int funcIndex);
+	SymbolNode *GetSymbol(LinkList* pSymbolTable, char *identifier, int funcIndex);
+	int AddSymbol(LinkList* pSymbolTable, char *identifier, int size, int stackIndex, int funcIndex);
+	int GetStackIndexByIdent(char *identifier, int funcIndex);
+	int GetSizeByIdent(char *identifier, int funcIndex);
 
-	LabelNode* GetLabelByIdent(char* identifier, int funcIndex);
-	int AddLabel(char* identifier, int targetIndex, int funcIndex);
+	LabelNode *GetLabel(LinkList* pLabelTable, char *identifier, int funcIndex);
+	int AddLabel(LinkList* pLabelTable, char *identifier, int targetIndex, int funcIndex);
 
-	int AddInstrLookup(InstrLookup instrLookup[], char* mnemonic, int opCode, int opCount);
+	int AddInstrLookup(InstrLookup instrLookupTable[], char* mnemonic, int opCode, int opCount);
 	void setOpType(InstrLookup instrLookup[], int instrIndex, int opIndex, OpType opType);
-	int GetInstrByMnemonic(char* mnemonic, InstrLookup* instrLookup);
+	int GetInstruction(InstrLookup instrLookupTable[], char* name, InstrLookup* instrLookup);
 }
 
 namespace _vm

@@ -10,18 +10,18 @@
 #include "sslexeme.h"
 #include "ssasm.h"
 
-extern _asm_::ASM ssam;
+extern _asm_::ASM sasm;
 
 namespace _asm_ 
 {
     void AssembleSourceFile()
     {
-		ssam.header.iStackSize = 0;
-        ssam.header.iIsMainFuncPresent = FALSE;
-    	ssam.header.iGlobalDataSize = 0;
+		sasm.header.iStackSize = 0;
+        sasm.header.iIsMainFuncPresent = FALSE;
+    	sasm.header.iGlobalDataSize = 0;
 
-        ssam.instrStreamSize = 0;
-        ssam.isSetStackSizeFound = FALSE;
+        sasm.instrStreamSize = 0;
+        sasm.isSetStackSizeFound = FALSE;
         
         ResetLexer();
     
@@ -38,18 +38,18 @@ namespace _asm_
             if (GetNextToken() == ASM_END_OF_TOKEN_STREAM)
                 break;
     
-            switch (ssam.lexer.currentToken)
+            switch (sasm.lexer.currentToken)
             {
                 case ASM_TOKEN_TYPE_SETSTACKSIZE:
     				{
     					if (isInFunction)
     						ExitOnCodeError(ERROR_MSG_LOCAL_SETSTACKSIZE);
-    					if (ssam.isSetStackSizeFound)
+    					if (sasm.isSetStackSizeFound)
     						ExitOnCodeError(ERROR_MSG_MULTIPLE_SETSTACKSIZE);
     					if (GetNextToken() != ASM_TOKEN_TYPE_INT)
     						ExitOnCodeError(ERROR_MSG_INVALID_STACK_SIZE);
     
-    					ssam.header.iStackSize = atoi(GetCurrentLexeme());
+    					sasm.header.iStackSize = atoi(GetCurrentLexeme());
     					break;
     				}
     				
@@ -83,15 +83,15 @@ namespace _asm_
     					if (isInFunction)
     						stackIndex = -(currentFuncLocalDataSize + 2);
     					else
-    						stackIndex = ssam.header.iGlobalDataSize;
+    						stackIndex = sasm.header.iGlobalDataSize;
     
-    					if (AddSymbol(pIdentifier, size, stackIndex, currentFuncIndex) == -1)
+    					if (AddSymbol(&sasm.symbolTable, pIdentifier, size, stackIndex, currentFuncIndex) == -1)
     						ExitOnCodeError(ERROR_MSG_IDENT_REDEFINITION);
     
     					if (isInFunction)
     						currentFuncLocalDataSize += size;
     					else 
-    						ssam.header.iGlobalDataSize += size;
+    						sasm.header.iGlobalDataSize += size;
     
     					break;
     				}
@@ -106,14 +106,14 @@ namespace _asm_
     
     					char* pFuncName = GetCurrentLexeme();
     
-    					int entryPoint = ssam.instrStreamSize;
-    					int funcIndex = AddFunction(pFuncName, entryPoint);
+    					int entryPoint = sasm.instrStreamSize;
+						int funcIndex = AddFunction(&sasm.functionTable, pFuncName, entryPoint);
     					if (funcIndex == -1)
     						ExitOnCodeError(ERROR_MSG_FUNC_REDEFINITION);
     					if (strcmp(pFuncName, ASM_KW_MAIN_FUNC_NAME) == 0)
     					{
-    						ssam.header.iIsMainFuncPresent = TRUE;
-    						ssam.header.iMainFuncIndex = funcIndex;
+    						sasm.header.iIsMainFuncPresent = TRUE;
+    						sasm.header.iMainFuncIndex = funcIndex;
     					}
     
     					isInFunction = TRUE;
@@ -124,10 +124,10 @@ namespace _asm_
     
     					while (GetNextToken() == ASM_TOKEN_TYPE_NEWLINE);
     
-    					if (ssam.lexer.currentToken != ASM_TOKEN_TYPE_OPEN_BRACE)
+    					if (sasm.lexer.currentToken != ASM_TOKEN_TYPE_OPEN_BRACE)
     						ExitOnCharExpectedError('{');
     
-    					ssam.instrStreamSize++;
+    					sasm.instrStreamSize++;
     					break;
     				}
     
@@ -162,7 +162,7 @@ namespace _asm_
     					if (!isInFunction)
     						ExitOnCodeError(ERROR_MSG_GLOBAL_INSTR);
     
-    					ssam.instrStreamSize++;
+    					sasm.instrStreamSize++;
     
     					break;
     				}
@@ -176,10 +176,10 @@ namespace _asm_
     						ExitOnCodeError(ERROR_MSG_GLOBAL_LINE_LABEL);
     
     					char* pIdentifier = GetCurrentLexeme();
-    					int   targetIndex = ssam.instrStreamSize - 1;
+    					int   targetIndex = sasm.instrStreamSize - 1;
     					int   funcIndex   = currentFuncIndex;
     
-    					if (AddLabel(pIdentifier, targetIndex, funcIndex) == -1)
+    					if (AddLabel(&sasm.labelTable, pIdentifier, targetIndex, funcIndex) == -1)
     						ExitOnCodeError(ERROR_MSG_LINE_LABEL_REDEFINITION);
     
     					break;
@@ -187,7 +187,7 @@ namespace _asm_
     
     			default:
     				{
-    					if (ssam.lexer.currentToken != ASM_TOKEN_TYPE_NEWLINE)
+    					if (sasm.lexer.currentToken != ASM_TOKEN_TYPE_NEWLINE)
     						ExitOnCodeError(ERROR_MSG_INVALID_INPUT);
     				}
             }
@@ -196,12 +196,12 @@ namespace _asm_
     			break;
         }
     
-    	ssam.instrStream = (Instruction*)malloc(ssam.instrStreamSize * sizeof(Instruction));
+    	sasm.instrStream = (Instruction*)malloc(sasm.instrStreamSize * sizeof(Instruction));
     
-    	for (int i = 0; i < ssam.instrStreamSize; i++)
-    		ssam.instrStream[i].pOplist = NULL;
+    	for (int i = 0; i < sasm.instrStreamSize; i++)
+    		sasm.instrStream[i].pOplist = NULL;
     
-    	ssam.currentInstrIndex = 0;
+    	sasm.currentInstrIndex = 0;
     	ResetLexer();
     
     	while (TRUE)
@@ -209,12 +209,12 @@ namespace _asm_
     		if (GetNextToken() == ASM_END_OF_TOKEN_STREAM)
     			break;
     
-    		switch (ssam.lexer.currentToken)
+    		switch (sasm.lexer.currentToken)
     		{
     		case ASM_TOKEN_TYPE_FUNC:
     			{
     				GetNextToken();
-    				pCurrentFunc = GetFunctionByName(GetCurrentLexeme());
+    				pCurrentFunc = GetFunctionByName(&sasm.functionTable, GetCurrentLexeme());
     
     				isInFunction = TRUE;
     				currentFuncParamCount = 0;
@@ -229,19 +229,19 @@ namespace _asm_
     				isInFunction = FALSE;
     				if (strcmp(pCurrentFunc->strName, ASM_KW_MAIN_FUNC_NAME) == 0)
     				{
-    					ssam.instrStream[ssam.currentInstrIndex].iOpcode = ASM_INSTR_EXIT;
-    					ssam.instrStream[ssam.currentInstrIndex].iOpCount = 1;
-    					ssam.instrStream[ssam.currentInstrIndex].pOplist = (Oprand*)malloc(sizeof(Oprand));
-    					ssam.instrStream[ssam.currentInstrIndex].pOplist[0].iType = ASM_OPRAND_TYPE_INT;
-    					ssam.instrStream[ssam.currentInstrIndex].pOplist[0].iIntLiteral = 0;
+    					sasm.instrStream[sasm.currentInstrIndex].iOpcode = ASM_INSTR_EXIT;
+    					sasm.instrStream[sasm.currentInstrIndex].iOpCount = 1;
+    					sasm.instrStream[sasm.currentInstrIndex].pOplist = (Oprand*)malloc(sizeof(Oprand));
+    					sasm.instrStream[sasm.currentInstrIndex].pOplist[0].iType = ASM_OPRAND_TYPE_INT;
+    					sasm.instrStream[sasm.currentInstrIndex].pOplist[0].iIntLiteral = 0;
     				}
     				else
     				{
-    					ssam.instrStream[ssam.currentInstrIndex].iOpcode = ASM_INSTR_RET;
-    					ssam.instrStream[ssam.currentInstrIndex].iOpCount = 0;
-    					ssam.instrStream[ssam.currentInstrIndex].pOplist = NULL;
+    					sasm.instrStream[sasm.currentInstrIndex].iOpcode = ASM_INSTR_RET;
+    					sasm.instrStream[sasm.currentInstrIndex].iOpCount = 0;
+    					sasm.instrStream[sasm.currentInstrIndex].pOplist = NULL;
     				}
-    				ssam.currentInstrIndex++;
+    				sasm.currentInstrIndex++;
     				break;
     			}
     
@@ -253,7 +253,7 @@ namespace _asm_
     				char* pIdentifier = GetCurrentLexeme();
     				int   stackIndex  = -(pCurrentFunc->iLocalDataSize + 2 +
     					                  currentFuncParamCount + 1);
-    				if (AddSymbol(pIdentifier, 1, stackIndex, currentFuncIndex) == -1)
+    				if (AddSymbol(&sasm.symbolTable, pIdentifier, 1, stackIndex, currentFuncIndex) == -1)
     					ExitOnCodeError(ERROR_MSG_IDENT_REDEFINITION);
     
     				currentFuncParamCount++;
@@ -262,9 +262,9 @@ namespace _asm_
     
     		case ASM_TOKEN_TYPE_INSTR:
     			{
-    				GetInstrByMnemonic(GetCurrentLexeme(), &currentInstr);
-    				ssam.instrStream[ssam.currentInstrIndex].iOpcode = currentInstr.iOpcode;
-    				ssam.instrStream[ssam.currentInstrIndex].iOpCount = currentInstr.iOpcount;
+    				GetInstruction(sasm.instrLookup, GetCurrentLexeme(), &currentInstr);
+    				sasm.instrStream[sasm.currentInstrIndex].iOpcode = currentInstr.iOpcode;
+    				sasm.instrStream[sasm.currentInstrIndex].iOpCount = currentInstr.iOpcount;
     
     				Oprand* pOpList = (Oprand*) malloc(currentInstr.iOpcount * sizeof(Oprand));
     
@@ -306,7 +306,7 @@ namespace _asm_
     							{
     								GetNextToken();
     
-    								switch(ssam.lexer.currentToken)
+    								switch(sasm.lexer.currentToken)
     								{
     								case ASM_TOKEN_TYPE_QUATE:
     									{
@@ -318,7 +318,7 @@ namespace _asm_
     								case ASM_TOKEN_TYPE_STRING:
     									{
     										char* str = GetCurrentLexeme();
-    										int   strIndex = AddString(&ssam.stringTable, str);
+    										int   strIndex = AddString(&sasm.stringTable, str);
     										if (GetNextToken() != ASM_TOKEN_TYPE_QUATE)
     											ExitOnCharExpectedError('\\');
     
@@ -355,7 +355,7 @@ namespace _asm_
     							{
     								char pIdentifier[MAX_INDENT_SIZE];
     								strcpy(pIdentifier, GetCurrentLexeme());
-    								if (!GetSymbolByIdent(pIdentifier, currentFuncIndex))
+    								if (!GetSymbol(&sasm.symbolTable, pIdentifier, currentFuncIndex))
     									ExitOnCodeError(ERROR_MSG_UNDEFINED_IDENT);
     
     								int baseIndex = GetStackIndexByIdent(pIdentifier, currentFuncIndex);
@@ -383,7 +383,7 @@ namespace _asm_
     									else if (indexToken == ASM_TOKEN_TYPE_IDENT)
     									{
     										char* pStrIndexIdent = GetCurrentLexeme();
-    										if (!GetSymbolByIdent(pStrIndexIdent, currentFuncIndex))
+    										if (!GetSymbol(&sasm.symbolTable, pStrIndexIdent, currentFuncIndex))
     											ExitOnCodeError(ERROR_MSG_UNDEFINED_IDENT);
     										if (GetSizeByIdent(pStrIndexIdent, currentFuncIndex) > 1)
     											ExitOnCodeError(ERROR_MSG_INVALID_ARRAY_INDEX);
@@ -405,7 +405,7 @@ namespace _asm_
     							if (currentOpType & ASM_OPRAND_FLAG_TYPE_LINE_LABEL)
     							{
     								char* pLabelIdent = GetCurrentLexeme();
-    								LabelNode* pLabel = GetLabelByIdent(pLabelIdent, currentFuncIndex);
+    								LabelNode* pLabel = GetLabel(&sasm.labelTable, pLabelIdent, currentFuncIndex);
     								if (!pLabel)
     									ExitOnCodeError(ERROR_MSG_UNDEFINED_LINE_LABEL);
     
@@ -416,7 +416,7 @@ namespace _asm_
     							if (currentOpType & ASM_OPRAND_FLAG_TYPE_FUNC_NAME)
     							{
     								char* strFuncName = GetCurrentLexeme();
-    								FuncNode* pFunc = GetFunctionByName(strFuncName);
+    								FuncNode* pFunc = GetFunctionByName(&sasm.functionTable, strFuncName);
     								if (!pFunc)
     									ExitOnCodeError(ERROR_MSG_UNDEFINED_FUNC);
     
@@ -427,7 +427,7 @@ namespace _asm_
     							if (currentOpType & ASM_OPRAND_FLAG_TYPE_HOST_API_CALL)
     							{
     								char* strHostAPICall = GetCurrentLexeme();
-    								int   index = AddString(&ssam.hostAPICallTable, strHostAPICall);
+    								int   index = AddString(&sasm.hostAPICallTable, strHostAPICall);
     
     								pOpList[i].iType = ASM_OPRAND_TYPE_HOST_API_CALL_INDEX;
     								pOpList[i].iHostAPICallIndex = index;
@@ -446,9 +446,9 @@ namespace _asm_
     				if (GetNextToken() != ASM_TOKEN_TYPE_NEWLINE)
     					ExitOnCodeError(ERROR_MSG_INVALID_INPUT);
     
-    				ssam.instrStream[ssam.currentInstrIndex].pOplist = pOpList;
+    				sasm.instrStream[sasm.currentInstrIndex].pOplist = pOpList;
     
-    				ssam.currentInstrIndex++;
+    				sasm.currentInstrIndex++;
     
     				break;
     			}
@@ -464,9 +464,9 @@ namespace _asm_
     	/*char exeFilename[MAX_FILENAME_SIZE];
     	char* exeDir = "bin\\";
     	strcpy(exeFilename, exeDir);
-    	strcat(exeFilename, ssam.exeFilename);*/
+    	strcat(exeFilename, sasm.exeFilename);*/
     
-    	FILE* pExeFile = fopen(ssam.exeFileName, "wb");
+    	FILE* pExeFile = fopen(sasm.exeFileName, "wb");
     	if (! pExeFile)
     		ExitOnError("Could not open executable for output");
     	
@@ -482,38 +482,38 @@ namespace _asm_
     
     	printf("-------------------------------Global Info--------------------------------\n");
     
-    	fwrite(&ssam.header.iStackSize, 4, 1, pExeFile);
-    	fwrite(&ssam.header.iGlobalDataSize, 4, 1, pExeFile);
-    	printf("stackSize: %d\n", ssam.header.iStackSize);
-    	printf("globalDataSize: %d\n", ssam.header.iGlobalDataSize);
+    	fwrite(&sasm.header.iStackSize, 4, 1, pExeFile);
+    	fwrite(&sasm.header.iGlobalDataSize, 4, 1, pExeFile);
+    	printf("stackSize: %d\n", sasm.header.iStackSize);
+    	printf("globalDataSize: %d\n", sasm.header.iGlobalDataSize);
     
     	char isMainExist = 0;
-    	if (ssam.header.iIsMainFuncPresent)
+    	if (sasm.header.iIsMainFuncPresent)
     		isMainExist = 1;
     
     	fwrite(&isMainExist, 1, 1, pExeFile);
-    	fwrite(&ssam.header.iMainFuncIndex, 4, 1, pExeFile);
+    	fwrite(&sasm.header.iMainFuncIndex, 4, 1, pExeFile);
     	if (isMainExist)
-    		printf("main func exists, and the main func index is: %d\n", ssam.header.iMainFuncIndex);
+    		printf("main func exists, and the main func index is: %d\n", sasm.header.iMainFuncIndex);
     	else
     		printf("main func not exists\n");
     
     	printf("-------------------------------Instr Info--------------------------------\n");
     
-    	fwrite(&ssam.instrStreamSize, 4, 1, pExeFile);
-    	for (int i = 0; i < ssam.instrStreamSize; i++)
+    	fwrite(&sasm.instrStreamSize, 4, 1, pExeFile);
+    	for (int i = 0; i < sasm.instrStreamSize; i++)
     	{
-    		short opCode = ssam.instrStream[i].iOpcode;
+    		short opCode = sasm.instrStream[i].iOpcode;
     		fwrite(&opCode, 2, 1, pExeFile);
     		printf("opCode: %d\n", opCode);
     
-    		char opCount = ssam.instrStream[i].iOpCount;
+    		char opCount = sasm.instrStream[i].iOpCount;
     		fwrite(&opCount, 1, 1, pExeFile);
     		printf("opCount: %d\n", opCount);
     
     		for (int j = 0; j < opCount; j++)
     		{
-    			Oprand currentOp = ssam.instrStream[i].pOplist[j];
+    			Oprand currentOp = sasm.instrStream[i].pOplist[j];
     
     			char opType = currentOp.iType;
     			fwrite(&opType, 1, 1, pExeFile);
@@ -581,13 +581,13 @@ namespace _asm_
     	int currentNode;
     	LinkListNode* pNode;
     
-    	fwrite(&ssam.stringTable.iNodeCount, 4, 1, pExeFile);
-    	printf("string number: %d\n\n", ssam.stringTable.iNodeCount);
-    	pNode = ssam.stringTable.pHead;
+    	fwrite(&sasm.stringTable.iNodeCount, 4, 1, pExeFile);
+    	printf("string number: %d\n\n", sasm.stringTable.iNodeCount);
+    	pNode = sasm.stringTable.pHead;
     
     	char paramCount;
     
-    	for (int i = 0; i < ssam.stringTable.iNodeCount; i++)
+    	for (int i = 0; i < sasm.stringTable.iNodeCount; i++)
     	{
     		char* currentString = (char*) pNode->pData;
     		int   currentStrLen = strlen(currentString);
@@ -604,12 +604,12 @@ namespace _asm_
     
     	printf("-------------------------------Func Info--------------------------------\n");
     
-    	fwrite(&ssam.functionTable.iNodeCount, 4, 1, pExeFile);
-    	printf("function number: %d\n\n", ssam.functionTable.iNodeCount);
+    	fwrite(&sasm.functionTable.iNodeCount, 4, 1, pExeFile);
+    	printf("function number: %d\n\n", sasm.functionTable.iNodeCount);
     
-    	pNode = ssam.functionTable.pHead;
+    	pNode = sasm.functionTable.pHead;
     
-    	for (int i = 0; i < ssam.functionTable.iNodeCount; i++)
+    	for (int i = 0; i < sasm.functionTable.iNodeCount; i++)
     	{
     		FuncNode* pFunc = (FuncNode*) pNode->pData;
     		fwrite(&pFunc->iEntryPoint, sizeof(int), 1, pExeFile);
@@ -629,12 +629,12 @@ namespace _asm_
     
     	printf("-------------------------------HostAPI Info--------------------------------\n");
     
-    	fwrite(&ssam.hostAPICallTable.iNodeCount, 4, 1, pExeFile);
-    	printf("host api number: %d\n\n", ssam.hostAPICallTable.iNodeCount);
+    	fwrite(&sasm.hostAPICallTable.iNodeCount, 4, 1, pExeFile);
+    	printf("host api number: %d\n\n", sasm.hostAPICallTable.iNodeCount);
     
-    	pNode = ssam.hostAPICallTable.pHead;
+    	pNode = sasm.hostAPICallTable.pHead;
     
-    	for (int i = 0; i < ssam.hostAPICallTable.iNodeCount; i++)
+    	for (int i = 0; i < sasm.hostAPICallTable.iNodeCount; i++)
     	{
     		char* currentHostAPICall = (char*) pNode->pData;
     		char  currentHostAPICallLen = strlen(currentHostAPICall);
@@ -658,7 +658,7 @@ namespace _asm_
     	strcpy(exeFilename, exeDir);
     	strcat(exeFilename, g_ExeInfoFilename);*/
     
-    	FILE* pExeFile = fopen(ssam.exeInfoFilename, "w");
+    	FILE* pExeFile = fopen(sasm.exeInfoFilename, "w");
     	if (! pExeFile)
     		ExitOnError("Could not open executable for output");
     	
@@ -682,37 +682,37 @@ namespace _asm_
     
     	fprintf(pExeFile, "\n;-------------------------------Global Info--------------------------------\n");
     
-    	swrite(&ssam.header.iStackSize,      4, 1, buf1);
-    	swrite(&ssam.header.iGlobalDataSize, 4, 1, buf2);
-    	fprintf(pExeFile, "%-20s; stack size: %d\n", buf1, ssam.header.iStackSize);
-    	fprintf(pExeFile, "%-20s; global data size: %d\n", buf2, ssam.header.iGlobalDataSize);
+    	swrite(&sasm.header.iStackSize,      4, 1, buf1);
+    	swrite(&sasm.header.iGlobalDataSize, 4, 1, buf2);
+    	fprintf(pExeFile, "%-20s; stack size: %d\n", buf1, sasm.header.iStackSize);
+    	fprintf(pExeFile, "%-20s; global data size: %d\n", buf2, sasm.header.iGlobalDataSize);
     
     	char isMainExist = 0;
-    	if (ssam.header.iIsMainFuncPresent)
+    	if (sasm.header.iIsMainFuncPresent)
     		isMainExist = 1;
     
     	swrite(&isMainExist, 1, 1, buf1);
-    	swrite(&ssam.header.iMainFuncIndex, 4, 1, buf2);
+    	swrite(&sasm.header.iMainFuncIndex, 4, 1, buf2);
     	fprintf(pExeFile, "%-20s; is main exist: %c\n", buf1, isMainExist + 48);
-    	fprintf(pExeFile, "%-20s; main function index: %d\n", buf1, ssam.header.iMainFuncIndex);
+    	fprintf(pExeFile, "%-20s; main function index: %d\n", buf1, sasm.header.iMainFuncIndex);
     
     	fprintf(pExeFile, "\n;-------------------------------Instr Info--------------------------------\n");
     
-    	swrite(&ssam.instrStreamSize, 4, 1, buf1);
-    	fprintf(pExeFile, "%-20s; instr stream size: %d\n", buf1, ssam.instrStreamSize);
-    	for (int i = 0; i < ssam.instrStreamSize; i++)
+    	swrite(&sasm.instrStreamSize, 4, 1, buf1);
+    	fprintf(pExeFile, "%-20s; instr stream size: %d\n", buf1, sasm.instrStreamSize);
+    	for (int i = 0; i < sasm.instrStreamSize; i++)
     	{
-    		short opCode = ssam.instrStream[i].iOpcode;
+    		short opCode = sasm.instrStream[i].iOpcode;
     		swrite(&opCode, sizeof(opCode), 1, buf1);
     		fprintf(pExeFile, "%-20s; opCode: %d\n", buf1, opCode);
     
-    		char opCount = ssam.instrStream[i].iOpCount;
+    		char opCount = sasm.instrStream[i].iOpCount;
     		swrite(&opCount, sizeof(opCount), 1, buf1);
     		fprintf(pExeFile, "%-20s; opCount: %d\n", buf1, opCount);
     
     		for (int j = 0; j < opCount; j++)
     		{
-    			Oprand currentOp = ssam.instrStream[i].pOplist[j];
+    			Oprand currentOp = sasm.instrStream[i].pOplist[j];
     
     			char opType = currentOp.iType;
     			swrite(&opType, sizeof(opType), 1, buf1);
@@ -780,14 +780,14 @@ namespace _asm_
     	int currentNode;
     	LinkListNode* pNode;
     
-    	swrite(&ssam.stringTable.iNodeCount, sizeof(int), 1, buf1);
-    	fprintf(pExeFile, "%-20s; string numbers: %d\n", buf1, ssam.stringTable.iNodeCount);
+    	swrite(&sasm.stringTable.iNodeCount, sizeof(int), 1, buf1);
+    	fprintf(pExeFile, "%-20s; string numbers: %d\n", buf1, sasm.stringTable.iNodeCount);
     
-    	pNode = ssam.stringTable.pHead;
+    	pNode = sasm.stringTable.pHead;
     
     	char paramCount;
     
-    	for (int i = 0; i < ssam.stringTable.iNodeCount; i++)
+    	for (int i = 0; i < sasm.stringTable.iNodeCount; i++)
     	{
     		char* currentString = (char*) pNode->pData;
     		int   currentStrLen = strlen(currentString);
@@ -805,12 +805,12 @@ namespace _asm_
     
     	fprintf(pExeFile, "\n;-------------------------------Func Info--------------------------------\n");
     
-    	swrite(&ssam.functionTable.iNodeCount, sizeof(int), 1, buf1);
-    	fprintf(pExeFile, "%-20s; function numbers: %d\n", buf1, ssam.functionTable.iNodeCount);
+    	swrite(&sasm.functionTable.iNodeCount, sizeof(int), 1, buf1);
+    	fprintf(pExeFile, "%-20s; function numbers: %d\n", buf1, sasm.functionTable.iNodeCount);
     
-    	pNode = ssam.functionTable.pHead;
+    	pNode = sasm.functionTable.pHead;
     
-    	for (int i = 0; i < ssam.functionTable.iNodeCount; i++)
+    	for (int i = 0; i < sasm.functionTable.iNodeCount; i++)
     	{
     		FuncNode* pFunc = (FuncNode*) pNode->pData;
     		swrite(&pFunc->iEntryPoint, sizeof(int), 1, buf1);
@@ -830,12 +830,12 @@ namespace _asm_
     
     	fprintf(pExeFile, "\n;-------------------------------HostAPI Info--------------------------------\n");
     
-    	swrite(&ssam.hostAPICallTable.iNodeCount, sizeof(int), 1, buf1);
-    	fprintf(pExeFile, "%-20s; host api numbers: %d\n", buf1, ssam.hostAPICallTable.iNodeCount);
+    	swrite(&sasm.hostAPICallTable.iNodeCount, sizeof(int), 1, buf1);
+    	fprintf(pExeFile, "%-20s; host api numbers: %d\n", buf1, sasm.hostAPICallTable.iNodeCount);
     
-    	pNode = ssam.hostAPICallTable.pHead;
+    	pNode = sasm.hostAPICallTable.pHead;
     
-    	for (int i = 0; i < ssam.hostAPICallTable.iNodeCount; i++)
+    	for (int i = 0; i < sasm.hostAPICallTable.iNodeCount; i++)
     	{
     		char* currentHostAPICall = (char*) pNode->pData;
     		char  currentHostAPICallLen = strlen(currentHostAPICall);
