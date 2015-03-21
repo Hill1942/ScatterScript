@@ -45,6 +45,8 @@ int main(int argc, char* argv[])
 				}
 
 				_cl::LoadScriptSource(scriptFilename, cl_lexer.stringSource);
+				_cl::CL_InitLexer();
+				_cl::TestLexer();
 				break;
 			}
 			

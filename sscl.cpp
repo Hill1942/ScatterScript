@@ -69,6 +69,9 @@ namespace _cl
 			case CL_TOKEN_TYPE_FLOAT:
 				strcpy(strToken, "Float");
 				break;
+			case CL_TOKEN_TYPE_IDENT:
+				strcpy (strToken, "Identifier" );
+				break;
 			case CL_TOKEN_TYPE_KEYWORD_VAR:
 				strcpy(strToken, "var");
 				break;
@@ -108,28 +111,28 @@ namespace _cl
 				break;
 
 			case CL_TOKEN_TYPE_DELIM_COMMA:
-				strcpy(strToken, ",");
+				strcpy(strToken, "comma");
 				break;
 			case CL_TOKEN_TYPE_DELIM_OPEN_PAREN:
-				strcpy(strToken, "(");
+				strcpy(strToken, "open paren");
 				break;
 			case CL_TOKEN_TYPE_DELIM_CLOSE_PAREN:
-				strcpy(strToken, ")");
+				strcpy(strToken, "close paren");
 				break;
 			case CL_TOKEN_TYPE_DELIM_OPEN_BRACE:
-				strcpy(strToken, "[");
+				strcpy(strToken, "open brace");
 				break;
 			case CL_TOKEN_TYPE_DELIM_CLOSE_BRACE:
-				strcpy(strToken, "]");
+				strcpy(strToken, "close brace");
 				break;
 			case CL_TOKEN_TYPE_DELIM_OPEN_CURLY_BRACE:
-				strcpy(strToken, "{");
+				strcpy(strToken, "open curly brace");
 				break;
 			case CL_TOKEN_TYPE_DELIM_CLOSE_CURLY_BRACE:
-				strcpy(strToken, "}");
+				strcpy(strToken, "close curly brace");
 				break;
 			case CL_TOKEN_TYPE_DELIM_SEMICOLON:
-				strcpy(strToken, ":");
+				strcpy(strToken, "semicolon");
 				break;
 
 			case CL_TOKEN_TYPE_STRING:
