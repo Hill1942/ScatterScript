@@ -8,10 +8,11 @@
 #include "sslexeme.h"
 #include "sscl.h"
 
+extern _cl::Lexer cl_lexer;
 
 namespace _cl
 {
-	void LoadScriptSource(char* filename, char* stringSource)
+	void LoadScriptSource(char* filename)
 	{
 		FILE* scriptFile = fopen(filename, "rb");
 
@@ -25,7 +26,7 @@ namespace _cl
 		int scriptSize = ftell(scriptFile);
 		fseek(scriptFile, 0, SEEK_SET);
 
-		stringSource = (char*) malloc(scriptSize + 1);
+		char* stringSource = (char*) malloc(scriptSize + 1);
 
 		char currentChar;
 		for (int i = 0; i < scriptSize; i++)
@@ -44,7 +45,10 @@ namespace _cl
 		}
 
 		stringSource[scriptSize] = '\0';
+		
+		cl_lexer.stringSource = stringSource;
 
+		stringSource = NULL;
 		fclose(scriptFile);
 	}
 
