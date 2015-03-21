@@ -916,6 +916,16 @@ namespace _cl
     {
 		return cl_lexer.stringSource[cl_lexer.currentLexemeEnd++];
     }
+
+	char* GetCurrentLexeme()
+	{
+		return cl_lexer.currentLexeme;
+	}
+
+	int GetCurrentOperator()
+	{
+		return cl_lexer.currentOp;
+	}
 }
 
 

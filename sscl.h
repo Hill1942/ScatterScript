@@ -3,7 +3,8 @@
 
 namespace _cl
 {
-	void LoadScriptSource(char* filename, Lexer lexer);
+	void LoadScriptSource(char* filename, char* stringSource);
+	void TestLexer();
 }
 
 #endif

@@ -27,11 +27,13 @@ namespace _asm_
 
 namespace _cl
 {
-	int IsCharOpChar(char c, int opCharsTableIndex);
-	int GetOpStateIndex(char c, int opCharsTableIndex, int nextStateIndex, int nextStateCount);
+	int     IsCharOpChar(char c, int opCharsTableIndex);
+	int     GetOpStateIndex(char c, int opCharsTableIndex, int nextStateIndex, int nextStateCount);
 	OpState GetOpState(int opCharsTableIndex, int opStateIndex);
-	Token GetNextToken();
-	char GetNextChar();
+	Token   GetNextToken();
+	char    GetNextChar();
+	char*   GetCurrentLexeme();
+	int     GetCurrentOperator();
 }
 
 #endif

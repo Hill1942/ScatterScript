@@ -10,6 +10,7 @@
 #include "sslexeme.h"
 #include "ssasm.h"
 #include "ssvm.h"
+#include "sscl.h"
 
 _asm_::ASM sasm;
 _vm::Script vm_script;
@@ -34,8 +35,17 @@ int main(int argc, char* argv[])
 		{
 		case 'c':
 			{
-				break;
+				char scriptFilename[MAX_FILENAME_SIZE];
+				strcpy(scriptFilename, argv[2]);
+				int ExtOffset = strrchr(scriptFilename, '.') - scriptFilename;
+				if (scriptFilename[ExtOffset + 1] != 's' || scriptFilename[ExtOffset + 2] != 's')
+				{
+					printf("Not valid .ss file!\n");
+					exit(0);
+				}
 
+				_cl::LoadScriptSource(scriptFilename, cl_lexer.stringSource);
+				break;
 			}
 			
 		case 'a':
