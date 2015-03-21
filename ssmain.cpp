@@ -33,7 +33,11 @@ int main(int argc, char* argv[])
 		switch (option[1])
 		{
 		case 'c':
-			break;
+			{
+				break;
+
+			}
+			
 		case 'a':
 			{
 				strcpy(sasm.sourceFileName, argv[2]);
