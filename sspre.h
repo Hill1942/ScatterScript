@@ -1,9 +1,6 @@
 #ifndef SSPRE_H
 #define SSPRE_H
 
-#define TRUE                                   1
-#define FALSE                                  0
-
 #define VERSION_MAJOR                          0
 #define VERSION_MINOR                          1
 

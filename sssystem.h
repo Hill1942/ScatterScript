@@ -24,6 +24,8 @@ namespace _cl
 {
 	void ExitOnInvalidInputError(char c);
     void CL_InitLexer();
+
+	void Init();
 }
 
 

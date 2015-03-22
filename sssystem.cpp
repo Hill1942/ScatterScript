@@ -12,6 +12,7 @@
 extern _asm_::ASM sasm;
 extern _vm::Script vm_script;
 extern _cl::Lexer cl_lexer;
+extern _cl::Compiler compiler;
 
 namespace _asm_
 {
@@ -417,6 +418,31 @@ namespace _cl
 		cl_lexer.currentLexemeStart = 0;
 		cl_lexer.currentLexemeEnd   = 0;
     }
+
+	void Init()
+	{
+		compiler.scriptHeader.iIsMainFuncExist = FALSE;
+		compiler.scriptHeader.iStackSize       = 0;
+		
+		InitLinkList(&compiler.sourceCode);
+		InitLinkList(&compiler.functionTable);
+		InitLinkList(&compiler.symbolTable);
+		InitLinkList(&compiler.stringTable);
+	}
+
+	void ShutDown()
+	{
+		FreeLinkList(&compiler.sourceCode);
+		FreeLinkList(&compiler.functionTable);
+		FreeLinkList(&compiler.symbolTable);
+		FreeLinkList(&compiler.stringTable);
+	}
+
+	void Exit()
+	{
+		ShutDown();
+		exit(0);
+	}
 }
 
 

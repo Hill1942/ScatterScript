@@ -27,6 +27,19 @@ namespace _asm_
     	return AddNode(pStringTable, newStr);
     }
 
+	char* GetString(LinkList* pStringTable, int index)
+	{
+		LinkListNode* pNode = pStringTable->pHead;
+		for (int i = 0; i < pStringTable->iNodeCount; i++)
+		{
+			if (i == index)
+				return (char*) pNode->pData;
+			pNode = pNode->pNext;
+		}
+
+		return NULL;
+	}
+
 	FuncNode* GetFunctionByName(LinkList* pFunctionTable, char* name)
 	{
 		if (pFunctionTable->iNodeCount == 0)

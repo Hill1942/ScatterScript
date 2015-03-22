@@ -222,6 +222,24 @@ namespace _cl
         int   currentLexemeEnd;
         int   currentOp;
 	};
+
+	struct Header
+	{
+		int iStackSize;
+		int iIsMainFuncExist;
+		int iMainFuncIndex;
+	};
+
+	struct Compiler
+	{
+		LinkList sourceCode;
+		LinkList functionTable;
+		LinkList symbolTable;
+		LinkList stringTable;
+
+		Header   scriptHeader;
+
+	};
 }
 
 
