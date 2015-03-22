@@ -15,20 +15,20 @@ extern _cl::Lexer cl_lexer;
 
 _cl::OpState g_OpChars0[MAX_OP_STATE_COUNT] = 
 {
-	{'+', 0, 2, 0},
-	{'-', 2, 2, 1},
-	{'*', 4, 1, 2},
-	{'/', 5, 1, 3},
-	{'%', 6, 1, 4},
+	{'+', 0,  2, 0},
+	{'-', 2,  2, 1},
+	{'*', 4,  1, 2},
+	{'/', 5,  1, 3},
+	{'%', 6,  1, 4},
 
-	{'&', 7, 2, 20},
-	{'|', 9, 2, 21},
-	{'~', 0, 0, 23},
+	{'&', 7,  2, 20},
+	{'|', 9,  2, 21},
 	{'^', 11, 2, 22},  //xor
+	{'~', 0,  0, 23},
 
 	{'<', 12, 2, 63},
 	{'>', 14, 2, 65},
-	{'=', 17, 1, 61},
+	{'=', 17, 1, 42},
 
 	{'!', 16, 1, 52}
 };
@@ -737,10 +737,12 @@ namespace _cl
     			{
     				if (IsCharIdent(currentChar))
     					currentLexemeState = CL_LEX_STATE_IDENT;
-    				else if (IsCharWhiteSpace_CL(currentChar) || IsCharDelimiter_CL(currentChar))
+    				else if (IsCharWhiteSpace_CL(currentChar) || 
+						     IsCharDelimiter_CL(currentChar)  ||
+							 IsCharOpChar(currentChar, 0))
     				{
     					isAddCurrentChar = FALSE;
-    					isLexemeDone = TRUE;
+    					isLexemeDone     = TRUE;
     				}
     				else
     					ExitOnInvalidInputError(currentChar);

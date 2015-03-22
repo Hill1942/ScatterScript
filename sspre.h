@@ -172,47 +172,45 @@
 #define CL_TOKEN_TYPE_DELIM_SEMICOLON          23
 #define CL_TOKEN_TYPE_STRING                   24
 
-#define CL_OPERATOR_TYPE_ADD                   0
-#define CL_OPERATOR_TYPE_SUB                   1
-#define CL_OPERATOR_TYPE_MUL                   2
-#define CL_OPERATOR_TYPE_DIV                   3
-#define CL_OPERATOR_TYPE_MOD                   4
-#define CL_OPERATOR_TYPE_EXP                   5
-		
-#define CL_OPERATOR_TYPE_INC                   6
-#define CL_OPERATOR_TYPE_DEC                   7
-		
-#define CL_OPERATOR_TYPE_ASSIGN_ADD            8
-#define CL_OPERATOR_TYPE_ASSIGN_SUB            9
-#define CL_OPERATOR_TYPE_ASSIGN_MUL            10
-#define CL_OPERATOR_TYPE_ASSIGN_DIV            11
-#define CL_OPERATOR_TYPE_ASSIGN_MOD            12
-#define CL_OPERATOR_TYPE_ASSIGN_EXP            13
-		
-#define CL_OPERATOR_TYPE_AND                   14
-#define CL_OPERATOR_TYPE_OR                    15
-#define CL_OPERATOR_TYPE_XOR                   16
-#define CL_OPERATOR_TYPE_NOT                   17
-#define CL_OPERATOR_TYPE_SHIFT_LEFT            18
-#define CL_OPERATOR_TYPE_SHIFT_RIGHT           19
-		
-#define CL_OPERATOR_TYPE_ASSIGN_AND            20
-#define CL_OPERATOR_TYPE_ASSIGN_OR             21
-#define CL_OPERATOR_TYPE_ASSIGN_XOR            22
-#define CL_OPERATOR_TYPE_ASSIGN_NOT            23
-#define CL_OPERATOR_TYPE_ASSIGN_SHIFT_LEFT     24
-#define CL_OPERATOR_TYPE_ASSIGN_SHIFT_RIGHT    25
-		
-#define CL_OPERATOR_TYPE_LOGICAL_AND           26
-#define CL_OPERATOR_TYPE_LOGICAL_OR            27
-#define CL_OPERATOR_TYPE_LOGICAL_NOT           28
-
-#define CL_OPERATOR_TYPE_EQUAL                 29
-#define CL_OPERATOR_TYPE_NOT_EQUAL             30
-#define CL_OPERATOR_TYPE_LESS                  31
-#define CL_OPERATOR_TYPE_LESS_EQUAL            32
-#define CL_OPERATOR_TYPE_GREATER               33
-#define CL_OPERATOR_TYPE_GREATER_EQUAL         34
+#define CL_OPERATOR_TYPE_ADD                   0		//  +
+#define CL_OPERATOR_TYPE_SUB                   1		//	-
+#define CL_OPERATOR_TYPE_MUL                   2		//	*
+#define CL_OPERATOR_TYPE_DIV                   3		//	/
+#define CL_OPERATOR_TYPE_MOD                   4		//	%
+														
+#define CL_OPERATOR_TYPE_INC                   40		//  ++
+#define CL_OPERATOR_TYPE_DEC                   41		//  --
+#define CL_OPERATOR_TYPE_ASSIGN                42		//  =
+														
+#define CL_OPERATOR_TYPE_ASSIGN_ADD            10		//  +=
+#define CL_OPERATOR_TYPE_ASSIGN_SUB            11		//	-=
+#define CL_OPERATOR_TYPE_ASSIGN_MUL            12		//	*=
+#define CL_OPERATOR_TYPE_ASSIGN_DIV            13		//	/=
+#define CL_OPERATOR_TYPE_ASSIGN_MOD            14		//	%=
+														
+#define CL_OPERATOR_TYPE_AND                   20		//  &
+#define CL_OPERATOR_TYPE_OR                    21		//	|
+#define CL_OPERATOR_TYPE_XOR                   22		//	^
+#define CL_OPERATOR_TYPE_NOT                   23		//	~
+#define CL_OPERATOR_TYPE_SHIFT_LEFT            24		//	<<
+#define CL_OPERATOR_TYPE_SHIFT_RIGHT           25		//	>>
+														
+#define CL_OPERATOR_TYPE_ASSIGN_AND            30		//	&=
+#define CL_OPERATOR_TYPE_ASSIGN_OR             31		//	|=
+#define CL_OPERATOR_TYPE_ASSIGN_XOR            32		//	^=
+#define CL_OPERATOR_TYPE_ASSIGN_SHIFT_LEFT     33		//	<<=
+#define CL_OPERATOR_TYPE_ASSIGN_SHIFT_RIGHT    34		//	>>=
+														
+#define CL_OPERATOR_TYPE_LOGICAL_AND           50		//	&&
+#define CL_OPERATOR_TYPE_LOGICAL_OR            51		//	||
+#define CL_OPERATOR_TYPE_LOGICAL_NOT           52		//	!
+														
+#define CL_OPERATOR_TYPE_EQUAL                 61		//	==
+#define CL_OPERATOR_TYPE_NOT_EQUAL             62		//	!=
+#define CL_OPERATOR_TYPE_LESS                  63		//	<
+#define CL_OPERATOR_TYPE_LESS_EQUAL            64		//	<=
+#define CL_OPERATOR_TYPE_GREATER               65		//	>
+#define CL_OPERATOR_TYPE_GREATER_EQUAL         66		//	>=
 
 #define ERROR_MSG_INVALID_INPUT             \
 	"Invalid input"
