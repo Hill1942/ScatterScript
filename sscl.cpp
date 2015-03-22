@@ -8,49 +8,30 @@
 #include "sslexeme.h"
 #include "sscl.h"
 
-extern _cl::Lexer cl_lexer;
+extern _cl::Compiler compiler;
 
 namespace _cl
 {
-	void LoadScriptSource(char* filename)
+	void LoadScriptSource()
 	{
-		FILE* scriptFile = fopen(filename, "rb");
+		FILE* pScriptFile = fopen(compiler.lexer.scriptSourceFile, "rb");
 
-		if (scriptFile == NULL)
+		if (pScriptFile == NULL)
 		{
 			printf("Can not load script file!\n");
 			exit(0);
 		}
 
-		fseek(scriptFile, 0, SEEK_END);
-		int scriptSize = ftell(scriptFile);
-		fseek(scriptFile, 0, SEEK_SET);
-
-		char* stringSource = (char*) malloc(scriptSize + 1);
-
-		char currentChar;
-		for (int i = 0; i < scriptSize; i++)
+		while(!feof(pScriptFile))
 		{
-			currentChar = fgetc(scriptFile);
-			if (currentChar == 13)	// '13' means return
-			{
-				fgetc(scriptFile);	// jump the next char
-				scriptSize--;
-				stringSource[i] = '\n';
-			}
-			else
-			{
-				stringSource[i] = currentChar;
-			}
+			char* strSourceLine = (char*) malloc(MAX_SOURCE_LINE_SIZE + 1);
+			fgets(strSourceLine, MAX_SOURCE_LINE_SIZE, pScriptFile);
+			AddNode(&compiler.sourceCode, strSourceLine);
 		}
 
-		stringSource[scriptSize] = '\0';
-		
-		cl_lexer.stringSource = stringSource;
-
-		stringSource = NULL;
-		fclose(scriptFile);
+		fclose(pScriptFile);
 	}
+
 
 	void TestLexer()
 	{

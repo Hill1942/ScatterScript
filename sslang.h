@@ -216,6 +216,7 @@ namespace _cl
 
 	struct Lexer
 	{
+		char  scriptSourceFile[MAX_FILENAME_SIZE];
 		char* stringSource;
         char  currentLexeme[MAX_LEXEME_SIZE];
         int   currentLexemeStart;
@@ -238,6 +239,7 @@ namespace _cl
 		LinkList stringTable;
 
 		Header   scriptHeader;
+		Lexer    lexer;
 
 	};
 }
