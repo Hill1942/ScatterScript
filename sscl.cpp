@@ -146,7 +146,7 @@ namespace _cl
 				break;
 			}
 
-			printf("%d: Token: %s. Lexeme: %s\n", tokenCount, strToken, GetCurrentLexeme());
+			printf("%d: Token: %-16s Lexeme: %s\n", tokenCount, strToken, GetCurrentLexeme());
 
 			tokenCount++;
 		}

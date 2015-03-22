@@ -79,6 +79,14 @@ int IsCharWhiteSpace(char cChar)
     else
         return FALSE;
 }
+
+int IsCharWhiteSpace_CL(char cChar)
+{
+	if (cChar == ' ' || cChar == '\t' || cChar == '\n')
+		return TRUE;
+	else
+		return FALSE;
+}
 int IsCharReturnOrNewline(char cChar)
 {
     if (cChar == '\r' || cChar == '\n')
@@ -105,6 +113,17 @@ int IsCharDelimiter(char cChar)
         return TRUE;
     else
         return FALSE;
+}
+
+int IsCharDelimiter_CL(char cChar)
+{
+	if (cChar == ';' || cChar == ',' ||
+		cChar == '[' || cChar == ']' ||
+		cChar == '{' || cChar == '}' ||
+		cChar == '(' || cChar == ')' )
+		return TRUE;
+	else
+		return FALSE;
 }
 
 int IsStringInt(const char* str)
@@ -637,7 +656,7 @@ namespace _cl
     		{
     		case CL_LEX_STATE_START:
     			{
-    				if (IsCharWhiteSpace(currentChar))
+    				if (IsCharWhiteSpace_CL(currentChar))
     				{
     					cl_lexer.currentLexemeStart++;
     					isAddCurrentChar = FALSE;
@@ -646,7 +665,7 @@ namespace _cl
     				{
     					currentLexemeState = CL_LEX_STATE_INT;
     				}
-    				else if (currentChar = '.')
+    				else if (currentChar == '.')
     				{
     					currentLexemeState = CL_LEX_STATE_FLOAT;
     				}
@@ -654,7 +673,7 @@ namespace _cl
     				{
     					currentLexemeState = CL_LEX_STATE_IDENT;
     				}
-    				else if (IsCharDelimiter(currentChar))
+    				else if (IsCharDelimiter_CL(currentChar))
     				{
     					currentLexemeState = CL_LEX_STATE_DELIMITER;
     				}
@@ -669,7 +688,7 @@ namespace _cl
     					cl_lexer.currentOp = currentOpState.iIndex;
     					currentLexemeState = CL_LEX_STATE_OP;
     				}
-    				else if (currentChar =  '"')
+    				else if (currentChar ==  '"')
     				{
     					isAddCurrentChar = FALSE;
     					currentLexemeState = CL_LEX_STATE_STRING;
@@ -688,7 +707,7 @@ namespace _cl
     					currentLexemeState = CL_LEX_STATE_INT;
     				else if (currentChar == '.')
     					currentLexemeState = CL_LEX_STATE_FLOAT;
-    				else if (IsCharWhiteSpace(currentChar) || IsCharDelimiter(currentChar))
+    				else if (IsCharWhiteSpace_CL(currentChar) || IsCharDelimiter_CL(currentChar))
     				{
     					isAddCurrentChar = FALSE;
     					isLexemeDone = TRUE;
@@ -703,7 +722,7 @@ namespace _cl
     			{
     				if (IsCharNumeric(currentChar))
     					currentLexemeState = CL_LEX_STATE_FLOAT;
-    				else if (IsCharWhiteSpace(currentChar) || IsCharDelimiter(currentChar))
+    				else if (IsCharWhiteSpace_CL(currentChar) || IsCharDelimiter_CL(currentChar))
     				{
     					isAddCurrentChar = FALSE;
     					isLexemeDone = TRUE;
@@ -718,7 +737,7 @@ namespace _cl
     			{
     				if (IsCharIdent(currentChar))
     					currentLexemeState = CL_LEX_STATE_IDENT;
-    				else if (IsCharWhiteSpace(currentChar) || IsCharDelimiter(currentChar))
+    				else if (IsCharWhiteSpace_CL(currentChar) || IsCharDelimiter_CL(currentChar))
     				{
     					isAddCurrentChar = FALSE;
     					isLexemeDone = TRUE;
@@ -772,12 +791,12 @@ namespace _cl
     
     		case CL_LEX_STATE_STRING:
     			{
-    				if (currentChar = '"')
+    				if (currentChar == '"')
     				{
     					isAddCurrentChar = FALSE;
     					currentLexemeState = CL_LEX_STATE_STRING_CLOSE_QUOTE;
     				}
-    				else if (currentChar = '\\')
+    				else if (currentChar == '\\')
     				{
     					isAddCurrentChar = FALSE;
     					currentLexemeState = CL_LEX_STATE_STRING_ESCAPE;
