@@ -6,8 +6,8 @@ void InitLinkList(LinkList* pList)
 {
     pList->pHead = NULL;
     pList->pTail = NULL;
+	pList->iNodeCount = 0;
 }
-
 void FreeLinkList(LinkList* pList)
 {
     if (!pList)
@@ -40,7 +40,6 @@ void FreeLinkList(LinkList* pList)
         }
     }
 }
-
 int AddNode(LinkList* pList, void *pData)
 {
 	LinkListNode* pNewNode = (LinkListNode*) malloc(sizeof(LinkListNode));
@@ -61,6 +60,72 @@ int AddNode(LinkList* pList, void *pData)
 
 	return pList->iNodeCount - 1;
 }
+void DeleteNode(LinkList* pList, LinkListNode* pNode)
+{
+	if (pList->iNodeCount == 0)
+		return;
+
+	if (pNode == pList->pHead)
+	{
+		pList->pHead = pNode->pNext;
+	}
+	else
+	{
+		LinkListNode* pThroughNode = pList->pHead;
+		for (int i = 0; i < pList->iNodeCount; i++)
+		{
+			if (pThroughNode->pNext == pNode)
+			{
+				if (pList->pTail == pNode)
+				{
+					pThroughNode->pNext = NULL;
+					pList->pTail = pThroughNode;
+				}
+				else
+				{
+					pThroughNode->pNext = pNode->pNext;
+				}
+				break;
+			}
+			pThroughNode = pThroughNode->pNext;
+		}
+	}
+
+	pList->iNodeCount--;
+	if (pNode->pData)
+		free(pNode->pData);
+	free(pNode);
+}
+
+void InitStack(Stack* pStack)
+{
+	InitLinkList(&pStack->elementList);
+}
+void FreeStack(Stack* pStack)
+{
+	FreeLinkList(&pStack->elementList);
+}
+int IsStackEmpty(Stack* pStack)
+{
+	if (pStack->elementList.iNodeCount > 0)
+		return FALSE;
+	else
+		return TRUE;
+}
+void Push(Stack* pStack, void* pData)
+{
+	AddNode(&pStack->elementList, pData);
+}
+void Pop(Stack* pStack)
+{
+	DeleteNode(&pStack->elementList, pStack->elementList.pTail);
+}
+void* Peek(Stack* pStack)
+{
+	return pStack->elementList.pTail->pData;
+}
+
+
 
 
 

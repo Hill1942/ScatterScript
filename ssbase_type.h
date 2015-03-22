@@ -1,24 +1,37 @@
 #ifndef SSBASE_TYPE_H
 #define SSBASE_TYPE_H
 
-typedef struct _LinkListNode
+#define TRUE  1
+#define FALSE 0
+
+struct LinkListNode
 {
     void*          pData;
-    _LinkListNode* pNext;
-
-}LinkListNode;
-
-typedef struct _LinkList
+    LinkListNode* pNext;
+};
+struct LinkList
 {
     LinkListNode* pHead;
     LinkListNode* pTail;
     int           iNodeCount;
-
-}LinkList;
-
+};
 void InitLinkList(LinkList* pList);
 void FreeLinkList(LinkList* pList);
 int  AddNode(LinkList* pList, void *pData);
+void DeleteNode(LinkList* pList, LinkListNode* pNode);
+
+
+struct Stack
+{
+	LinkList elementList;
+};
+void  InitStack(Stack* pStack);
+void  FreeStack(Stack* pStack);
+int   IsStackEmpty(Stack* pStack);
+void  Push(Stack* pStack, void* pData);
+void  Pop(Stack* pStack);
+void* Peek(Stack* pStack);
+
 
 
 #endif
