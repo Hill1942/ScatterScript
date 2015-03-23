@@ -209,6 +209,19 @@
 #define CL_OPERATOR_TYPE_GREATER               65		//	>
 #define CL_OPERATOR_TYPE_GREATER_EQUAL         66		//	>=
 
+#define CL_KW_MAIN_FUNC_NAME                   "_main"
+#define CL_KW_VAR                              "var"
+#define CL_KW_TRUE                             "true"
+#define CL_KW_FALSE                            "false"
+#define CL_KW_IF                               "if"
+#define CL_KW_ELSE                             "else"
+#define CL_KW_FOR                              "for"
+#define CL_KW_WHILE                            "while"
+#define CL_KW_BREAK                            "break"
+#define CL_KW_CONTINUE                         "continue"
+#define CL_KW_FUNC                             "func"
+#define CL_KW_RETURN                           "return"
+
 #define ERROR_MSG_INVALID_INPUT             \
 	"Invalid input"
 #define ERROR_MSG_LOCAL_SETSTACKSIZE        \

@@ -857,27 +857,27 @@ namespace _cl
     		{
     			tokenType = CL_TOKEN_TYPE_IDENT;
     
-    			if (strcmp(cl_lexer.currentLexeme, "var") == 0)
+    			if (strcmp(cl_lexer.currentLexeme, CL_KW_VAR) == 0)
     				tokenType = CL_TOKEN_TYPE_KEYWORD_VAR;
-    			if (strcmp(cl_lexer.currentLexeme, "true") == 0)
+    			if (strcmp(cl_lexer.currentLexeme, CL_KW_TRUE) == 0)
     				tokenType = CL_TOKEN_TYPE_KEYWORD_TRUE;
-    			if (strcmp(cl_lexer.currentLexeme, "false") == 0)
+    			if (strcmp(cl_lexer.currentLexeme, CL_KW_FALSE) == 0)
     				tokenType = CL_TOKEN_TYPE_KEYWORD_FALSE;
-    			if (strcmp(cl_lexer.currentLexeme, "if") == 0)
+    			if (strcmp(cl_lexer.currentLexeme, CL_KW_IF) == 0)
     				tokenType = CL_TOKEN_TYPE_KEYWORD_IF;
-    			if (strcmp(cl_lexer.currentLexeme, "else") == 0)
+    			if (strcmp(cl_lexer.currentLexeme, CL_KW_ELSE) == 0)
     				tokenType = CL_TOKEN_TYPE_KEYWORD_ELSE;
-    			if (strcmp(cl_lexer.currentLexeme, "break") == 0)
+    			if (strcmp(cl_lexer.currentLexeme, CL_KW_BREAK) == 0)
     				tokenType = CL_TOKEN_TYPE_KEYWORD_BREAK;
-    			if (strcmp(cl_lexer.currentLexeme, "continue") == 0)
+    			if (strcmp(cl_lexer.currentLexeme, CL_KW_CONTINUE) == 0)
     				tokenType = CL_TOKEN_TYPE_KEYWORD_CONTINUE;
-    			if (strcmp(cl_lexer.currentLexeme, "for") == 0)
+    			if (strcmp(cl_lexer.currentLexeme, CL_KW_FOR) == 0)
     				tokenType = CL_TOKEN_TYPE_KEYWORD_FOR;
-    			if (strcmp(cl_lexer.currentLexeme, "while") == 0)
+    			if (strcmp(cl_lexer.currentLexeme, CL_KW_WHILE) == 0)
     				tokenType = CL_TOKEN_TYPE_KEYWORD_WHILE;
-    			if (strcmp(cl_lexer.currentLexeme, "func") == 0)
+    			if (strcmp(cl_lexer.currentLexeme, CL_KW_FUNC) == 0)
     				tokenType = CL_TOKEN_TYPE_KEYWORD_FUNC;
-    			if (strcmp(cl_lexer.currentLexeme, "return") == 0)
+    			if (strcmp(cl_lexer.currentLexeme, CL_KW_RETURN) == 0)
     				tokenType = CL_TOKEN_TYPE_KEYWORD_RETURN;
     
     			break;
