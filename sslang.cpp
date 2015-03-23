@@ -191,6 +191,71 @@ namespace _asm_
 
 }
 
+namespace _cl
+{
+	SymbolNode* GetSymbol(LinkList* pSymbolTable, int index)
+	{
+		if (pSymbolTable->iNodeCount == 0)
+		{
+			return NULL;
+		}
+
+		LinkListNode* pCurrentNode = pSymbolTable->pHead;
+		for (int i = 0; i < pSymbolTable->iNodeCount; i++)
+		{
+			SymbolNode* pSymbol = (SymbolNode*) pCurrentNode->pData;
+			if (pSymbol->iIndex == index)
+				return pSymbol;
+
+			pCurrentNode =pCurrentNode->pNext;
+		}
+
+		return NULL;
+	}
+
+	SymbolNode* GetSymbol(LinkList* pSymbolTable, char* identifier, int scope)
+	{
+		SymbolNode* pSymbol;
+
+		for (int i = 0; i < pSymbolTable->iNodeCount; i++)
+		{
+			SymbolNode* pSymbol = GetSymbol(pSymbolTable, i);
+			if (pSymbol && 
+				strcmp(pSymbol->strIdentifier, identifier) &&
+				(pSymbol->iScope == scope || pSymbol->iScope == 0))
+				return pSymbol;
+		}
+
+		return NULL;
+	}
+	int GetSymbolSize(LinkList* pSymbolTable, char* identifer, int scope)
+	{
+		SymbolNode* pSymbol = GetSymbol(pSymbolTable, identifer, scope);
+		if (pSymbol != NULL)
+			return pSymbol->iSize;
+
+		return -1;
+	}
+	int AddSymbol(LinkList* pSymbolTable, int size, int scope, int type, char* identifier)
+	{
+		if (GetSymbol(pSymbolTable, identifier, scope))
+			return -1;
+
+		SymbolNode* pNewSymbol = (SymbolNode*) malloc(sizeof(SymbolNode));
+
+		strcpy(pNewSymbol->strIdentifier, identifier);
+		pNewSymbol->iSize = size;
+		pNewSymbol->iScope = scope;
+		pNewSymbol->iType = type;
+
+		int index = AddNode(pSymbolTable, pNewSymbol);
+		pNewSymbol->iIndex = index;
+
+		return index;
+	}
+
+}
+
 
 
 

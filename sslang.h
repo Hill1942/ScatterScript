@@ -214,6 +214,16 @@ namespace _cl
     	int  iIndex;
     };
 
+	struct SymbolNode
+	{
+		int  iIndex;
+		char strIdentifier[MAX_INDENT_SIZE];
+		int  iSize;
+		int  iScope;
+		int  iType;
+	};
+
+
 	struct Lexer
 	{
 		char  scriptSourceFile[MAX_FILENAME_SIZE];
@@ -242,6 +252,11 @@ namespace _cl
 		Lexer    lexer;
 
 	};
+
+	SymbolNode* GetSymbol(LinkList* pSymbolTable, int index);
+	SymbolNode* GetSymbol(LinkList* pSymbolTable, char* identifier, int scope);
+	int         GetSymbolSize(LinkList* pSymbolTable, char* identifer, int scope);
+	int         AddSymbol(LinkList* pSymbolTable, int size, int scope, int type, char* identifier);
 }
 
 
