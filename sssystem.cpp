@@ -415,8 +415,8 @@ namespace _cl
     
     void CL_InitLexer()
     {
-		cl_lexer.currentLexemeStart = 0;
-		cl_lexer.currentLexemeEnd   = 0;
+		cl_lexer.currLexerState.currentLexemeStart = 0;
+		cl_lexer.currLexerState.currentLexemeEnd   = 0;
     }
 
 	void Init()

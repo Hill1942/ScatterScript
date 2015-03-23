@@ -34,6 +34,9 @@ namespace _cl
 	char    GetNextChar();
 	char*   GetCurrentLexeme();
 	int     GetCurrentOperator();
+
+	void CopyLexerState(LexerState* pDestState, LexerState* pSourceState);
+	void RewindTokenStream();
 }
 
 #endif

@@ -225,17 +225,31 @@ namespace _cl
 
 	struct FuncNode
 	{
+		int  iIndex;
+		char strName[MAX_INDENT_SIZE];
+		int  isHostAPI;
+		int  iParamCount;
+		LinkList codeStream;
 	};
 
+	struct LexerState
+	{
+		int           iCurrentLineIndex;
+		char          currentLexeme[MAX_LEXEME_SIZE];
+        int           currentLexemeStart;
+        int           currentLexemeEnd;
+        int           currentOp;
+		Token         currentToken;
+		LinkListNode* pCurrentLine;
+	};
 
 	struct Lexer
 	{
 		char  scriptSourceFile[MAX_FILENAME_SIZE];
 		char* stringSource;
-        char  currentLexeme[MAX_LEXEME_SIZE];
-        int   currentLexemeStart;
-        int   currentLexemeEnd;
-        int   currentOp;
+
+		LexerState prevLexerState;
+		LexerState currLexerState;
 	};
 
 	struct Header
@@ -261,6 +275,11 @@ namespace _cl
 	SymbolNode* GetSymbol(LinkList* pSymbolTable, char* identifier, int scope);
 	int         GetSymbolSize(LinkList* pSymbolTable, char* identifer, int scope);
 	int         AddSymbol(LinkList* pSymbolTable, int size, int scope, int type, char* identifier);
+
+	FuncNode* GetFunction(LinkList* pFunctionTable, int index);
+	FuncNode* GetFunction(LinkList* pFunctionTable, char* identifier);
+	void      SetFuncParamCount(LinkList* pFunctionTable, int index, int paramCount);
+	int       AddFunction(LinkList* pFunctionTable, int isHostAPI, char* name);
 }
 
 
