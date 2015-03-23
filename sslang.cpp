@@ -7,6 +7,7 @@
 #include "sslang.h"
 
 extern _asm_::ASM sasm;
+extern _cl::Compiler compiler;
 
 namespace _asm_
 {
@@ -212,7 +213,6 @@ namespace _cl
 
 		return NULL;
 	}
-
 	SymbolNode* GetSymbol(LinkList* pSymbolTable, char* identifier, int scope)
 	{
 		SymbolNode* pSymbol;
@@ -221,7 +221,7 @@ namespace _cl
 		{
 			SymbolNode* pSymbol = GetSymbol(pSymbolTable, i);
 			if (pSymbol && 
-				strcmp(pSymbol->strIdentifier, identifier) &&
+				strcmp(pSymbol->strIdentifier, identifier) == 0 &&
 				(pSymbol->iScope == scope || pSymbol->iScope == 0))
 				return pSymbol;
 		}
@@ -254,6 +254,66 @@ namespace _cl
 		return index;
 	}
 
+	FuncNode* GetFunction(LinkList* pFunctionTable, int index)
+	{
+		if (pFunctionTable->iNodeCount == 0)
+		{
+			return NULL;
+		}
+
+		LinkListNode* pCurrentNode = pFunctionTable->pHead;
+		for (int i = 0; i < pFunctionTable->iNodeCount; i++)
+		{
+			FuncNode* pFunction = (FuncNode*) pCurrentNode->pData;
+			if (pFunction->iIndex == index)
+				return pFunction;
+
+			pCurrentNode = pCurrentNode->pNext;
+		}
+
+		return NULL;
+	}
+	FuncNode* GetFunction(LinkList* pFunctionTable, char* name)
+	{
+		FuncNode* pFunction;
+
+		for (int i = 0; i < pFunctionTable->iNodeCount; i++)
+		{
+			FuncNode* pFunction = GetFunction(pFunctionTable, i);
+			if (pFunction && 
+				strcmp(pFunction->strName, name) == 0)
+				return pFunction;
+		}
+
+		return NULL;
+	}
+	void SetFuncParamCount(LinkList* pFunctionTable, int index, int paramCount)
+	{
+		FuncNode* pFunction = GetFunction(pFunctionTable, index);
+		pFunction->iParamCount = paramCount;
+	}
+	int AddFunction(LinkList* pFunctionTable, int isHostAPI, char* name)
+	{
+		if (GetFunction(pFunctionTable, name))
+			return -1;
+
+		FuncNode* pNewFunction = (FuncNode*) malloc(sizeof(FuncNode));
+
+		strcpy(pNewFunction->strName, name);
+		pNewFunction->iIndex = AddNode(pFunctionTable, pNewFunction) + 1;
+		pNewFunction->isHostAPI = isHostAPI;
+		pNewFunction->iParamCount = 0;
+		pNewFunction->codeStream.iNodeCount = 0;
+
+		if (strcmp(name, CL_KW_MAIN_FUNC_NAME) == 0)
+		{
+			compiler.scriptHeader.iIsMainFuncExist = TRUE;
+			compiler.scriptHeader.iMainFuncIndex = pNewFunction->iIndex;
+		}
+		return pNewFunction->iIndex;
+	}
+
+	
 }
 
 

@@ -223,6 +223,10 @@ namespace _cl
 		int  iType;
 	};
 
+	struct FuncNode
+	{
+	};
+
 
 	struct Lexer
 	{
