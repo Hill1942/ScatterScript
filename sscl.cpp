@@ -32,6 +32,67 @@ namespace _cl
 		fclose(pScriptFile);
 	}
 
+	void PreProcessSourceCode()
+	{
+		int isInBlockComment = FALSE;
+		int isInString = FALSE;
+
+		LinkListNode* pNode = compiler.sourceCode.pHead;
+
+		while (TRUE)
+		{
+			char* currentSourceLine = (char*)pNode->pData;
+			for (int i = 0; i < (uint) strlen(currentSourceLine); i++)
+			{
+				if (currentSourceLine[i] == '"')
+				{
+					if (isInString)
+						isInString = FALSE;
+					else
+						isInString = TRUE;
+				}
+
+				if (currentSourceLine[i] == '/' &&
+					currentSourceLine[i + 1] == '/' &&
+					!isInString &&
+					!isInBlockComment)
+				{
+					currentSourceLine[i] = '\n';
+					currentSourceLine[i + 1] = '\0';
+					break;
+				}
+
+				if (currentSourceLine[i] == '/' &&
+					currentSourceLine[i + 1] == '*' &&
+					!isInString &&
+					!isInBlockComment)
+				{
+					isInBlockComment = TRUE;
+				}
+
+				if (currentSourceLine[i] == '*' &&
+					currentSourceLine[i + 1] == '/' &&
+					isInBlockComment)
+				{
+					currentSourceLine[i] = ' ';
+					currentSourceLine[i + 1] = ' ';
+					isInBlockComment = FALSE;
+				}
+
+				if (isInBlockComment)
+				{
+					if (currentSourceLine[i] != '\n')
+						currentSourceLine[i] = ' ';
+				}
+			}
+
+			pNode = pNode->pNext;
+
+			if (pNode == NULL)
+				break;
+		}
+	}
+
 
 	void TestLexer()
 	{
