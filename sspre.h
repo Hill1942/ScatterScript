@@ -24,6 +24,7 @@
 #define MAX_DELIMITER_COUNT                    24
 #define MAX_OP_STATE_COUNT                     32
 
+//ASM Instruction
 #define ASM_INSTR_MOV                          0
 #define ASM_INSTR_ADD                          1
 #define ASM_INSTR_SUB                          2
@@ -66,6 +67,7 @@
 								               
 #define ASM_INSTR_PRINT                        33
 
+//
 #define ASM_OPRAND_TYPE_INT                    0
 #define ASM_OPRAND_TYPE_FLOAT                  1
 #define ASM_OPRAND_TYPE_STRING_INDEX           2
@@ -130,6 +132,56 @@
 #define VM_LOAD_ERROR_UNSOPPORTED_VERSION      3
 #define VM_LOAD_ERROR_OUT_OF_MEMORY            4
 #define VM_LOAD_ERROR_OUT_OF_THREAD            5
+
+#define IL_INSTR_MOV                           0
+#define IL_INSTR_ADD                           1
+#define IL_INSTR_SUB                           2
+#define IL_INSTR_MUL                           3
+#define IL_INSTR_DIV                           4
+#define IL_INSTR_MOD                           5
+#define IL_INSTR_EXP                           6
+#define IL_INSTR_NEG                           7
+#define IL_INSTR_INC                           8
+#define IL_INSTR_DEC                           9
+											   
+#define IL_INSTR_AND                           10
+#define IL_INSTR_OR                            11
+#define IL_INSTR_XOR                           12
+#define IL_INSTR_NOT                           13
+#define IL_INSTR_SHL                           14
+#define IL_INSTR_SHR                           15
+											   
+#define IL_INSTR_CONCAT                        16
+#define IL_INSTR_GETCHAR                       17
+#define IL_INSTR_SETCHAR                       18
+											   
+#define IL_INSTR_JMP                           19
+#define IL_INSTR_JE                            20
+#define IL_INSTR_JNE                           21
+#define IL_INSTR_JG                            22
+#define IL_INSTR_JL                            23
+#define IL_INSTR_JGE                           24
+#define IL_INSTR_JLE                           25
+											   
+#define IL_INSTR_PUSH                          26
+#define IL_INSTR_POP                           27
+											   
+#define IL_INSTR_CALL                          28
+#define IL_INSTR_RET                           29
+#define IL_INSTR_CALLHOST                      30
+											   
+#define IL_INSTR_PAUSE                         31
+#define IL_INSTR_EXIT                          32
+
+#define IL_OPRAND_TYPE_INT                     0
+#define IL_OPRAND_TYPE_FLOAT                   1
+#define IL_OPRAND_TYPE_STRING_INDEX            2
+#define IL_OPRAND_TYPE_VAR                     3
+#define IL_OPRAND_TYPE_ABS_ARRAY_INDEX         4
+#define IL_OPRAND_TYPE_REL_ARRAY_INDEX         5
+#define IL_OPRAND_TYPE_JUMP_TARGET_INDEX       6
+#define IL_OPRAND_TYPE_FUNC_INDEX              7
+#define IL_OPRAND_TYPE_REG                     8
 
 
 

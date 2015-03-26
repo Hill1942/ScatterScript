@@ -282,6 +282,64 @@ namespace _cl
 	int       AddFunction(LinkList* pFunctionTable, int isHostAPI, char* name);
 }
 
+namespace _IL
+{
+	struct Oprand
+	{
+		int iType;
+		union 
+		{
+			int iType;
+			union
+			{
+				int   iIntLiteral;
+				float fFloatLiteral;
+				int   iStringIndex;
+				int   iSymbolIndex;
+				int   iJumpTargetIndex;
+				int   iFuncIndex;
+				int   iRegCode;
+			};
+			int iOffsetIndex;
+			int iOffsetSymbolIndex;
+		};
+	};
+
+	struct ILCodeInstr
+	{
+		int iOpCode;
+		LinkList OpList;
+	};
+
+	struct ILCodeNode
+	{
+		int iType;
+		union 
+		{
+			  ILCodeInstr instr;
+			  char*       strSoureLine;
+			  int         iJumpTargetIndex;
+		};
+	};
+
+	ILCodeNode* GetILCodeNode(int funcIndex, int instrIndex);
+	void        AddILCodeSourceLine(int funcIndex, char* sourceLine);
+	int         AddILCodeInstr(int funcIndex, int opCode);
+	Oprand*     GetILCodeOprand(ILCodeNode* pInstr, int index);
+	void        AddILCodeOprand(int funcIndex, int instrIndex, Oprand value);
+
+	void        AddILCodeOprand_Int(int funcIndex, int instrIndex, int iValue);
+	void        AddILCodeOprand_Float(int funcIndex, int instrIndex, float fValue);
+	void        AddILCodeOprand_String(int funcIndex, int instrIndex, int stringIndex);
+	void        AddILCodeOprand_Var(int funcIndex, int instrIndex, int symbolIndex);
+	void        AddILCodeOprand_AbsArrayIndex(int funcIndex, int instrIndex, int arrayIndex, int offset);
+	void        AddILCodeOprand_RelArrayIndex(int funcIndex, int instrIndex, int arrayIndex, int offsetSymbolIndex);
+	void        AddILCodeOprand_Func(int funcIndex, int instrIndex, int opFuncIndex);
+	void        AddILCodeOprand_Reg(int funcIndex, int instrIndex, int regCode);
+	void        AddILCodeOprand_JumpTarget(int funcIndex, int instrIndex, int targetIndex);
+
+}
+
 
 
 
