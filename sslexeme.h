@@ -33,6 +33,9 @@ namespace _cl
 	Token   GetNextToken();
 	char    GetNextChar();
 	char*   GetCurrentLexeme();
+	int     GetCurrentLexemeStartIndex();
+	char*   GetCurrentSourceLine();
+	int     GetCurrentSourceLineIndex();
 	int     GetCurrentOperator();
 
 	void CopyLexerState(LexerState* pDestState, LexerState* pSourceState);

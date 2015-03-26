@@ -944,6 +944,24 @@ namespace _cl
 		return cl_lexer.currLexerState.currentLexeme;
 	}
 
+	int GetCurrentLexemeStartIndex()
+	{
+		return cl_lexer.currLexerState.currentLexemeStart;
+	}
+
+	char* GetCurrentSourceLine()
+	{
+		if (cl_lexer.currLexerState.pCurrentLine)
+			return (char*)cl_lexer.currLexerState.pCurrentLine->pData;
+		else
+			return NULL;
+	}
+
+	int GetCurrentSourceLineIndex()
+	{
+		return cl_lexer.currLexerState.iCurrentLineIndex;
+	}
+
 	int GetCurrentOperator()
 	{
 		return cl_lexer.currLexerState.currentOp;
