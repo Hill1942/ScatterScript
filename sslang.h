@@ -322,21 +322,24 @@ namespace _IL
 		};
 	};
 
-	ILCodeNode* GetILCodeNode(int funcIndex, int instrIndex);
-	void        AddILCodeSourceLine(int funcIndex, char* sourceLine);
-	int         AddILCodeInstr(int funcIndex, int opCode);
+	ILCodeNode* GetILCodeNode(LinkList* pFuncTable, int funcIndex, int instrIndex);
+	void        AddILCodeSourceLine(LinkList* pFuncTable, int funcIndex, char* sourceLine);
+	int         AddILCodeInstr(LinkList* pFuncTable, int funcIndex, int opCode);
 	Oprand*     GetILCodeOprand(ILCodeNode* pInstr, int index);
-	void        AddILCodeOprand(int funcIndex, int instrIndex, Oprand value);
+	void        AddILCodeOprand(LinkList* pFuncTable, int funcIndex, int instrIndex, Oprand value);
 
-	void        AddILCodeOprand_Int(int funcIndex, int instrIndex, int iValue);
-	void        AddILCodeOprand_Float(int funcIndex, int instrIndex, float fValue);
-	void        AddILCodeOprand_String(int funcIndex, int instrIndex, int stringIndex);
-	void        AddILCodeOprand_Var(int funcIndex, int instrIndex, int symbolIndex);
-	void        AddILCodeOprand_AbsArrayIndex(int funcIndex, int instrIndex, int arrayIndex, int offset);
-	void        AddILCodeOprand_RelArrayIndex(int funcIndex, int instrIndex, int arrayIndex, int offsetSymbolIndex);
-	void        AddILCodeOprand_Func(int funcIndex, int instrIndex, int opFuncIndex);
-	void        AddILCodeOprand_Reg(int funcIndex, int instrIndex, int regCode);
-	void        AddILCodeOprand_JumpTarget(int funcIndex, int instrIndex, int targetIndex);
+	void        AddILCodeOprand_Int(LinkList* pFuncTable, int funcIndex, int instrIndex, int iValue);
+	void        AddILCodeOprand_Float(LinkList* pFuncTable, int funcIndex, int instrIndex, float fValue);
+	void        AddILCodeOprand_String(LinkList* pFuncTable, int funcIndex, int instrIndex, int stringIndex);
+	void        AddILCodeOprand_Variable(LinkList* pFuncTable, int funcIndex, int instrIndex, int symbolIndex);
+	void        AddILCodeOprand_AbsArrayIndex(LinkList* pFuncTable, int funcIndex, int instrIndex, int arrayIndex, int offset);
+	void        AddILCodeOprand_RelArrayIndex(LinkList* pFuncTable, int funcIndex, int instrIndex, int arrayIndex, int offsetSymbolIndex);
+	void        AddILCodeOprand_Func(LinkList* pFuncTable, int funcIndex, int instrIndex, int opFuncIndex);
+	void        AddILCodeOprand_Reg(LinkList* pFuncTable, int funcIndex, int instrIndex, int regCode);
+	void        AddILCodeOprand_JumpTarget(LinkList* pFuncTable, int funcIndex, int instrIndex, int targetIndex);
+
+	int         GetNextJumpTargetIndex();
+	void        AddILCodeJumpTarget(LinkList* pFuncTable, int funcIndex, int targetIndex);
 
 }
 

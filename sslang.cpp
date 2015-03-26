@@ -316,6 +316,177 @@ namespace _cl
 	
 }
 
+namespace _IL
+{
+	ILCodeNode* GetILCodeNode(LinkList* pFuncTable, int funcIndex, int instrIndex)
+	{
+		_cl::FuncNode* pFunc = _cl::GetFunction(pFuncTable, funcIndex);
+
+		if (pFunc->codeStream.iNodeCount)
+			return NULL;
+
+		LinkListNode* pCurrentNode = pFunc->codeStream.pHead;
+		for (int i = 0; i < pFunc->codeStream.iNodeCount; i++)
+		{
+			if (instrIndex == i)
+				return (ILCodeNode*) pCurrentNode->pData;
+
+			pCurrentNode = pCurrentNode->pNext;
+		}
+
+		return NULL;
+	}
+	void AddILCodeSourceLine(LinkList* pFuncTable, int funcIndex, char* sourceLine)
+	{
+		_cl::FuncNode* pFunc = _cl::GetFunction(pFuncTable, funcIndex);
+		ILCodeNode* pSourceLineNode = (ILCodeNode*) malloc(sizeof(ILCodeNode));
+
+		pSourceLineNode->iType        = IL_CODE_NODE_SOURCE_LINE;
+		pSourceLineNode->strSoureLine = sourceLine;
+
+		AddNode(&pFunc->codeStream, pSourceLineNode);
+	}
+	int AddILCodeInstr(LinkList* pFuncTable, int funcIndex, int opCode)
+	{
+		_cl::FuncNode* pFunc = _cl::GetFunction(pFuncTable, funcIndex);
+		ILCodeNode* pInstrNode = (ILCodeNode*) malloc(sizeof(ILCodeNode));
+
+		pInstrNode->iType         = IL_CODE_NODE_INSTR;
+		pInstrNode->instr.iOpCode = opCode;
+		pInstrNode->instr.OpList.iNodeCount = 0;
+
+		int index = AddNode(&pFunc->codeStream, pInstrNode);
+
+		return index;
+	}
+	Oprand* GetILCodeOprand(ILCodeNode* pInstr, int index)
+	{
+		if (pInstr->instr.OpList.iNodeCount == 0)
+			return NULL;
+
+		LinkListNode* pCurrentNode = pInstr->instr.OpList.pHead;
+
+		for (int i = 0; i < pInstr->instr.OpList.iNodeCount; i++)
+		{
+			if (index == i)
+				return (Oprand*) pCurrentNode->pData;
+
+			pCurrentNode = pCurrentNode->pNext;
+		}
+
+		return NULL;
+	}
+	void AddILCodeOprand(LinkList* pFuncTable, int funcIndex, 
+		                 int instrIndex, Oprand value)
+	{
+		ILCodeNode* pILCodeNode = GetILCodeNode(pFuncTable, funcIndex, instrIndex);
+
+		Oprand* pValue = (Oprand*) malloc(sizeof(Oprand));
+		memcpy(pValue, &value, sizeof(Oprand));
+
+		AddNode(&pILCodeNode->instr.OpList, pValue);
+	}
+
+	void AddILCodeOprand_Int(LinkList* pFuncTable, int funcIndex, 
+		                     int instrIndex, int iValue)
+	{
+		Oprand value;
+		value.iType = IL_OPRAND_TYPE_INT;
+		value.iIntLiteral = iValue;
+
+		AddILCodeOprand(pFuncTable, funcIndex, instrIndex, value);
+	}
+	void AddILCodeOprand_Float(LinkList* pFuncTable, int funcIndex, 
+		                       int instrIndex, float fValue)
+	{
+		Oprand value;
+		value.iType = IL_OPRAND_TYPE_FLOAT;
+		value.fFloatLiteral = fValue;
+
+		AddILCodeOprand(pFuncTable, funcIndex, instrIndex, value);
+	}
+	void AddILCodeOprand_String(LinkList* pFuncTable, int funcIndex, 
+		                        int instrIndex, int stringIndex)
+	{
+		Oprand value;
+		value.iType = IL_OPRAND_TYPE_STRING_INDEX;
+		value.iStringIndex = stringIndex;
+
+		AddILCodeOprand(pFuncTable, funcIndex, instrIndex, value);
+	}
+	void AddILCodeOprand_Variable(LinkList* pFuncTable, int funcIndex, 
+		                     int instrIndex, int symbolIndex)
+	{
+		Oprand value;
+		value.iType = IL_OPRAND_TYPE_VARIABLE;
+		value.iSymbolIndex = symbolIndex;
+
+		AddILCodeOprand(pFuncTable, funcIndex, instrIndex, value);
+	}
+	void AddILCodeOprand_AbsArrayIndex(LinkList* pFuncTable, int funcIndex, 
+		                               int instrIndex, int arrayIndex, int offset)
+	{
+		Oprand value;
+		value.iType = IL_OPRAND_TYPE_ABS_ARRAY_INDEX;
+		value.iSymbolIndex = arrayIndex;
+		value.iOffsetIndex = offset;
+
+		AddILCodeOprand(pFuncTable, funcIndex, instrIndex, value);
+	}
+	void AddILCodeOprand_RelArrayIndex(LinkList* pFuncTable, int funcIndex, 
+		                               int instrIndex, int arrayIndex, int offsetSymbolIndex)
+	{
+		Oprand value;
+		value.iType = IL_OPRAND_TYPE_REL_ARRAY_INDEX;
+		value.iSymbolIndex = offsetSymbolIndex;
+
+		AddILCodeOprand(pFuncTable, funcIndex, instrIndex, value);
+	}
+	void AddILCodeOprand_Func(LinkList* pFuncTable, int funcIndex, 
+		                      int instrIndex, int opFuncIndex)
+	{
+		Oprand value;
+		value.iType = IL_OPRAND_TYPE_FUNC_INDEX;
+		value.iFuncIndex = opFuncIndex;
+
+		AddILCodeOprand(pFuncTable, funcIndex, instrIndex, value);
+	}
+	void AddILCodeOprand_Reg(LinkList* pFuncTable, int funcIndex, 
+		                     int instrIndex, int regCode)
+	{
+		Oprand value;
+		value.iType = IL_OPRAND_TYPE_REG;
+		value.iSymbolIndex = regCode;
+
+		AddILCodeOprand(pFuncTable, funcIndex, instrIndex, value);
+	}
+	void AddILCodeOprand_JumpTarget(LinkList* pFuncTable, int funcIndex, 
+		                            int instrIndex, int targetIndex)
+	{
+		Oprand value;
+		value.iType = IL_OPRAND_TYPE_JUMP_TARGET_INDEX;
+		value.iJumpTargetIndex = targetIndex;
+
+		AddILCodeOprand(pFuncTable, funcIndex, instrIndex, value);
+	}
+
+	int GetNextJumpTargetIndex()
+	{
+		return 0;
+	}
+	void AddILCodeJumpTarget(LinkList* pFuncTable, int funcIndex, int targetIndex)
+	{
+		_cl::FuncNode* pFunc = _cl::GetFunction(pFuncTable, funcIndex);
+		ILCodeNode* pSourceLineNode = (ILCodeNode*) malloc(sizeof(ILCodeNode));
+
+		pSourceLineNode->iType            = IL_CODE_NODE_JUMP_TARGET;
+		pSourceLineNode->iJumpTargetIndex = targetIndex;
+
+		AddNode(&pFunc->codeStream, pSourceLineNode);
+	}
+
+}
+
 
 
 

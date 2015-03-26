@@ -176,12 +176,17 @@
 #define IL_OPRAND_TYPE_INT                     0
 #define IL_OPRAND_TYPE_FLOAT                   1
 #define IL_OPRAND_TYPE_STRING_INDEX            2
-#define IL_OPRAND_TYPE_VAR                     3
+#define IL_OPRAND_TYPE_VARIABLE                3
 #define IL_OPRAND_TYPE_ABS_ARRAY_INDEX         4
 #define IL_OPRAND_TYPE_REL_ARRAY_INDEX         5
 #define IL_OPRAND_TYPE_JUMP_TARGET_INDEX       6
 #define IL_OPRAND_TYPE_FUNC_INDEX              7
 #define IL_OPRAND_TYPE_REG                     8
+
+#define IL_CODE_NODE_INSTR                     0
+#define IL_CODE_NODE_SOURCE_LINE               1
+#define IL_CODE_NODE_JUMP_TARGET               2
+
 
 
 
