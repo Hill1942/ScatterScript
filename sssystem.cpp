@@ -7,6 +7,7 @@
 #include "ssutil.h"
 #include "ssbase_type.h"
 #include "sslang.h"
+#include "sslexeme.h"
 #include "sssystem.h"
 
 extern _asm_::ASM sasm;
@@ -407,6 +408,41 @@ namespace _vm
 
 namespace _cl
 {
+	void ExitOnError(char* strErrorMsg)
+	{
+		printf("Error: %s\n", strErrorMsg);
+		Exit();
+	}
+	void ExitOnCodeError(char* strErrorMsg)
+	{
+		printf("Error: %s.\n\n", strErrorMsg);
+		printf("Line %d\n", GetCurrentSourceLineIndex());
+
+		char strCurrentSourceLine[MAX_SOURCE_LINE_SIZE];
+		char* strTempSourceLine = GetCurrentSourceLine();
+		if (strTempSourceLine)
+			strcpy(strCurrentSourceLine, strTempSourceLine);
+		else
+			strCurrentSourceLine[0] = '\0';
+
+		int lastIndex = strlen(strCurrentSourceLine) - 1;
+		if (strCurrentSourceLine[lastIndex] == '\n')
+			strCurrentSourceLine[lastIndex] = '\0';
+
+		for (uint i = 0; i < lastIndex; i++)
+			if (strCurrentSourceLine[i] == '\t')
+				strCurrentSourceLine[i] = ' ');
+
+		printf("%s\n", strCurrentSourceLine);
+
+		for (uint i = 0; i < GetCurrentLexemeStartIndex(); i++)
+			printf(" ");
+		printf("^\n");
+
+		printf("Could not compile %s\n", cl_lexer.scriptSourceFile);
+
+		Exit();
+	}
 	void ExitOnInvalidInputError(char c)
     {
     	printf("Error: expected %c\n", c);
