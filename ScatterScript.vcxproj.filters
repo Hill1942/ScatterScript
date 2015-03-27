@@ -10,6 +10,7 @@
     <ClCompile Include="sssystem.cpp" />
     <ClCompile Include="ssvm.cpp" />
     <ClCompile Include="ssutil.cpp" />
+    <ClCompile Include="ssil.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
@@ -25,5 +26,6 @@
     <ClInclude Include="sssystem.h" />
     <ClInclude Include="ssutil.h" />
     <ClInclude Include="ssvm.h" />
+    <ClInclude Include="ssil.h" />
   </ItemGroup>
 </Project>

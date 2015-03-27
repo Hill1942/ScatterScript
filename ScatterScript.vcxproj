@@ -84,6 +84,7 @@
     <ClCompile Include="ssasm.cpp" />
     <ClCompile Include="ssbase_type.cpp" />
     <ClCompile Include="sscl.cpp" />
+    <ClCompile Include="ssil.cpp" />
     <ClCompile Include="sslang.cpp" />
     <ClCompile Include="sslexeme.cpp" />
     <ClCompile Include="ssmain.cpp" />
@@ -99,6 +100,7 @@
     <ClInclude Include="ssasm.h" />
     <ClInclude Include="ssbase_type.h" />
     <ClInclude Include="sscl.h" />
+    <ClInclude Include="ssil.h" />
     <ClInclude Include="sslang.h" />
     <ClInclude Include="sslexeme.h" />
     <ClInclude Include="sspre.h" />

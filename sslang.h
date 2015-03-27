@@ -266,6 +266,8 @@ namespace _cl
 		LinkList symbolTable;
 		LinkList stringTable;
 
+		FILE* outAssembleFile;
+
 		Header   scriptHeader;
 		Lexer    lexer;
 
@@ -280,6 +282,10 @@ namespace _cl
 	FuncNode* GetFunction(LinkList* pFunctionTable, char* identifier);
 	void      SetFuncParamCount(LinkList* pFunctionTable, int index, int paramCount);
 	int       AddFunction(LinkList* pFunctionTable, int isHostAPI, char* name);
+
+	int       AddString(LinkList* pStringTable, char* str);
+	char*     GetString(LinkList* pStringTable, int index);
+
 }
 
 namespace _IL
@@ -300,7 +306,7 @@ namespace _IL
 				int   iFuncIndex;
 				int   iRegCode;
 			};
-			int iOffsetIndex;
+			int iOffset;
 			int iOffsetSymbolIndex;
 		};
 	};

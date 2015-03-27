@@ -10,6 +10,10 @@
 #define SSE_ID_STRING                          "sse0"
 
 #define DEFAULT_STACK_SIZE                     1024
+#define TAB_WIDTH                              4
+#define SCOPE_GLOBAL                           0
+#define SYMBOL_TYPE_PARAM                      1
+#define SYMBOL_TYPE_VAR                        2
 
 #define MAX_VALUE_STRING_SIZE                  4096
 #define MAX_THREAD_NUMBER                      1024
@@ -113,9 +117,6 @@
 #define ASM_LEX_STATE_IN_STRING                1
 #define ASM_LEX_STATE_END_STRING               2
 
-
-
-
 #define ASM_KW_MAIN_FUNC_NAME                  "_main"
 #define ASM_KW_SET_STACK_SIZE                  "setstacksize"
 #define ASM_KW_VAR                             "var"
@@ -125,13 +126,13 @@
 #define ASM_KW_PRINT                           "_print"
 
 
-
 #define VM_LOAD_OK                             0
 #define VM_LOAD_ERROR_FAIL_FILE_OPEN           1
 #define VM_LOAD_ERROR_INVALID_SSE              2
 #define VM_LOAD_ERROR_UNSOPPORTED_VERSION      3
 #define VM_LOAD_ERROR_OUT_OF_MEMORY            4
 #define VM_LOAD_ERROR_OUT_OF_THREAD            5
+
 
 #define IL_INSTR_MOV                           0
 #define IL_INSTR_ADD                           1
@@ -186,8 +187,6 @@
 #define IL_CODE_NODE_INSTR                     0
 #define IL_CODE_NODE_SOURCE_LINE               1
 #define IL_CODE_NODE_JUMP_TARGET               2
-
-
 
 
 #define CL_LEX_STATE_START                     0
