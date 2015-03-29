@@ -7,6 +7,7 @@
 #include "sslang.h"
 #include "sscl.h"
 #include "ssil.h"
+#include "sssystem.h"
 
 extern _cl::Compiler compiler;
 
@@ -203,6 +204,55 @@ extern _cl::Compiler compiler;
 	 }
 	 void OutCode()
 	 {
+		 compiler.outAssembleFile = fopen(compiler.outAssembleFilename, "wb");
+		 if (compiler.outAssembleFile == NULL)
+			 _cl::ExitOnCodeError("Could not open out asm file");
 
+		 OutHeader();
+
+		 fprintf(compiler.outAssembleFile, ";---- Directives ----------------------");
+		 OutDirectives();
+
+		 fprintf(compiler.outAssembleFile, ";---- Global Varibles -------------------------");
+		 OutScopeSymbols(SCOPE_GLOBAL, SYMBOL_TYPE_VAR);
+
+		 fprintf(compiler.outAssembleFile, ";---- Functions -----------------------------");
+		 LinkListNode* pNode = compiler.functionTable.pHead;
+		 _cl::FuncNode* pFunction;
+		 _cl::FuncNode* pMainFunction = NULL;
+		 if (compiler.functionTable.iNodeCount > 0) 
+		 {
+			 while (TRUE)
+			 {
+				 pFunction = (_cl::FuncNode*)pNode->pData;
+				 if (!pFunction->isHostAPI) 
+				 {
+					 if (strcmp(pFunction->strName, ASM_KW_MAIN_FUNC_NAME))
+					 {
+						 pMainFunction = pFunction;
+					 }
+					 else
+					 {
+						 OutFunction(pFunction);
+						 fprintf(compiler.outAssembleFile, "\n\n");
+					 }
+				 }
+
+				 pNode = pNode->pNext;
+				 if (pNode == NULL)
+					 break;
+			 }
+		 }
+
+		 fprintf(compiler.outAssembleFile, ";---- Main -----------------------------");
+		 if (pMainFunction)
+		 {
+			 fprintf(compiler.outAssembleFile, "\n\n");
+			 OutFunction(pMainFunction);
+		 }
+
+		 fclose(compiler.outAssembleFile);
 	 }
+
+
  }

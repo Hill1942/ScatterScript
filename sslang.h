@@ -267,6 +267,7 @@ namespace _cl
 		LinkList stringTable;
 
 		FILE* outAssembleFile;
+		char  outAssembleFilename[MAX_FILENAME_SIZE];
 
 		Header   scriptHeader;
 		Lexer    lexer;
