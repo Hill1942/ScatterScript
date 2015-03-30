@@ -6,6 +6,8 @@
 #include "ssbase_type.h"
 #include "sslang.h"
 #include "sslexeme.h"
+#include "ssil.h"
+#include "sssystem.h"
 #include "sscl.h"
 
 extern _cl::Compiler compiler;
@@ -198,5 +200,134 @@ namespace _cl
 
 
 	}
+
+	void ReadToken(Token token);
+
+	void ParseSourceCode()
+	{
+		ResetLexer();
+
+		InitStack(&compiler.loopStack);
+		compiler.currentScope = SCOPE_GLOBAL;
+
+		while (TRUE) 
+		{
+			ParseStatement();
+			if (GetNextToken() == CL_TOKEN_TYPE_END_OF_STREAM)
+				break;
+			else 
+				RewindTokenStream();
+		}
+		
+		FreeStack(&compiler.loopStack);
+	}
+
+	void ParseStatement()
+	{
+		if (GetLookAheadChar() == ';')
+		{
+			ReadToken(CL_TOKEN_TYPE_DELIM_SEMICOLON);
+			return;
+		}
+
+		Token initToken = GetNextToken();
+		switch (initToken)
+		{
+		case CL_TOKEN_TYPE_END_OF_STREAM:
+			ExitOnCodeError("Unexpected end of file");
+			break;
+
+		case CL_TOKEN_TYPE_DELIM_OPEN_CURLY_BRACE:
+			ParseBlock();
+			break;
+
+		case CL_TOKEN_TYPE_KEYWORD_VAR:
+			ParseVariable();
+			break;;
+
+		case CL_TOKEN_TYPE_KEYWORD_FUNC:
+			ParseFunction();
+			break;
+
+		/*case CL_TOKEN_TYPE_KEYWORD_HOST:
+			ParseHost();
+			break; */
+
+		case CL_TOKEN_TYPE_KEYWORD_IF:
+			ParseIf();
+			break;
+
+		case CL_TOKEN_TYPE_KEYWORD_WHILE:
+			ParseWhile();
+			break;
+
+		case CL_TOKEN_TYPE_KEYWORD_FOR:
+			ParseFor();
+			break;
+
+		case CL_TOKEN_TYPE_KEYWORD_BREAK:
+			ParseBreak();
+			break;
+
+		case CL_TOKEN_TYPE_KEYWORD_CONTINUE:
+			ParseContinue();
+			break;
+
+		case CL_TOKEN_TYPE_KEYWORD_RETURN:
+			ParseReturn();
+			break;
+
+		case CL_TOKEN_TYPE_IDENT:
+			{
+				if (GetSymbol(&compiler.symbolTable, GetCurrentLexeme(), compiler.currentScope))
+				{
+					ParseAssign();
+				}
+				else if (GetFunction(&compiler.functionTable, GetCurrentLexeme()))
+				{
+					_IL::AddILCodeSourceLine(&compiler.functionTable, compiler.currentScope, GetCurrentSourceLine());
+					ParseFunctionCall();
+
+					ReadToken(CL_TOKEN_TYPE_DELIM_SEMICOLON);
+				}
+				else
+				{
+					ExitOnCodeError("Invalid identifier");
+				}
+				break;
+			}
+		default:
+			ExitOnCodeError("Unexpected input");
+			break;
+		}
+	}
+	void ParseBlock()
+	{
+		if (compiler.currentScope == SCOPE_GLOBAL)
+			ExitOnCodeError("Code blocks illegal in global scope");
+
+		while (GetLookAheadChar() != '}')
+		{
+			ParseStatement();
+		}
+
+		ReadToken(CL_TOKEN_TYPE_DELIM_CLOSE_CURLY_BRACE);
+	}
+	void ParseVariable();
+	void ParseHost();
+	void ParseFunction();
+	void ParseExpression();
+	void ParseSubExpression();
+	void ParseTerm();
+	void ParseFactor();
+
+	void ParseIf();
+	void ParseWhile();
+	void ParseBreak();
+	void ParseFor();
+	void ParseContinue();
+	void ParseReturn();
+	void ParseAssign();
+	void ParseFunctionCall();
 
 }

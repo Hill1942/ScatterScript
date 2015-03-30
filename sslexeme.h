@@ -40,6 +40,9 @@ namespace _cl
 
 	void CopyLexerState(LexerState* pDestState, LexerState* pSourceState);
 	void RewindTokenStream();
+	char GetLookAheadChar();
+
+	void ResetLexer();
 }
 
 #endif

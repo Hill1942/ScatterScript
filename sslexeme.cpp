@@ -982,6 +982,23 @@ namespace _cl
 	{
 		CopyLexerState(&cl_lexer.currLexerState, &cl_lexer.prevLexerState);
 	}
+	char GetLookAheadChar()
+	{
+		LexerState prevLexerState;
+		CopyLexerState(&prevLexerState, &cl_lexer.currLexerState);
+
+		char currentChar;
+		while (TRUE)
+		{
+			currentChar = GetNextChar();
+			if (!IsCharWhiteSpace_CL(currentChar))
+				break;
+		}
+
+		CopyLexerState(&cl_lexer.currLexerState, &prevLexerState);
+
+		return currentChar;
+	}
 }
 
 

@@ -272,6 +272,12 @@ namespace _cl
 		Header   scriptHeader;
 		Lexer    lexer;
 
+		int      currentScope;
+		Stack    loopStack;
+
+		int      tempVar0SymbolIndex;
+		int      tempVar1SymbolIndex;
+
 	};
 
 	SymbolNode* GetSymbol(LinkList* pSymbolTable, int index);
