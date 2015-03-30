@@ -434,6 +434,73 @@ namespace _cl
 		instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, compiler.currentScope, IL_INSTR_POP);
 		_IL::AddILCodeOprand_Variable(&compiler.functionTable, compiler.currentScope,
 			instrIndex, compiler.tempVar0SymbolIndex);
+
+		if (isArray)
+		{
+			instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, compiler.currentScope, IL_INSTR_POP);
+			_IL::AddILCodeOprand_Variable(&compiler.functionTable, compiler.currentScope,
+				instrIndex, compiler.tempVar1SymbolIndex);
+		}
+
+		switch (assignOp)
+		{
+		case CL_OPERATOR_TYPE_ASSIGN:
+			instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, 
+				compiler.currentScope, IL_INSTR_MOV);
+			break;
+		case CL_OPERATOR_TYPE_ASSIGN_ADD:
+			instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, 
+				compiler.currentScope, IL_INSTR_ADD);
+			break;
+		case CL_OPERATOR_TYPE_ASSIGN_SUB:
+			instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, 
+				compiler.currentScope, IL_INSTR_SUB);
+			break;
+		case CL_OPERATOR_TYPE_ASSIGN_MUL:
+			instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, 
+				compiler.currentScope, IL_INSTR_MUL);
+			break;
+		case CL_OPERATOR_TYPE_ASSIGN_DIV:
+			instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, 
+				compiler.currentScope, IL_INSTR_DIV);
+			break;
+		case CL_OPERATOR_TYPE_ASSIGN_MOD:
+			instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, 
+				compiler.currentScope, IL_INSTR_MOD);
+			break;
+		case CL_OPERATOR_TYPE_ASSIGN_AND:
+			instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, 
+				compiler.currentScope, IL_INSTR_AND);
+			break;
+		case CL_OPERATOR_TYPE_ASSIGN_OR:
+			instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, 
+				compiler.currentScope, IL_INSTR_OR);
+			break;
+		case CL_OPERATOR_TYPE_ASSIGN_XOR:
+			instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, 
+				compiler.currentScope, IL_INSTR_XOR);
+			break;
+		case CL_OPERATOR_TYPE_ASSIGN_SHIFT_LEFT:
+			instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, 
+				compiler.currentScope, IL_INSTR_SHL);
+			break;
+		case CL_OPERATOR_TYPE_ASSIGN_SHIFT_RIGHT:
+			instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, 
+				compiler.currentScope, IL_INSTR_SHR);
+			break;
+		default:
+			break;
+		}
+
+		if (isArray)
+			_IL::AddILCodeOprand_RelArrayIndex(&compiler.functionTable, compiler.currentScope,
+				instrIndex, pSymbol->iIndex, compiler.tempVar1SymbolIndex);
+		else
+			_IL::AddILCodeOprand_Variable(&compiler.functionTable, compiler.currentScope, 
+				instrIndex, pSymbol->iIndex);
+
+		_IL::AddILCodeOprand_Variable(&compiler.functionTable, compiler.currentScope,
+			instrIndex, compiler.tempVar0SymbolIndex);
 		
 	}
 	void ParseFunctionCall();

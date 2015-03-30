@@ -440,7 +440,7 @@ namespace _IL
 		Oprand value;
 		value.iType = IL_OPRAND_TYPE_ABS_ARRAY_INDEX;
 		value.iSymbolIndex = arrayIndex;
-		value.iOffsetIndex = offset;
+		value.iOffset = offset;
 
 		AddILCodeOprand(pFuncTable, funcIndex, instrIndex, value);
 	}
