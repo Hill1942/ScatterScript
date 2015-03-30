@@ -27,6 +27,7 @@
 #define MAX_OF_STATE_COUNT                     32
 #define MAX_DELIMITER_COUNT                    24
 #define MAX_OP_STATE_COUNT                     32
+#define MAX_FUNC_PARAM_COUNT                   128
 
 //ASM Instruction
 #define ASM_INSTR_MOV                          0

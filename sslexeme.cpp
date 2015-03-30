@@ -967,6 +967,11 @@ namespace _cl
 		return cl_lexer.currLexerState.currentOp;
 	}
 
+	void CopyCurrentLexeme(char* buffer)
+	{
+		strcpy(buffer, cl_lexer.currLexerState.currentLexeme);
+	}
+
 	void CopyLexerState(LexerState* pDestState, LexerState* pSourceState)
 	{
 		pDestState->iCurrentLineIndex  = pSourceState->iCurrentLineIndex;

@@ -315,7 +315,58 @@ namespace _cl
 	}
 	void ParseVariable();
 	void ParseHost();
-	void ParseFunction();
+	void ParseFunction()
+	{
+		if (compiler.currentScope != SCOPE_GLOBAL)
+			ExitOnCodeError("Nested functions illegal");
+
+		ReadToken(CL_TOKEN_TYPE_IDENT);
+
+		int funcIndex = AddFunction(&compiler.functionTable, FALSE, GetCurrentLexeme());
+		if (funcIndex == -1)
+			ExitOnCodeError("Function redefinition");
+
+		compiler.currentScope == funcIndex;
+
+		ReadToken(CL_TOKEN_TYPE_DELIM_OPEN_PAREN);
+
+		if (GetLookAheadChar() != ')') 
+		{
+			if (compiler.scriptHeader.iIsMainFuncExist && 
+				compiler.scriptHeader.iMainFuncIndex == funcIndex)
+				ExitOnCodeError("main function cannot accept parameters");
+
+			int paramCount = 0;
+			char paramList[MAX_FUNC_PARAM_COUNT][MAX_INDENT_SIZE];
+
+			while (TRUE)
+			{
+				ReadToken(CL_TOKEN_TYPE_IDENT);
+				_cl::CopyCurrentLexeme(paramList[paramCount]);
+				paramCount++;
+
+				if (GetLookAheadChar() == ')')
+					break;
+
+				ReadToken(CL_TOKEN_TYPE_DELIM_COMMA);
+			}
+
+			SetFuncParamCount(&compiler.functionTable, compiler.currentScope, paramCount);
+
+			while (paramCount > 0)
+			{
+				paramCount--;
+				AddSymbol(&compiler.symbolTable, 1, compiler.currentScope,
+					SYMBOL_TYPE_PARAM, paramList[paramCount]);
+			}
+		}
+
+		ReadToken(CL_TOKEN_TYPE_DELIM_CLOSE_PAREN);
+		ReadToken(CL_TOKEN_TYPE_DELIM_OPEN_CURLY_BRACE);
+		ParseBlock();
+
+		compiler.currentScope = SCOPE_GLOBAL;
+	}
 	void ParseExpression();
 	void ParseSubExpression();
 	void ParseTerm();
@@ -327,7 +378,64 @@ namespace _cl
 	void ParseFor();
 	void ParseContinue();
 	void ParseReturn();
-	void ParseAssign();
+	void ParseAssign()
+	{
+		if (compiler.currentScope == SCOPE_GLOBAL)
+			ExitOnCodeError("Assigenment illegal in global scope");
+
+		int instrIndex;
+		int assignOp;
+		_IL::AddILCodeSourceLine(&compiler.functionTable, compiler.currentScope, GetCurrentSourceLine());
+		
+		SymbolNode* pSymbol = GetSymbol(&compiler.symbolTable, GetCurrentLexeme(), compiler.currentScope);
+		int isArray = FALSE;
+		if (GetLookAheadChar() == '[')
+		{
+			if (pSymbol->iSize == 1)
+				ExitOnCodeError("Invalid array");
+
+			ReadToken(CL_TOKEN_TYPE_DELIM_OPEN_BRACE);
+
+			if (GetLookAheadChar() == ']')
+				ExitOnCodeError("Invalid expression");
+
+			ParseExpression();
+
+			ReadToken(CL_TOKEN_TYPE_DELIM_CLOSE_BRACE);
+
+			isArray = TRUE;
+		}
+		else
+		{
+			if (pSymbol->iSize > 1)
+				ExitOnCodeError("Arrays must be indexed");
+		}
+
+		if ( GetNextToken() != CL_TOKEN_TYPE_OPERATOR && 
+			(GetCurrentOperator() != CL_OPERATOR_TYPE_ASSIGN && 
+			 GetCurrentOperator() != CL_OPERATOR_TYPE_ASSIGN_ADD &&
+			 GetCurrentOperator() != CL_OPERATOR_TYPE_ASSIGN_SUB &&
+			 GetCurrentOperator() != CL_OPERATOR_TYPE_ASSIGN_MUL &&
+			 GetCurrentOperator() != CL_OPERATOR_TYPE_ASSIGN_DIV &&
+			 GetCurrentOperator() != CL_OPERATOR_TYPE_ASSIGN_MOD &&
+			 GetCurrentOperator() != CL_OPERATOR_TYPE_ASSIGN_AND &&
+			 GetCurrentOperator() != CL_OPERATOR_TYPE_ASSIGN_OR &&
+			 GetCurrentOperator() != CL_OPERATOR_TYPE_ASSIGN_XOR &&
+			 GetCurrentOperator() != CL_OPERATOR_TYPE_ASSIGN_SHIFT_LEFT &&
+			 GetCurrentOperator() != CL_OPERATOR_TYPE_ASSIGN_SHIFT_RIGHT))
+			ExitOnCodeError("Illegal assignment operator");
+		else
+			assignOp = GetCurrentOperator();
+
+		ParseExpression();
+
+		ReadToken(CL_TOKEN_TYPE_DELIM_SEMICOLON);
+
+		instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, compiler.currentScope, IL_INSTR_POP);
+		_IL::AddILCodeOprand_Variable(&compiler.functionTable, compiler.currentScope,
+			instrIndex, compiler.tempVar0SymbolIndex);
+		
+	}
 	void ParseFunctionCall();
 
 }

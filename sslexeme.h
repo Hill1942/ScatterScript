@@ -37,6 +37,7 @@ namespace _cl
 	char*   GetCurrentSourceLine();
 	int     GetCurrentSourceLineIndex();
 	int     GetCurrentOperator();
+	void    CopyCurrentLexeme(char* buffer);
 
 	void CopyLexerState(LexerState* pDestState, LexerState* pSourceState);
 	void RewindTokenStream();
