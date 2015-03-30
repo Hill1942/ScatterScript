@@ -203,6 +203,29 @@ namespace _cl
 
 	void ReadToken(Token token);
 
+	int IsOprandRelational(int opType)
+	{
+		if (opType != CL_OPERATOR_TYPE_EQUAL &&
+			opType != CL_OPERATOR_TYPE_NOT_EQUAL &&
+			opType != CL_OPERATOR_TYPE_LESS &&
+			opType != CL_OPERATOR_TYPE_LESS_EQUAL &&
+			opType != CL_OPERATOR_TYPE_GREATER &&
+			opType != CL_OPERATOR_TYPE_GREATER_EQUAL)
+			return FALSE;
+		else
+			return TRUE;
+	}
+
+	int IsOprandLogical(int opType)
+	{
+		if (opType != CL_OPERATOR_TYPE_LOGICAL_AND && 
+			opType != CL_OPERATOR_TYPE_LOGICAL_OR && 
+			opType != CL_OPERATOR_TYPE_LOGICAL_NOT)
+			return FALSE;
+		else
+			return TRUE;
+	}
+
 	void ParseSourceCode()
 	{
 		ResetLexer();
@@ -367,7 +390,43 @@ namespace _cl
 
 		compiler.currentScope = SCOPE_GLOBAL;
 	}
-	void ParseExpression();
+	void ParseExpression()
+	{
+		int instrIndex;
+		int opType;
+
+		ParseSubExpression();
+
+		while (TRUE)
+		{
+			if (GetNextToken() != CL_TOKEN_TYPE_OPERATOR || 
+				(!IsOprandLogical(GetCurrentOperator()) && 
+				 !IsOprandRelational(GetCurrentOperator())))
+			{
+				RewindTokenStream();
+				break;
+			}
+
+			opType = GetCurrentOperator();
+
+			ParseSubExpression();
+
+			instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, compiler.currentScope,
+				IL_INSTR_POP);
+			_IL::AddILCodeOprand_Variable(&compiler.functionTable, compiler.currentScope,
+				instrIndex, compiler.tempVar1SymbolIndex);
+
+			instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, compiler.currentScope,
+				IL_INSTR_POP);
+			_IL::AddILCodeOprand_Variable(&compiler.functionTable, compiler.currentScope,
+				instrIndex, compiler.tempVar0SymbolIndex);
+
+			if (IsOprandRelational(opType))
+			{
+				
+			}
+		}
+	}
 	void ParseSubExpression();
 	void ParseTerm();
 	void ParseFactor();
