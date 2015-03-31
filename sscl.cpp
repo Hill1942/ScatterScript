@@ -390,6 +390,7 @@ namespace _cl
 
 		compiler.currentScope = SCOPE_GLOBAL;
 	}
+
 	void ParseExpression()
 	{
 		int instrIndex;
@@ -781,7 +782,219 @@ namespace _cl
 				instrIndex, compiler.tempVar0SymbolIndex);
 		}
 	}
-	void ParseFactor();
+	void ParseFactor()
+	{
+		int instrIndex;
+		int isUnaryOperatorExist = FALSE;
+		int opType;
+
+		if ( GetNextToken() == CL_TOKEN_TYPE_OPERATOR && 
+			(GetCurrentOperator() == CL_OPERATOR_TYPE_ADD ||
+			 GetCurrentOperator() == CL_OPERATOR_TYPE_SUB ||
+			 GetCurrentOperator() == CL_OPERATOR_TYPE_NOT ||
+			 GetCurrentOperator() == CL_OPERATOR_TYPE_LOGICAL_NOT ))
+		{
+			isUnaryOperatorExist = TRUE;
+			opType = GetCurrentOperator();
+		}
+		else
+		{
+			RewindTokenStream();
+		}
+
+		switch (GetNextToken())
+		{
+		case CL_TOKEN_TYPE_KEYWORD_TRUE:
+		case CL_TOKEN_TYPE_KEYWORD_FALSE:
+			instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, compiler.currentScope,
+				IL_INSTR_PUSH);
+			_IL::AddILCodeOprand_Int(&compiler.functionTable, compiler.currentScope,
+				instrIndex, compiler.lexer.currLexerState.currentToken ==
+				CL_TOKEN_TYPE_KEYWORD_TRUE ? 1 : 0);
+			break;
+
+		case CL_TOKEN_TYPE_INT:
+			instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, compiler.currentScope,
+				IL_INSTR_PUSH);
+			_IL::AddILCodeOprand_Int(&compiler.functionTable, compiler.currentScope,
+				instrIndex, atoi(GetCurrentLexeme()));
+			break;
+
+		case CL_TOKEN_TYPE_FLOAT:
+			instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, compiler.currentScope,
+				IL_INSTR_PUSH);
+			_IL::AddILCodeOprand_Float(&compiler.functionTable, compiler.currentScope,
+				instrIndex, (float) atof(GetCurrentLexeme()));
+			break;
+
+		case CL_TOKEN_TYPE_STRING:
+			{
+				int stringIndex = AddString(&compiler.stringTable, GetCurrentLexeme());
+				instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, compiler.currentScope,
+					IL_INSTR_PUSH);
+				_IL::AddILCodeOprand_String(&compiler.functionTable, compiler.currentScope,
+					instrIndex, stringIndex);
+				break;
+			}
+
+		case CL_TOKEN_TYPE_IDENT:
+			{
+				SymbolNode* pSymbol = GetSymbol(&compiler.symbolTable, GetCurrentLexeme(),
+					compiler.currentScope);
+				if (pSymbol) 
+				{
+					if (GetLookAheadChar() == '[')
+					{
+						if (pSymbol->iSize == 1)
+							ExitOnCodeError("Invalid array");
+
+						ReadToken(CL_TOKEN_TYPE_DELIM_OPEN_BRACE);
+
+						if (GetLookAheadChar() == ']')
+							ExitOnCodeError("Invalid expression");
+
+						ParseExpression();
+
+						ReadToken(CL_TOKEN_TYPE_DELIM_CLOSE_BRACE);
+
+						instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, compiler.currentScope,
+							IL_INSTR_POP);
+						_IL::AddILCodeOprand_Variable(&compiler.functionTable, compiler.currentScope,
+							instrIndex, compiler.tempVar0SymbolIndex);
+
+						instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, compiler.currentScope,
+							IL_INSTR_PUSH);
+						_IL::AddILCodeOprand_RelArrayIndex(&compiler.functionTable, compiler.currentScope,
+							instrIndex, pSymbol->iIndex, compiler.tempVar0SymbolIndex);
+					}
+					else
+					{
+						if (pSymbol->iSize == 1)
+						{
+							instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, compiler.currentScope,
+								IL_INSTR_PUSH);
+							_IL::AddILCodeOprand_Variable(&compiler.functionTable, compiler.currentScope,
+								instrIndex, pSymbol->iIndex); 
+						}
+						else
+						{
+							ExitOnCodeError("Array must be indexed");
+						}
+					}
+				}
+				else
+				{
+					if (GetFunction(&compiler.functionTable, GetCurrentLexeme()))
+					{
+						ParseFunctionCall();
+
+						instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, compiler.currentScope,
+							IL_INSTR_PUSH);
+						_IL::AddILCodeOprand_Reg(&compiler.functionTable, compiler.currentScope,
+							instrIndex, REG_CODE_RETVAL);
+					}
+				}
+				break;
+			}
+
+		case CL_TOKEN_TYPE_DELIM_OPEN_PAREN:
+			ParseExpression();
+			ReadToken(CL_TOKEN_TYPE_DELIM_CLOSE_PAREN);
+			break;
+
+		default:
+			ExitOnCodeError("Invalid input");
+			break;
+		}
+
+		if (isUnaryOperatorExist)
+		{
+			instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, compiler.currentScope,
+				IL_INSTR_POP);
+			_IL::AddILCodeOprand_Variable(&compiler.functionTable, compiler.currentScope,
+				instrIndex, compiler.tempVar0SymbolIndex);
+
+			if (opType == CL_OPERATOR_TYPE_LOGICAL_NOT)
+			{
+				int trueJumpTargetIndex = GetNextJumpTargetIndex();
+				int exitJumpTargetIndex  = GetNextJumpTargetIndex();
+
+				//je t0, 0, TRUE
+				instrIndex = _IL::AddILCodeInstr(&compiler.functionTable,
+					compiler.currentScope, IL_INSTR_JE);
+				_IL::AddILCodeOprand_Variable(&compiler.functionTable,
+					compiler.currentScope, instrIndex, compiler.tempVar0SymbolIndex);
+				_IL::AddILCodeOprand_Int(&compiler.functionTable,
+					compiler.currentScope, instrIndex, 0);
+				_IL::AddILCodeOprand_JumpTarget(&compiler.functionTable, 
+					compiler.currentScope, instrIndex, trueJumpTargetIndex);
+
+				//push 0
+				instrIndex = _IL::AddILCodeInstr(&compiler.functionTable,
+					compiler.currentScope, IL_INSTR_PUSH);
+				_IL::AddILCodeOprand_Int(&compiler.functionTable,
+					compiler.currentScope, instrIndex, 0);
+
+				//jmp EXIT
+				instrIndex = _IL::AddILCodeInstr(&compiler.functionTable,
+					compiler.currentScope, IL_INSTR_JMP);
+				_IL::AddILCodeOprand_JumpTarget(&compiler.functionTable,
+					compiler.currentScope, instrIndex, exitJumpTargetIndex);
+				 
+				//TRUE: 
+				_IL::AddILCodeJumpTarget(&compiler.functionTable,
+					compiler.currentScope, trueJumpTargetIndex);
+
+				//push 1
+				instrIndex = _IL::AddILCodeInstr(&compiler.functionTable,
+					compiler.currentScope, IL_INSTR_PUSH);
+				_IL::AddILCodeOprand_Int(&compiler.functionTable,
+					compiler.currentScope, instrIndex, 1);
+
+				//EXIT: 
+				_IL::AddILCodeJumpTarget(&compiler.functionTable,
+					compiler.currentScope, exitJumpTargetIndex); 
+
+				/************************************************************************
+				   The asm code generated by the above code:
+
+				      pop t0
+				      je  t0, 0, FALSE
+				      push 0
+				      jmp EXIT
+				    TRUE:
+				      push 1
+				    EXIT:
+
+				 ************************************************************************/
+			}
+			else
+			{
+				int ILInstr;
+				switch (opType)
+				{
+				case CL_OPERATOR_TYPE_SUB:
+					ILInstr = IL_INSTR_NEG;
+					break;
+				case CL_OPERATOR_TYPE_NOT:
+					ILInstr = IL_INSTR_NOT;
+					break;
+				default:
+					break;
+				}
+
+				instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, compiler.currentScope,
+					ILInstr);
+				_IL::AddILCodeOprand_Variable(&compiler.functionTable, compiler.currentScope,
+					instrIndex, compiler.tempVar0SymbolIndex);
+
+				instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, compiler.currentScope,
+					IL_INSTR_PUSH);
+				_IL::AddILCodeOprand_Variable(&compiler.functionTable, compiler.currentScope,
+					instrIndex, compiler.tempVar0SymbolIndex);
+			}
+		}
+	}
 
 	void ParseIf();
 	void ParseWhile();

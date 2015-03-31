@@ -294,6 +294,8 @@ namespace _cl
 	int         AddString(LinkList* pStringTable, char* str);
 	char*       GetString(LinkList* pStringTable, int index);
 
+	int         GetNextJumpTargetIndex();
+
 }
 
 namespace _IL
