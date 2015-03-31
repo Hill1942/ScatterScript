@@ -361,7 +361,18 @@ namespace _cl
 
 		ReadToken(CL_TOKEN_TYPE_DELIM_SEMICOLON);
 	}
-	void ParseHost();
+	void ParseHost()
+	{
+		ReadToken(CL_TOKEN_TYPE_IDENT);
+
+		if (AddFunction(&compiler.functionTable, TRUE, GetCurrentLexeme()) == -1)
+			ExitOnCodeError("Function redefinition");
+
+		ReadToken(CL_TOKEN_TYPE_DELIM_OPEN_PAREN);
+		ReadToken(CL_TOKEN_TYPE_DELIM_CLOSE_PAREN);
+
+		ReadToken(CL_TOKEN_TYPE_DELIM_SEMICOLON);
+	}
 	void ParseFunction()
 	{
 		if (compiler.currentScope != SCOPE_GLOBAL)
