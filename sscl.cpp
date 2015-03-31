@@ -336,7 +336,31 @@ namespace _cl
 
 		ReadToken(CL_TOKEN_TYPE_DELIM_CLOSE_CURLY_BRACE);
 	}
-	void ParseVariable();
+	void ParseVariable()
+	{
+		ReadToken(CL_TOKEN_TYPE_IDENT);
+
+		char strIdentifier[MAX_INDENT_SIZE];
+		CopyCurrentLexeme(strIdentifier);
+
+		int size = 1;
+
+		if (GetLookAheadChar() == '[') 
+		{
+			ReadToken(CL_TOKEN_TYPE_DELIM_OPEN_BRACE);
+			ReadToken(CL_TOKEN_TYPE_INT);
+
+			size = atoi(GetCurrentLexeme());
+
+			ReadToken(CL_TOKEN_TYPE_DELIM_CLOSE_BRACE);
+		}
+
+		if (AddSymbol(&compiler.symbolTable, size, compiler.currentScope,
+			SYMBOL_TYPE_VAR, strIdentifier))
+			ExitOnCodeError("identifier redefinition");
+
+		ReadToken(CL_TOKEN_TYPE_DELIM_SEMICOLON);
+	}
 	void ParseHost();
 	void ParseFunction()
 	{
