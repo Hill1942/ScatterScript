@@ -644,7 +644,63 @@ namespace _cl
 			}
 		}
 	}
-	void ParseSubExpression();
+	void ParseSubExpression()
+	{
+		int instrIndex;
+		int opType;
+
+		ParseTerm();
+
+		while (TRUE)
+		{
+			if ( GetNextToken()!= CL_TOKEN_TYPE_OPERATOR ||
+				(GetCurrentOperator() != CL_OPERATOR_TYPE_ADD && 
+				 GetCurrentOperator() != CL_OPERATOR_TYPE_SUB))
+			{
+				RewindTokenStream();
+				break;
+			}
+
+			opType = GetCurrentOperator();
+
+			ParseTerm();
+
+			instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, compiler.currentScope,
+				IL_INSTR_POP);
+			_IL::AddILCodeOprand_Variable(&compiler.functionTable, compiler.currentScope,
+				instrIndex, compiler.tempVar1SymbolIndex);
+
+			instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, compiler.currentScope,
+				IL_INSTR_POP);
+			_IL::AddILCodeOprand_Variable(&compiler.functionTable, compiler.currentScope,
+				instrIndex, compiler.tempVar0SymbolIndex);
+
+			int ILInstr;
+			switch (opType)
+			{
+			case CL_OPERATOR_TYPE_ADD:
+				ILInstr = IL_INSTR_ADD;
+				break;
+			case CL_OPERATOR_TYPE_SUB:
+				ILInstr = IL_INSTR_ADD;
+				break;
+			default:
+				break;
+			}
+
+			instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, compiler.currentScope,
+				ILInstr);
+			_IL::AddILCodeOprand_Variable(&compiler.functionTable, compiler.currentScope,
+				instrIndex, compiler.tempVar0SymbolIndex);
+			_IL::AddILCodeOprand_Variable(&compiler.functionTable, compiler.currentScope,
+				instrIndex, compiler.tempVar1SymbolIndex);
+
+			instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, compiler.currentScope,
+				IL_INSTR_PUSH);
+			_IL::AddILCodeOprand_Variable(&compiler.functionTable, compiler.currentScope,
+				instrIndex, compiler.tempVar0SymbolIndex);
+		}
+	}
 	void ParseTerm();
 	void ParseFactor();
 
