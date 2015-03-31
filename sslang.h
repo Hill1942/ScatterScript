@@ -266,8 +266,8 @@ namespace _cl
 		LinkList symbolTable;
 		LinkList stringTable;
 
-		FILE* outAssembleFile;
-		char  outAssembleFilename[MAX_FILENAME_SIZE];
+		FILE*    outAssembleFile;
+		char     outAssembleFilename[MAX_FILENAME_SIZE];
 
 		Header   scriptHeader;
 		Lexer    lexer;
@@ -275,6 +275,7 @@ namespace _cl
 		int      currentScope;
 		Stack    loopStack;
 
+		int      jumpTargetIndex;
 		int      tempVar0SymbolIndex;
 		int      tempVar1SymbolIndex;
 
@@ -285,13 +286,13 @@ namespace _cl
 	int         GetSymbolSize(LinkList* pSymbolTable, char* identifer, int scope);
 	int         AddSymbol(LinkList* pSymbolTable, int size, int scope, int type, char* identifier);
 
-	FuncNode* GetFunction(LinkList* pFunctionTable, int index);
-	FuncNode* GetFunction(LinkList* pFunctionTable, char* identifier);
-	void      SetFuncParamCount(LinkList* pFunctionTable, int index, int paramCount);
-	int       AddFunction(LinkList* pFunctionTable, int isHostAPI, char* name);
+	FuncNode*   GetFunction(LinkList* pFunctionTable, int index);
+	FuncNode*   GetFunction(LinkList* pFunctionTable, char* identifier);
+	void        SetFuncParamCount(LinkList* pFunctionTable, int index, int paramCount);
+	int         AddFunction(LinkList* pFunctionTable, int isHostAPI, char* name);
 
-	int       AddString(LinkList* pStringTable, char* str);
-	char*     GetString(LinkList* pStringTable, int index);
+	int         AddString(LinkList* pStringTable, char* str);
+	char*       GetString(LinkList* pStringTable, int index);
 
 }
 

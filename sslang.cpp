@@ -483,7 +483,7 @@ namespace _IL
 
 	int GetNextJumpTargetIndex()
 	{
-		return 0;
+		return compiler.jumpTargetIndex++;
 	}
 	void AddILCodeJumpTarget(LinkList* pFuncTable, int funcIndex, int targetIndex)
 	{
