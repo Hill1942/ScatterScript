@@ -14,6 +14,10 @@
 #define SCOPE_GLOBAL                           0
 #define SYMBOL_TYPE_PARAM                      1
 #define SYMBOL_TYPE_VAR                        2
+#define REG_CODE_RETVAL                        0           
+
+#define TEMP_VAR_0                             "_T0"       
+#define TEMP_VAR_1                             "_T1"       
 
 #define MAX_VALUE_STRING_SIZE                  4096
 #define MAX_THREAD_NUMBER                      1024
