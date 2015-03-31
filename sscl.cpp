@@ -1167,6 +1167,42 @@ namespace _cl
 		_cl::FuncNode* pFunction = _cl::GetFunction(&compiler.functionTable, GetCurrentLexeme());
 		
 		int paramCount = 0;
+
+		ReadToken(CL_TOKEN_TYPE_DELIM_OPEN_PAREN);
+
+		while(TRUE) 
+		{
+			if (GetLookAheadChar() != ')')
+			{
+				ParseExpression();
+
+				paramCount++;
+
+				if (!pFunction->isHostAPI && paramCount > pFunction->iParamCount)
+					ExitOnCodeError("Too many parameters");
+
+				if (GetLookAheadChar() != ')')
+					ReadToken(CL_TOKEN_TYPE_DELIM_SEMICOLON);
+			}
+			else
+			{
+				break;
+			}
+		}
+
+		ReadToken(CL_TOKEN_TYPE_DELIM_CLOSE_PAREN);
+
+		if (!pFunction->isHostAPI && paramCount < pFunction->iParamCount)
+			ExitOnCodeError("Too few parameters");
+
+		int callInstr = IL_INSTR_CALL;
+		if (pFunction->isHostAPI)
+			callInstr =IL_INSTR_CALLHOST;
+
+		int instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, compiler.currentScope,
+			callInstr);
+		_IL::AddILCodeOprand_Func(&compiler.functionTable, compiler.currentScope,
+			instrIndex, pFunction->iIndex);
 	}
 
 }
