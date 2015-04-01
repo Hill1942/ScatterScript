@@ -201,7 +201,95 @@ namespace _cl
 
 	}
 
-	void ReadToken(Token token);
+	void ReadToken(Token token)
+	{
+		if (GetNextToken() != token)
+		{
+			char errorMsg[256];
+			switch (token)
+			{
+			case CL_TOKEN_TYPE_INT:
+				strcpy(errorMsg, "Integer");
+				break;
+			case CL_TOKEN_TYPE_FLOAT:
+				strcpy(errorMsg, "Float");
+				break;
+			case CL_TOKEN_TYPE_IDENT:
+				strcpy(errorMsg, "Identifier");
+				break;
+			case CL_TOKEN_TYPE_KEYWORD_VAR:
+				strcpy(errorMsg, "var");
+				break;
+			case CL_TOKEN_TYPE_KEYWORD_TRUE:
+				strcpy(errorMsg, "true");
+				break;
+			case CL_TOKEN_TYPE_KEYWORD_FALSE:
+				strcpy(errorMsg, "false");
+				break;
+			case CL_TOKEN_TYPE_KEYWORD_IF:
+				strcpy(errorMsg, "if");
+				break;
+			case CL_TOKEN_TYPE_KEYWORD_ELSE:
+				strcpy(errorMsg, "else");
+				break;
+			case CL_TOKEN_TYPE_KEYWORD_BREAK:
+				strcpy(errorMsg, "break");
+				break;
+			case CL_TOKEN_TYPE_KEYWORD_CONTINUE:
+				strcpy(errorMsg, "continue");
+				break;
+			case CL_TOKEN_TYPE_KEYWORD_FOR:
+				strcpy(errorMsg, "for");
+				break;
+			case CL_TOKEN_TYPE_KEYWORD_WHILE:
+				strcpy(errorMsg, "while");
+				break;
+			case CL_TOKEN_TYPE_KEYWORD_FUNC:
+				strcpy(errorMsg, "func");
+				break;
+			case CL_TOKEN_TYPE_KEYWORD_RETURN:
+				strcpy(errorMsg, "return");
+				break;
+			case CL_TOKEN_TYPE_OPERATOR:
+				strcpy(errorMsg, "operator");
+				break;
+			case CL_TOKEN_TYPE_DELIM_COMMA:
+				strcpy(errorMsg, ",");
+				break;
+			case CL_TOKEN_TYPE_DELIM_OPEN_PAREN:
+				strcpy(errorMsg, "(");
+				break;
+			case CL_TOKEN_TYPE_DELIM_CLOSE_PAREN:
+				strcpy(errorMsg, ")");
+				break;
+			case CL_TOKEN_TYPE_DELIM_OPEN_BRACE:
+				strcpy(errorMsg, "[");
+				break;
+			case CL_TOKEN_TYPE_DELIM_CLOSE_BRACE:
+				strcpy(errorMsg, "]");
+				break;
+			case CL_TOKEN_TYPE_DELIM_OPEN_CURLY_BRACE:
+				strcpy(errorMsg, "{");
+				break;
+			case CL_TOKEN_TYPE_DELIM_CLOSE_CURLY_BRACE:
+				strcpy(errorMsg, "}");
+				break;
+			case CL_TOKEN_TYPE_DELIM_SEMICOLON:
+				strcpy(errorMsg, ";");
+				break;
+			case CL_TOKEN_TYPE_STRING:
+				strcpy(errorMsg, "string");
+				break;
+
+
+			default:
+				break;
+			}
+
+			strcat(errorMsg, " expected");
+			ExitOnCodeError(errorMsg);
+		}
+	}
 
 	int IsOprandRelational(int opType)
 	{
