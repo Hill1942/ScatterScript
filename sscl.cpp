@@ -1031,8 +1031,127 @@ namespace _cl
 		}
 	}
 
-	void ParseIf();
-	void ParseWhile();
+	void ParseIf()
+	{
+		int instrIndex;
+
+		if (compiler.currentScope == SCOPE_GLOBAL)
+			ExitOnCodeError("if illegal in global scope");
+
+		_IL::AddILCodeSourceLine(&compiler.functionTable, compiler.currentScope, GetCurrentSourceLine());
+
+		int falseJumpTargetIndex = GetNextJumpTargetIndex();
+
+		ReadToken(CL_TOKEN_TYPE_DELIM_OPEN_PAREN);
+
+		ParseExpression();
+
+		ReadToken(CL_TOKEN_TYPE_DELIM_CLOSE_PAREN);
+
+		//pop t0
+		instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, compiler.currentScope,
+			IL_INSTR_POP);
+		_IL::AddILCodeOprand_Variable(&compiler.functionTable, compiler.currentScope, 
+			instrIndex, compiler.tempVar0SymbolIndex);
+
+		//je t0, 0, FALSE
+		instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, compiler.currentScope,
+			IL_INSTR_JE);
+		_IL::AddILCodeOprand_Variable(&compiler.functionTable, compiler.currentScope,
+			instrIndex, compiler.tempVar0SymbolIndex);
+		_IL::AddILCodeOprand_Int(&compiler.functionTable, compiler.currentScope,
+			instrIndex, 0);
+		_IL::AddILCodeOprand_JumpTarget(&compiler.functionTable, compiler.currentScope,
+			instrIndex, falseJumpTargetIndex);
+
+		ParseStatement();
+
+		if (GetNextToken() == CL_TOKEN_TYPE_KEYWORD_ELSE)
+		{
+			int skipFalseJumpTargetIndex = GetNextJumpTargetIndex();
+			//jmp SKIP_FALSE
+			instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, compiler.currentScope,
+				IL_INSTR_JMP);
+			_IL::AddILCodeOprand_JumpTarget(&compiler.functionTable, compiler.currentScope, 
+				instrIndex, skipFalseJumpTargetIndex);
+
+			//FALSE:
+			_IL::AddILCodeJumpTarget(&compiler.functionTable, compiler.currentScope,
+				falseJumpTargetIndex);
+
+			ParseStatement();
+
+			//SKIP_FALSE:
+			_IL::AddILCodeJumpTarget(&compiler.functionTable, compiler.currentScope,
+				skipFalseJumpTargetIndex);
+		}
+		else
+		{
+			RewindTokenStream();
+
+			//FALSE:
+			_IL::AddILCodeJumpTarget(&compiler.functionTable, compiler.currentScope,
+				falseJumpTargetIndex);
+		}
+	}
+	void ParseWhile()
+	{
+		int instrIndex;
+
+		if (compiler.currentScope == SCOPE_GLOBAL)
+			ExitOnCodeError("while illega in global scope");
+
+		_IL::AddILCodeSourceLine(&compiler.functionTable, compiler.currentScope,
+			GetCurrentSourceLine());
+
+		int startTargetIndex = GetNextJumpTargetIndex();
+		int endTargetIndex = GetNextJumpTargetIndex();
+
+		_IL::AddILCodeJumpTarget(&compiler.functionTable, compiler.currentScope, 
+			startTargetIndex);
+
+		ReadToken(CL_TOKEN_TYPE_DELIM_OPEN_PAREN);
+
+		ParseExpression();
+
+		ReadToken(CL_TOKEN_TYPE_DELIM_CLOSE_PAREN);
+
+		//pop t0
+		instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, compiler.currentScope,
+			IL_INSTR_POP);
+		_IL::AddILCodeOprand_Variable(&compiler.functionTable, compiler.currentScope, 
+			instrIndex, compiler.tempVar0SymbolIndex);
+
+		//je t0, 0, END
+		instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, compiler.currentScope,
+			IL_INSTR_JE);
+		_IL::AddILCodeOprand_Variable(&compiler.functionTable, compiler.currentScope,
+			instrIndex, compiler.tempVar0SymbolIndex);
+		_IL::AddILCodeOprand_Int(&compiler.functionTable, compiler.currentScope,
+			instrIndex, 0);
+		_IL::AddILCodeOprand_JumpTarget(&compiler.functionTable, compiler.currentScope,
+			instrIndex, endTargetIndex); 
+
+		Loop* loop = (Loop*) malloc(sizeof(Loop));
+		loop->iStartTargetIndex = startTargetIndex;
+		loop->iEndTargetIndex   = endTargetIndex;
+
+		Push(&compiler.loopStack, loop);
+
+		ParseStatement();
+
+		Pop(&compiler.loopStack);
+
+		//jmp START
+		instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, compiler.currentScope,
+			IL_INSTR_JMP);
+		_IL::AddILCodeOprand_JumpTarget(&compiler.functionTable, compiler.currentScope,
+			instrIndex, startTargetIndex);
+
+		//END:
+		_IL::AddILCodeJumpTarget(&compiler.functionTable, compiler.currentScope,
+			endTargetIndex);
+	}
 	void ParseBreak();
 	void ParseFor();
 	void ParseContinue();

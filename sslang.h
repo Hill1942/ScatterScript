@@ -232,6 +232,17 @@ namespace _cl
 		LinkList codeStream;
 	};
 
+	struct Expression
+	{
+		int iStackOffset;
+	};
+
+	struct Loop
+	{
+		int iStartTargetIndex;
+		int iEndTargetIndex;
+	};
+
 	struct LexerState
 	{
 		int           iCurrentLineIndex;
