@@ -1152,9 +1152,41 @@ namespace _cl
 		_IL::AddILCodeJumpTarget(&compiler.functionTable, compiler.currentScope,
 			endTargetIndex);
 	}
-	void ParseBreak();
 	void ParseFor();
-	void ParseContinue();
+	void ParseBreak()
+	{
+		if (compiler.currentScope == SCOPE_GLOBAL)
+			ExitOnCodeError("break illegal in global scope");
+
+		_IL::AddILCodeSourceLine(&compiler.functionTable, compiler.currentScope,
+			GetCurrentSourceLine());
+
+		ReadToken(CL_TOKEN_TYPE_DELIM_SEMICOLON);
+
+		int targetIndex = ((Loop*)Peek(&compiler.loopStack))->iEndTargetIndex;
+
+		int instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, compiler.currentScope,
+			IL_INSTR_JMP);
+		_IL::AddILCodeOprand_JumpTarget(&compiler.functionTable, compiler.currentScope,
+			instrIndex, targetIndex);
+	}
+	void ParseContinue()
+	{
+		if (compiler.currentScope == SCOPE_GLOBAL)
+			ExitOnCodeError("continue illegal in global scope");
+
+		_IL::AddILCodeSourceLine(&compiler.functionTable, compiler.currentScope,
+			GetCurrentSourceLine());
+
+		ReadToken(CL_TOKEN_TYPE_DELIM_SEMICOLON);
+
+		int targetIndex = ((Loop*)Peek(&compiler.loopStack))->iStartTargetIndex;
+
+		int instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, compiler.currentScope,
+			IL_INSTR_JMP);
+		_IL::AddILCodeOprand_JumpTarget(&compiler.functionTable, compiler.currentScope,
+			instrIndex, targetIndex);
+	}
 	void ParseReturn();
 	void ParseAssign()
 	{
