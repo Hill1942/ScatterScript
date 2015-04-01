@@ -1187,7 +1187,62 @@ namespace _cl
 		_IL::AddILCodeOprand_JumpTarget(&compiler.functionTable, compiler.currentScope,
 			instrIndex, targetIndex);
 	}
-	void ParseReturn();
+	void ParseReturn()
+	{
+		int instrIndex;
+
+		if (compiler.currentScope == SCOPE_GLOBAL)
+			ExitOnCodeError("return illegal in global scope");
+
+		_IL::AddILCodeSourceLine(&compiler.functionTable, compiler.currentScope,
+			GetCurrentSourceLine());
+
+		if (GetLookAheadChar() != ';')
+		{
+			ParseExpression();
+
+			if (compiler.scriptHeader.iIsMainFuncExist &&
+				compiler.scriptHeader.iMainFuncIndex == compiler.currentScope)
+			{
+				instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, compiler.currentScope,
+					IL_INSTR_POP);
+				_IL::AddILCodeOprand_Variable(&compiler.functionTable, compiler.currentScope,
+					instrIndex, compiler.tempVar0SymbolIndex);
+			}
+			else
+			{
+				instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, compiler.currentScope,
+					IL_INSTR_POP);
+				_IL::AddILCodeOprand_Variable(&compiler.functionTable, compiler.currentScope,
+					instrIndex, REG_CODE_RETVAL);
+			}
+		}
+		else
+		{
+			instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, compiler.currentScope,
+				IL_INSTR_MOV);
+			_IL::AddILCodeOprand_Variable(&compiler.functionTable, compiler.currentScope,
+				instrIndex, compiler.tempVar0SymbolIndex);
+			_IL::AddILCodeOprand_Int(&compiler.functionTable, compiler.currentScope,
+				instrIndex, 0);
+		}
+
+		if (compiler.scriptHeader.iIsMainFuncExist &&
+			compiler.scriptHeader.iMainFuncIndex == compiler.currentScope)
+		{
+			instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, compiler.currentScope,
+				IL_INSTR_EXIT);
+			_IL::AddILCodeOprand_Variable(&compiler.functionTable, compiler.currentScope,
+				instrIndex, compiler.tempVar0SymbolIndex);
+		}
+		else
+		{
+			instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, compiler.currentScope,
+				IL_INSTR_RET);
+		}
+
+		ReadToken(CL_TOKEN_TYPE_DELIM_SEMICOLON);
+	}
 	void ParseAssign()
 	{
 		if (compiler.currentScope == SCOPE_GLOBAL)
