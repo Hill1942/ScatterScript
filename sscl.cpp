@@ -806,7 +806,7 @@ namespace _cl
 				ILInstr = IL_INSTR_ADD;
 				break;
 			case CL_OPERATOR_TYPE_SUB:
-				ILInstr = IL_INSTR_ADD;
+				ILInstr = IL_INSTR_SUB;
 				break;
 			default:
 				break;

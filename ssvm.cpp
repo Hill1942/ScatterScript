@@ -606,13 +606,14 @@ namespace _vm
     			{
     				Value targetFuncIndexValue = Pop();
     				Function targetFunc = vm_script.pFuncTable[targetFuncIndexValue.iFuncIndex];
+					
     				int frameIndex = targetFuncIndexValue.iOffsetIndex;
     
     				Value returnAddress = GetStackValue(vm_script.stack.iTopIndex - (targetFunc.iLocalDataSize + 1));
     				
     				PopFrame(targetFunc.iStackFrameSize);
     
-    				vm_script.stack.iFrameIndex = frameIndex;
+    				//vm_script.stack.iFrameIndex = frameIndex;
     				vm_script.instrStream.iCurrentInstr = returnAddress.iInstrIndex;
     
     				break;

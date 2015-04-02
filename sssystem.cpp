@@ -39,7 +39,7 @@ namespace _asm_
     							 ASM_OPRAND_FLAG_TYPE_MEM_REF |
     							 ASM_OPRAND_FLAG_TYPE_REG);
     
-    	instrIndex = AddInstrLookup(sasm.instrLookup, "add", ASM_INSTR_AND, 2);
+    	instrIndex = AddInstrLookup(sasm.instrLookup, "add", ASM_INSTR_ADD, 2);
     	setOpType(sasm.instrLookup, instrIndex, 0, ASM_OPRAND_FLAG_TYPE_MEM_REF |
     		                     ASM_OPRAND_FLAG_TYPE_REG);
     	setOpType(sasm.instrLookup, instrIndex, 1, ASM_OPRAND_FLAG_TYPE_INT |
