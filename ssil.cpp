@@ -28,7 +28,7 @@ extern _cl::Compiler compiler;
 	 void OutHeader()
 	 {
 		 fprintf(compiler.outAssembleFile, "; %s\n\n", "test");
-		 fprintf(compiler.outAssembleFile, "; Source File: %s\n", compiler.lexer.scriptSourceFile);
+		 fprintf(compiler.outAssembleFile, "; Source File: %s\n", compiler.scriptSourceFile);
 		 fprintf(compiler.outAssembleFile, "; Version: %d.%d", VERSION_MAJOR, VERSION_MINOR);
 		 fprintf(compiler.outAssembleFile, "; Generate Time: %s\n", "ddddd");
 	 }

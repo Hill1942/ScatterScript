@@ -16,7 +16,7 @@ namespace _cl
 {
 	void LoadScriptSource()
 	{
-		FILE* pScriptFile = fopen(compiler.lexer.scriptSourceFile, "rb");
+		FILE* pScriptFile = fopen(compiler.scriptSourceFile, "rb");
 
 		if (pScriptFile == NULL)
 		{
@@ -444,7 +444,7 @@ namespace _cl
 		}
 
 		if (AddSymbol(&compiler.symbolTable, size, compiler.currentScope,
-			SYMBOL_TYPE_VAR, strIdentifier))
+			SYMBOL_TYPE_VAR, strIdentifier) == -1)
 			ExitOnCodeError("identifier redefinition");
 
 		ReadToken(CL_TOKEN_TYPE_DELIM_SEMICOLON);
@@ -472,7 +472,7 @@ namespace _cl
 		if (funcIndex == -1)
 			ExitOnCodeError("Function redefinition");
 
-		compiler.currentScope == funcIndex;
+		compiler.currentScope = funcIndex;
 
 		ReadToken(CL_TOKEN_TYPE_DELIM_OPEN_PAREN);
 
@@ -932,16 +932,21 @@ namespace _cl
 			instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, compiler.currentScope,
 				IL_INSTR_PUSH);
 			_IL::AddILCodeOprand_Int(&compiler.functionTable, compiler.currentScope,
-				instrIndex, compiler.lexer.currLexerState.currentToken ==
+				instrIndex, compiler.currLexerState.currentToken ==
 				CL_TOKEN_TYPE_KEYWORD_TRUE ? 1 : 0);
 			break;
 
 		case CL_TOKEN_TYPE_INT:
+			{
+
+			
 			instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, compiler.currentScope,
 				IL_INSTR_PUSH);
+			int a = 	atoi(GetCurrentLexeme());
 			_IL::AddILCodeOprand_Int(&compiler.functionTable, compiler.currentScope,
-				instrIndex, atoi(GetCurrentLexeme()));
+				instrIndex, a);
 			break;
+			}
 
 		case CL_TOKEN_TYPE_FLOAT:
 			instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, compiler.currentScope,
@@ -1483,7 +1488,7 @@ namespace _cl
 					ExitOnCodeError("Too many parameters");
 
 				if (GetLookAheadChar() != ')')
-					ReadToken(CL_TOKEN_TYPE_DELIM_SEMICOLON);
+					ReadToken(CL_TOKEN_TYPE_DELIM_COMMA);
 			}
 			else
 			{

@@ -254,15 +254,6 @@ namespace _cl
 		LinkListNode* pCurrentLine;
 	};
 
-	struct Lexer
-	{
-		char  scriptSourceFile[MAX_FILENAME_SIZE];
-		char* stringSource;
-
-		LexerState prevLexerState;
-		LexerState currLexerState;
-	};
-
 	struct Header
 	{
 		int iStackSize;
@@ -272,24 +263,26 @@ namespace _cl
 
 	struct Compiler
 	{
-		LinkList sourceCode;
-		LinkList functionTable;
-		LinkList symbolTable;
-		LinkList stringTable;
+		LinkList   functionTable;
+		LinkList   symbolTable;
+		LinkList   stringTable;
 
-		FILE*    outAssembleFile;
-		char     outAssembleFilename[MAX_FILENAME_SIZE];
+		char       outAssembleFilename[MAX_FILENAME_SIZE];
+		FILE*      outAssembleFile;
+		
+		char       scriptSourceFile[MAX_FILENAME_SIZE];
+		LinkList   sourceCode;
 
-		Header   scriptHeader;
-		Lexer    lexer;
+		Header     scriptHeader;
+		LexerState prevLexerState;
+		LexerState currLexerState;
 
-		int      currentScope;
-		Stack    loopStack;
+		int        currentScope;
+		Stack      loopStack;
 
-		int      jumpTargetIndex;
-		int      tempVar0SymbolIndex;
-		int      tempVar1SymbolIndex;
-
+		int        jumpTargetIndex;
+		int        tempVar0SymbolIndex;
+		int        tempVar1SymbolIndex;
 	};
 
 	SymbolNode* GetSymbol(LinkList* pSymbolTable, int index);

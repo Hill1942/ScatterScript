@@ -38,10 +38,10 @@ int main(int argc, char* argv[])
 		{
 		case 'c':
 			{
-				strcpy(compiler.lexer.scriptSourceFile, argv[2]);
-				int ExtOffset = strrchr(compiler.lexer.scriptSourceFile, '.') - compiler.lexer.scriptSourceFile;
-				if (compiler.lexer.scriptSourceFile[ExtOffset + 1] != 's' || 
-					compiler.lexer.scriptSourceFile[ExtOffset + 2] != 's')
+				strcpy(compiler.scriptSourceFile, argv[2]);
+				int ExtOffset = strrchr(compiler.scriptSourceFile, '.') - compiler.scriptSourceFile;
+				if (compiler.scriptSourceFile[ExtOffset + 1] != 's' || 
+					compiler.scriptSourceFile[ExtOffset + 2] != 's')
 				{
 					printf("Not valid .ss file!\n");
 					exit(0);
@@ -55,7 +55,7 @@ int main(int argc, char* argv[])
 				}
 				else
 				{
-					strncpy(compiler.outAssembleFilename, compiler.lexer.scriptSourceFile, ExtOffset);
+					strncpy(compiler.outAssembleFilename, compiler.scriptSourceFile, ExtOffset);
 					compiler.outAssembleFilename[ExtOffset] = '\0';
 					strcat(compiler.outAssembleFilename, ASM_SOURCE_EXTENSION);
 				}
@@ -163,6 +163,8 @@ void vm_run(char* exeFilename)
 }
 void compile()
 {
+	_cl::Init();
+
 	_cl::LoadScriptSource();
 	_cl::PreProcessSourceCode();
 
@@ -171,7 +173,7 @@ void compile()
 	compiler.tempVar1SymbolIndex = _cl::AddSymbol(&compiler.symbolTable, 1,
 		SCOPE_GLOBAL, SYMBOL_TYPE_VAR, TEMP_VAR_1);
 
-	_cl::Init();
+	
 
 	_cl::ParseSourceCode();
 

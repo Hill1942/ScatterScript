@@ -438,7 +438,7 @@ namespace _cl
 			printf(" ");
 		printf("^\n");
 
-		printf("Could not compile %s\n", compiler.lexer.scriptSourceFile);
+		printf("Could not compile %s\n", compiler.scriptSourceFile);
 
 		Exit();
 	}
@@ -450,8 +450,8 @@ namespace _cl
  
 	void Init()
 	{
-		compiler.lexer.currLexerState.currentLexemeStart = 0;
-		compiler.lexer.currLexerState.currentLexemeEnd   = 0;
+		compiler.currLexerState.currentLexemeStart = 0;
+		compiler.currLexerState.currentLexemeEnd   = 0;
 
 		compiler.scriptHeader.iIsMainFuncExist = FALSE;
 		compiler.scriptHeader.iStackSize       = 0;

@@ -349,7 +349,7 @@ namespace _IL
 	{
 		_cl::FuncNode* pFunc = _cl::GetFunction(pFuncTable, funcIndex);
 
-		if (pFunc->codeStream.iNodeCount)
+		if (!pFunc->codeStream.iNodeCount)
 			return NULL;
 
 		LinkListNode* pCurrentNode = pFunc->codeStream.pHead;
