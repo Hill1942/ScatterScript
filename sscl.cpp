@@ -1304,6 +1304,7 @@ namespace _cl
 			if (compiler.scriptHeader.iIsMainFuncExist &&
 				compiler.scriptHeader.iMainFuncIndex == compiler.currentScope)
 			{
+				//pop t0
 				instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, compiler.currentScope,
 					IL_INSTR_POP);
 				_IL::AddILCodeOprand_Variable(&compiler.functionTable, compiler.currentScope,
@@ -1311,9 +1312,10 @@ namespace _cl
 			}
 			else
 			{
+				//pop t0
 				instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, compiler.currentScope,
 					IL_INSTR_POP);
-				_IL::AddILCodeOprand_Variable(&compiler.functionTable, compiler.currentScope,
+				_IL::AddILCodeOprand_Reg(&compiler.functionTable, compiler.currentScope,
 					instrIndex, REG_CODE_RETVAL);
 			}
 		}
@@ -1503,8 +1505,9 @@ namespace _cl
 
 		int callInstr = IL_INSTR_CALL;
 		if (pFunction->isHostAPI)
-			callInstr =IL_INSTR_CALLHOST;
+			callInstr = IL_INSTR_CALLHOST;
 
+		//call (func name)
 		int instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, compiler.currentScope,
 			callInstr);
 		_IL::AddILCodeOprand_Func(&compiler.functionTable, compiler.currentScope,

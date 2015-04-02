@@ -145,39 +145,38 @@
 #define IL_INSTR_MUL                           3
 #define IL_INSTR_DIV                           4
 #define IL_INSTR_MOD                           5
-#define IL_INSTR_EXP                           6
-#define IL_INSTR_NEG                           7
-#define IL_INSTR_INC                           8
-#define IL_INSTR_DEC                           9
+#define IL_INSTR_NEG                           6
+#define IL_INSTR_INC                           7
+#define IL_INSTR_DEC                           8
 											   
-#define IL_INSTR_AND                           10
-#define IL_INSTR_OR                            11
-#define IL_INSTR_XOR                           12
-#define IL_INSTR_NOT                           13
-#define IL_INSTR_SHL                           14
-#define IL_INSTR_SHR                           15
+#define IL_INSTR_AND                           9
+#define IL_INSTR_OR                            10
+#define IL_INSTR_XOR                           11
+#define IL_INSTR_NOT                           12
+#define IL_INSTR_SHL                           13
+#define IL_INSTR_SHR                           14
 											   
-#define IL_INSTR_CONCAT                        16
-#define IL_INSTR_GETCHAR                       17
-#define IL_INSTR_SETCHAR                       18
+#define IL_INSTR_CONCAT                        15
+#define IL_INSTR_GETCHAR                       16
+#define IL_INSTR_SETCHAR                       17
 											   
-#define IL_INSTR_JMP                           19
-#define IL_INSTR_JE                            20
-#define IL_INSTR_JNE                           21
-#define IL_INSTR_JG                            22
-#define IL_INSTR_JL                            23
-#define IL_INSTR_JGE                           24
-#define IL_INSTR_JLE                           25
+#define IL_INSTR_JMP                           18
+#define IL_INSTR_JE                            19
+#define IL_INSTR_JNE                           20
+#define IL_INSTR_JG                            21
+#define IL_INSTR_JL                            22
+#define IL_INSTR_JGE                           23
+#define IL_INSTR_JLE                           24
 											   
-#define IL_INSTR_PUSH                          26
-#define IL_INSTR_POP                           27
+#define IL_INSTR_PUSH                          25
+#define IL_INSTR_POP                           26
 											   
-#define IL_INSTR_CALL                          28
-#define IL_INSTR_RET                           29
-#define IL_INSTR_CALLHOST                      30
+#define IL_INSTR_CALL                          27
+#define IL_INSTR_RET                           28
+#define IL_INSTR_CALLHOST                      29
 											   
-#define IL_INSTR_PAUSE                         31
-#define IL_INSTR_EXIT                          32
+#define IL_INSTR_PAUSE                         30
+#define IL_INSTR_EXIT                          31
 
 #define IL_OPRAND_TYPE_INT                     0
 #define IL_OPRAND_TYPE_FLOAT                   1

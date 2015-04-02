@@ -159,7 +159,7 @@ extern _cl::Compiler compiler;
 							 
 							 case IL_OPRAND_TYPE_FUNC_INDEX:
 							 	 fprintf(compiler.outAssembleFile, "%s", 
-									  _cl::GetFunction(&compiler.symbolTable, oprand->iFuncIndex)->strName);
+									  _cl::GetFunction(&compiler.functionTable, oprand->iFuncIndex)->strName);
 							 	 break;
 							 
 							 case IL_OPRAND_TYPE_REG:
