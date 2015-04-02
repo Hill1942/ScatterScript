@@ -27,9 +27,9 @@ extern _cl::Compiler compiler;
 
 	 void OutHeader()
 	 {
-		 fprintf(compiler.outAssembleFile, "; %s\n\n", "test");
+		 fprintf(compiler.outAssembleFile, "; Asseble file: %s\n", compiler.outAssembleFilename);
 		 fprintf(compiler.outAssembleFile, "; Source File: %s\n", compiler.scriptSourceFile);
-		 fprintf(compiler.outAssembleFile, "; Version: %d.%d", VERSION_MAJOR, VERSION_MINOR);
+		 fprintf(compiler.outAssembleFile, "; Version: %d.%d\n", VERSION_MAJOR, VERSION_MINOR);
 		 fprintf(compiler.outAssembleFile, "; Generate Time: %s\n", "ddddd");
 	 }
 	 void OutDirectives()
@@ -105,7 +105,7 @@ extern _cl::Compiler compiler;
 						 if (!isFirstSourceLine)
 							 fprintf(compiler.outAssembleFile, "\n");
 
-						 fprintf(compiler.outAssembleFile, "\t\t; %s\n\n", strSourceLine);
+						 fprintf(compiler.outAssembleFile, "\t\t;%s\n\n", strSourceLine);
 
 						 break;
 					 }
@@ -209,14 +209,17 @@ extern _cl::Compiler compiler;
 			 _cl::ExitOnCodeError("Could not open out asm file");
 
 		 OutHeader();
+		 fprintf(compiler.outAssembleFile, "\n");
 
-		 fprintf(compiler.outAssembleFile, ";---- Directives ----------------------");
+		 fprintf(compiler.outAssembleFile, ";---- Directives ----------------------\n");
 		 OutDirectives();
+		 fprintf(compiler.outAssembleFile, "\n");
 
-		 fprintf(compiler.outAssembleFile, ";---- Global Varibles -------------------------");
+		 fprintf(compiler.outAssembleFile, ";---- Global Varibles -------------------------\n");
 		 OutScopeSymbols(SCOPE_GLOBAL, SYMBOL_TYPE_VAR);
+		 fprintf(compiler.outAssembleFile, "\n");
 
-		 fprintf(compiler.outAssembleFile, ";---- Functions -----------------------------");
+		 fprintf(compiler.outAssembleFile, ";---- Functions -----------------------------\n");
 		 LinkListNode* pNode = compiler.functionTable.pHead;
 		 _cl::FuncNode* pFunction;
 		 _cl::FuncNode* pMainFunction = NULL;
@@ -227,7 +230,7 @@ extern _cl::Compiler compiler;
 				 pFunction = (_cl::FuncNode*)pNode->pData;
 				 if (!pFunction->isHostAPI) 
 				 {
-					 if (strcmp(pFunction->strName, ASM_KW_MAIN_FUNC_NAME))
+					 if (strcmp(pFunction->strName, ASM_KW_MAIN_FUNC_NAME) == 0)
 					 {
 						 pMainFunction = pFunction;
 					 }
@@ -243,11 +246,11 @@ extern _cl::Compiler compiler;
 					 break;
 			 }
 		 }
+		 fprintf(compiler.outAssembleFile, "\n");
 
-		 fprintf(compiler.outAssembleFile, ";---- Main -----------------------------");
+		 fprintf(compiler.outAssembleFile, ";---- Main ----------------------------\n");
 		 if (pMainFunction)
 		 {
-			 fprintf(compiler.outAssembleFile, "\n\n");
 			 OutFunction(pMainFunction);
 		 }
 
