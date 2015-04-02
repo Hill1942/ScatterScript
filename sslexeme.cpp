@@ -11,7 +11,7 @@
 #include "sslexeme.h"
 
 extern _asm_::ASM sasm;
-extern _cl::Lexer cl_lexer;
+extern _cl::Compiler compiler;
 
 _cl::OpState g_OpChars0[MAX_OP_STATE_COUNT] = 
 {
@@ -627,10 +627,10 @@ namespace _cl
     
     Token GetNextToken()
     {
-		CopyLexerState(&cl_lexer.prevLexerState, &cl_lexer.currLexerState);
-    	cl_lexer.currLexerState.currentLexemeStart = cl_lexer.currLexerState.currentLexemeEnd;
+		CopyLexerState(&compiler.lexer.prevLexerState, &compiler.lexer.currLexerState);
+    	compiler.lexer.currLexerState.currentLexemeStart = compiler.lexer.currLexerState.currentLexemeEnd;
     
-		if (cl_lexer.currLexerState.currentLexemeStart >= (int) strlen(cl_lexer.stringSource))
+		if (compiler.lexer.currLexerState.currentLexemeStart >= (int) strlen(compiler.lexer.stringSource))
     		return CL_TOKEN_TYPE_END_OF_STREAM;
     
     	int currentLexemeState = CL_LEX_STATE_START;
@@ -659,7 +659,7 @@ namespace _cl
     			{
     				if (IsCharWhiteSpace_CL(currentChar))
     				{
-    					cl_lexer.currLexerState.currentLexemeStart++;
+    					compiler.lexer.currLexerState.currentLexemeStart++;
     					isAddCurrentChar = FALSE;
     				}
     				else if (IsCharNumeric(currentChar))
@@ -686,7 +686,7 @@ namespace _cl
     					currentOpState = GetOpState(0, currentOpStateIndex);
     
     					currentOpCharIndex = 1;
-    					cl_lexer.currLexerState.currentOp = currentOpState.iIndex;
+    					compiler.lexer.currLexerState.currentOp = currentOpState.iIndex;
     					currentLexemeState = CL_LEX_STATE_OP;
     				}
     				else if (currentChar ==  '"')
@@ -772,7 +772,7 @@ namespace _cl
     					currentOpState = GetOpState(currentOpCharIndex, currentOpStateIndex);
     
     					currentOpCharIndex++;
-    					cl_lexer.currLexerState.currentOp = currentOpState.iIndex;
+    					compiler.lexer.currLexerState.currentOp = currentOpState.iIndex;
     				}
     				else
     				{
@@ -829,7 +829,7 @@ namespace _cl
     
     		if (isAddCurrentChar)
     		{
-    			cl_lexer.currLexerState.currentLexeme[nextLexemeCharIndex] = currentChar;
+    			compiler.lexer.currLexerState.currentLexeme[nextLexemeCharIndex] = currentChar;
     			nextLexemeCharIndex++;
     		}
     
@@ -837,8 +837,8 @@ namespace _cl
     			break;
     	}
     
-    	cl_lexer.currLexerState.currentLexeme[nextLexemeCharIndex] = '\0';
-    	cl_lexer.currLexerState.currentLexemeEnd--;
+    	compiler.lexer.currLexerState.currentLexeme[nextLexemeCharIndex] = '\0';
+    	compiler.lexer.currLexerState.currentLexemeEnd--;
     
     
     	Token tokenType;
@@ -858,34 +858,34 @@ namespace _cl
     		{
     			tokenType = CL_TOKEN_TYPE_IDENT;
     
-    			if (strcmp(cl_lexer.currLexerState.currentLexeme, CL_KW_VAR) == 0)
+    			if (strcmp(compiler.lexer.currLexerState.currentLexeme, CL_KW_VAR) == 0)
     				tokenType = CL_TOKEN_TYPE_KEYWORD_VAR;
-    			if (strcmp(cl_lexer.currLexerState.currentLexeme, CL_KW_TRUE) == 0)
+    			if (strcmp(compiler.lexer.currLexerState.currentLexeme, CL_KW_TRUE) == 0)
     				tokenType = CL_TOKEN_TYPE_KEYWORD_TRUE;
-    			if (strcmp(cl_lexer.currLexerState.currentLexeme, CL_KW_FALSE) == 0)
+    			if (strcmp(compiler.lexer.currLexerState.currentLexeme, CL_KW_FALSE) == 0)
     				tokenType = CL_TOKEN_TYPE_KEYWORD_FALSE;
-    			if (strcmp(cl_lexer.currLexerState.currentLexeme, CL_KW_IF) == 0)
+    			if (strcmp(compiler.lexer.currLexerState.currentLexeme, CL_KW_IF) == 0)
     				tokenType = CL_TOKEN_TYPE_KEYWORD_IF;
-    			if (strcmp(cl_lexer.currLexerState.currentLexeme, CL_KW_ELSE) == 0)
+    			if (strcmp(compiler.lexer.currLexerState.currentLexeme, CL_KW_ELSE) == 0)
     				tokenType = CL_TOKEN_TYPE_KEYWORD_ELSE;
-    			if (strcmp(cl_lexer.currLexerState.currentLexeme, CL_KW_BREAK) == 0)
+    			if (strcmp(compiler.lexer.currLexerState.currentLexeme, CL_KW_BREAK) == 0)
     				tokenType = CL_TOKEN_TYPE_KEYWORD_BREAK;
-    			if (strcmp(cl_lexer.currLexerState.currentLexeme, CL_KW_CONTINUE) == 0)
+    			if (strcmp(compiler.lexer.currLexerState.currentLexeme, CL_KW_CONTINUE) == 0)
     				tokenType = CL_TOKEN_TYPE_KEYWORD_CONTINUE;
-    			if (strcmp(cl_lexer.currLexerState.currentLexeme, CL_KW_FOR) == 0)
+    			if (strcmp(compiler.lexer.currLexerState.currentLexeme, CL_KW_FOR) == 0)
     				tokenType = CL_TOKEN_TYPE_KEYWORD_FOR;
-    			if (strcmp(cl_lexer.currLexerState.currentLexeme, CL_KW_WHILE) == 0)
+    			if (strcmp(compiler.lexer.currLexerState.currentLexeme, CL_KW_WHILE) == 0)
     				tokenType = CL_TOKEN_TYPE_KEYWORD_WHILE;
-    			if (strcmp(cl_lexer.currLexerState.currentLexeme, CL_KW_FUNC) == 0)
+    			if (strcmp(compiler.lexer.currLexerState.currentLexeme, CL_KW_FUNC) == 0)
     				tokenType = CL_TOKEN_TYPE_KEYWORD_FUNC;
-    			if (strcmp(cl_lexer.currLexerState.currentLexeme, CL_KW_RETURN) == 0)
+    			if (strcmp(compiler.lexer.currLexerState.currentLexeme, CL_KW_RETURN) == 0)
     				tokenType = CL_TOKEN_TYPE_KEYWORD_RETURN;
     
     			break;
     		}
     	case CL_LEX_STATE_DELIMITER:
     		{
-    			switch (cl_lexer.currLexerState.currentLexeme[0])
+    			switch (compiler.lexer.currLexerState.currentLexeme[0])
     			{
     			case ',':
     				tokenType = CL_TOKEN_TYPE_DELIM_COMMA;
@@ -936,40 +936,40 @@ namespace _cl
     
     char GetNextChar()
     {
-		return cl_lexer.stringSource[cl_lexer.currLexerState.currentLexemeEnd++];
+		return compiler.lexer.stringSource[compiler.lexer.currLexerState.currentLexemeEnd++];
     }
 
 	char* GetCurrentLexeme()
 	{
-		return cl_lexer.currLexerState.currentLexeme;
+		return compiler.lexer.currLexerState.currentLexeme;
 	}
 
 	int GetCurrentLexemeStartIndex()
 	{
-		return cl_lexer.currLexerState.currentLexemeStart;
+		return compiler.lexer.currLexerState.currentLexemeStart;
 	}
 
 	char* GetCurrentSourceLine()
 	{
-		if (cl_lexer.currLexerState.pCurrentLine)
-			return (char*)cl_lexer.currLexerState.pCurrentLine->pData;
+		if (compiler.lexer.currLexerState.pCurrentLine)
+			return (char*)compiler.lexer.currLexerState.pCurrentLine->pData;
 		else
 			return NULL;
 	}
 
 	int GetCurrentSourceLineIndex()
 	{
-		return cl_lexer.currLexerState.iCurrentLineIndex;
+		return compiler.lexer.currLexerState.iCurrentLineIndex;
 	}
 
 	int GetCurrentOperator()
 	{
-		return cl_lexer.currLexerState.currentOp;
+		return compiler.lexer.currLexerState.currentOp;
 	}
 
 	void CopyCurrentLexeme(char* buffer)
 	{
-		strcpy(buffer, cl_lexer.currLexerState.currentLexeme);
+		strcpy(buffer, compiler.lexer.currLexerState.currentLexeme);
 	}
 
 	void CopyLexerState(LexerState* pDestState, LexerState* pSourceState)
@@ -985,12 +985,12 @@ namespace _cl
 	}
 	void RewindTokenStream()
 	{
-		CopyLexerState(&cl_lexer.currLexerState, &cl_lexer.prevLexerState);
+		CopyLexerState(&compiler.lexer.currLexerState, &compiler.lexer.prevLexerState);
 	}
 	char GetLookAheadChar()
 	{
 		LexerState prevLexerState;
-		CopyLexerState(&prevLexerState, &cl_lexer.currLexerState);
+		CopyLexerState(&prevLexerState, &compiler.lexer.currLexerState);
 
 		char currentChar;
 		while (TRUE)
@@ -1000,9 +1000,20 @@ namespace _cl
 				break;
 		}
 
-		CopyLexerState(&cl_lexer.currLexerState, &prevLexerState);
+		CopyLexerState(&compiler.lexer.currLexerState, &prevLexerState);
 
 		return currentChar;
+	}
+
+	void ResetLexer()
+	{
+		compiler.lexer.currLexerState.iCurrentLineIndex = 0;
+		compiler.lexer.currLexerState.pCurrentLine = compiler.sourceCode.pHead;
+
+		compiler.lexer.currLexerState.currentLexemeStart = 0;
+		compiler.lexer.currLexerState.currentLexemeEnd   = 0;
+
+		compiler.lexer.currLexerState.currentOp = 0;
 	}
 }
 

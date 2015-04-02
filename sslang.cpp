@@ -325,6 +325,22 @@ namespace _cl
 
 		return NULL;
 	}
+	int AddString(LinkList* pStringTable, char* str)
+	{
+		LinkListNode* pNode = pStringTable->pHead;
+		for (uint i = 0; i < pStringTable->iNodeCount; i++)
+		{
+			if (strcmp((char*)pNode->pData, str) == 0)
+				return i;
+
+			pNode = pNode->pNext;
+		}
+
+		char* pStringNode = (char*) malloc(strlen(str) + 1);
+		strcpy(pStringNode, str);
+
+		return AddNode(pStringTable, pStringNode);
+	}
 }
 
 namespace _IL

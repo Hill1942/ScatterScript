@@ -1,22 +1,25 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <process.h>
 
 #include "ssutil.h"
 #include "sspre.h"
 #include "ssbase_type.h"
 #include "sslang.h"
-#include "sssystem.h"
 #include "sslexeme.h"
 #include "ssasm.h"
 #include "ssvm.h"
+#include "ssil.h"
 #include "sscl.h"
+#include "sssystem.h"
+
 
 _asm_::ASM sasm;
 _vm::Script vm_script;
 _vm::Script vm_scripts[MAX_THREAD_NUMBER];
 
-_cl::Lexer cl_lexer;
+_cl::Compiler compiler;
 
 
 void asm_run();
@@ -35,18 +38,31 @@ int main(int argc, char* argv[])
 		{
 		case 'c':
 			{
-				char scriptFilename[MAX_FILENAME_SIZE];
-				strcpy(scriptFilename, argv[2]);
-				int ExtOffset = strrchr(scriptFilename, '.') - scriptFilename;
-				if (scriptFilename[ExtOffset + 1] != 's' || scriptFilename[ExtOffset + 2] != 's')
+				strcpy(compiler.lexer.scriptSourceFile, argv[2]);
+				int ExtOffset = strrchr(compiler.lexer.scriptSourceFile, '.') - compiler.lexer.scriptSourceFile;
+				if (compiler.lexer.scriptSourceFile[ExtOffset + 1] != 's' || 
+					compiler.lexer.scriptSourceFile[ExtOffset + 2] != 's')
 				{
 					printf("Not valid .ss file!\n");
 					exit(0);
 				}
 
-				_cl::LoadScriptSource(scriptFilename);
-				_cl::CL_InitLexer();
-				_cl::TestLexer();
+				if (argv[3])
+				{
+					strcpy(compiler.outAssembleFilename, argv[3]);
+					if (! strstr(compiler.outAssembleFilename, ASM_SOURCE_EXTENSION))
+						strcat(compiler.outAssembleFilename, ASM_SOURCE_EXTENSION);
+				}
+				else
+				{
+					strncpy(compiler.outAssembleFilename, compiler.lexer.scriptSourceFile, ExtOffset);
+					compiler.outAssembleFilename[ExtOffset] = '\0';
+					strcat(compiler.outAssembleFilename, ASM_SOURCE_EXTENSION);
+				}
+
+				
+				compile();
+
 				break;
 			}
 			
@@ -147,5 +163,22 @@ void vm_run(char* exeFilename)
 }
 void compile()
 {
+	_cl::LoadScriptSource();
+	_cl::PreProcessSourceCode();
 
+	compiler.tempVar0SymbolIndex = _cl::AddSymbol(&compiler.symbolTable, 1,
+		SCOPE_GLOBAL, SYMBOL_TYPE_VAR, TEMP_VAR_0);
+	compiler.tempVar1SymbolIndex = _cl::AddSymbol(&compiler.symbolTable, 1,
+		SCOPE_GLOBAL, SYMBOL_TYPE_VAR, TEMP_VAR_1);
+
+	_cl::Init();
+
+	_cl::ParseSourceCode();
+
+	_IL::OutCode();
+
+	//char* params[3];
+
+
+	//_spawnv(P_WAIT, "sasm.exe", params);
 }

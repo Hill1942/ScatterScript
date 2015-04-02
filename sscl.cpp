@@ -547,8 +547,8 @@ namespace _cl
 
 			if (IsOprandRelational(opType))
 			{
-				int trueJumpTargetIndex = GetNextJumpTargetIndex();
-				int exitJumpTargetIndex = GetNextJumpTargetIndex();
+				int trueJumpTargetIndex = _IL::GetNextJumpTargetIndex();
+				int exitJumpTargetIndex = _IL::GetNextJumpTargetIndex();
 
 				switch (opType)
 				{
@@ -628,8 +628,8 @@ namespace _cl
 				{
 				case CL_OPERATOR_TYPE_LOGICAL_AND:
 					{
-						int falseJumpTargetIndex = GetNextJumpTargetIndex();
-						int exitJumpTargetIndex  = GetNextJumpTargetIndex();
+						int falseJumpTargetIndex = _IL::GetNextJumpTargetIndex();
+						int exitJumpTargetIndex  = _IL::GetNextJumpTargetIndex();
 
 						//je t0, 0, FALSE
 						instrIndex = _IL::AddILCodeInstr(&compiler.functionTable,
@@ -696,8 +696,8 @@ namespace _cl
 
 				case CL_OPERATOR_TYPE_LOGICAL_OR:
 					{
-						int trueJumpTargetIndex  = GetNextJumpTargetIndex();
-						int exitJumpTargetIndex  = GetNextJumpTargetIndex();
+						int trueJumpTargetIndex  = _IL::GetNextJumpTargetIndex();
+						int exitJumpTargetIndex  = _IL::GetNextJumpTargetIndex();
 
 						//jne t0, 0, TRUE
 						instrIndex = _IL::AddILCodeInstr(&compiler.functionTable,
@@ -1039,8 +1039,8 @@ namespace _cl
 
 			if (opType == CL_OPERATOR_TYPE_LOGICAL_NOT)
 			{
-				int trueJumpTargetIndex = GetNextJumpTargetIndex();
-				int exitJumpTargetIndex  = GetNextJumpTargetIndex();
+				int trueJumpTargetIndex = _IL::GetNextJumpTargetIndex();
+				int exitJumpTargetIndex  = _IL::GetNextJumpTargetIndex();
 
 				//je t0, 0, TRUE
 				instrIndex = _IL::AddILCodeInstr(&compiler.functionTable,
@@ -1128,7 +1128,7 @@ namespace _cl
 
 		_IL::AddILCodeSourceLine(&compiler.functionTable, compiler.currentScope, GetCurrentSourceLine());
 
-		int falseJumpTargetIndex = GetNextJumpTargetIndex();
+		int falseJumpTargetIndex = _IL::GetNextJumpTargetIndex();
 
 		ReadToken(CL_TOKEN_TYPE_DELIM_OPEN_PAREN);
 
@@ -1156,7 +1156,7 @@ namespace _cl
 
 		if (GetNextToken() == CL_TOKEN_TYPE_KEYWORD_ELSE)
 		{
-			int skipFalseJumpTargetIndex = GetNextJumpTargetIndex();
+			int skipFalseJumpTargetIndex = _IL::GetNextJumpTargetIndex();
 			//jmp SKIP_FALSE
 			instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, compiler.currentScope,
 				IL_INSTR_JMP);
@@ -1192,8 +1192,8 @@ namespace _cl
 		_IL::AddILCodeSourceLine(&compiler.functionTable, compiler.currentScope,
 			GetCurrentSourceLine());
 
-		int startTargetIndex = GetNextJumpTargetIndex();
-		int endTargetIndex = GetNextJumpTargetIndex();
+		int startTargetIndex = _IL::GetNextJumpTargetIndex();
+		int endTargetIndex = _IL::GetNextJumpTargetIndex();
 
 		_IL::AddILCodeJumpTarget(&compiler.functionTable, compiler.currentScope, 
 			startTargetIndex);
@@ -1240,7 +1240,14 @@ namespace _cl
 		_IL::AddILCodeJumpTarget(&compiler.functionTable, compiler.currentScope,
 			endTargetIndex);
 	}
-	void ParseFor();
+	void ParseFor()
+	{
+		if (compiler.currentScope == SCOPE_GLOBAL)
+			ExitOnCodeError("for illegal in global scope");
+
+		_IL::AddILCodeSourceLine(&compiler.functionTable, compiler.currentScope,
+			GetCurrentSourceLine());
+	}
 	void ParseBreak()
 	{
 		if (compiler.currentScope == SCOPE_GLOBAL)

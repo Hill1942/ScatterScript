@@ -12,7 +12,6 @@
 
 extern _asm_::ASM sasm;
 extern _vm::Script vm_script;
-extern _cl::Lexer cl_lexer;
 extern _cl::Compiler compiler;
 
 namespace _asm_
@@ -431,7 +430,7 @@ namespace _cl
 
 		for (uint i = 0; i < lastIndex; i++)
 			if (strCurrentSourceLine[i] == '\t')
-				strCurrentSourceLine[i] = ' ');
+				strCurrentSourceLine[i] = ' ';
 
 		printf("%s\n", strCurrentSourceLine);
 
@@ -439,7 +438,7 @@ namespace _cl
 			printf(" ");
 		printf("^\n");
 
-		printf("Could not compile %s\n", cl_lexer.scriptSourceFile);
+		printf("Could not compile %s\n", compiler.lexer.scriptSourceFile);
 
 		Exit();
 	}
@@ -448,15 +447,12 @@ namespace _cl
     	printf("Error: expected %c\n", c);
     	exit(0);
     }
-    
-    void CL_InitLexer()
-    {
-		cl_lexer.currLexerState.currentLexemeStart = 0;
-		cl_lexer.currLexerState.currentLexemeEnd   = 0;
-    }
-
+ 
 	void Init()
 	{
+		compiler.lexer.currLexerState.currentLexemeStart = 0;
+		compiler.lexer.currLexerState.currentLexemeEnd   = 0;
+
 		compiler.scriptHeader.iIsMainFuncExist = FALSE;
 		compiler.scriptHeader.iStackSize       = 0;
 		

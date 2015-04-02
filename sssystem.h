@@ -25,7 +25,6 @@ namespace _cl
 	void ExitOnError(char* strErrorMsg);
 	void ExitOnCodeError(char* strErrorMsg);
 	void ExitOnInvalidInputError(char c);
-    void CL_InitLexer();
 
 	void Init();
 	void ShutDown();
