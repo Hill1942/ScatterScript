@@ -423,6 +423,8 @@ namespace _vm
     
     				dest.strStringLiteral = newString;
     				*GetOpValuePointer(0) = dest;
+
+					break;
     			}
     
     		case ASM_INSTR_SETCHAR:
@@ -477,6 +479,8 @@ namespace _vm
     						default:
     							break;
     						}
+
+							break;
     					}
     				case ASM_INSTR_JNE:
     					{
@@ -497,6 +501,8 @@ namespace _vm
     						default:
     							break;
     						}
+
+							break;
     					}
     				case ASM_INSTR_JG:
     					{
@@ -513,6 +519,8 @@ namespace _vm
     						default:
     							break;
     						}
+
+							break;
     					}
     				case ASM_INSTR_JGE:
     					{
@@ -529,6 +537,8 @@ namespace _vm
     						default:
     							break;
     						}
+
+							break;
     					}
     				case ASM_INSTR_JL:
     					{
@@ -545,6 +555,8 @@ namespace _vm
     						default:
     							break;
     						}
+
+							break;
     					}
     				case ASM_INSTR_JLE:
     					{
@@ -561,6 +573,8 @@ namespace _vm
     						default:
     							break;
     						}
+
+							break;
     					}
     				default:
     					break;

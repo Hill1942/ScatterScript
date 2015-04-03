@@ -132,7 +132,7 @@ namespace _asm_
 		for (int i = 0; i < pLabelTable->iNodeCount; i++)
 		{
 			LabelNode* currentLabel = (LabelNode*) throughNode->pData;
-			if (strcpy(currentLabel->strIndentifier, identifier) == 0 &&
+			if (strcmp(currentLabel->strIndentifier, identifier) == 0 &&
 				currentLabel->iFuncIndex == funcIndex)
 				return currentLabel;
 			throughNode = throughNode->pNext;

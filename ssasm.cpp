@@ -127,7 +127,7 @@ namespace _asm_
     					if (sasm.lexer.currentToken != ASM_TOKEN_TYPE_OPEN_BRACE)
     						ExitOnCharExpectedError('{');
     
-    					sasm.instrStreamSize++;
+    					//sasm.instrStreamSize++;
     					break;
     				}
     
@@ -176,7 +176,8 @@ namespace _asm_
     						ExitOnCodeError(ERROR_MSG_GLOBAL_LINE_LABEL);
     
     					char* pIdentifier = GetCurrentLexeme();
-    					int   targetIndex = sasm.instrStreamSize - 1;
+    					//int   targetIndex = sasm.instrStreamSize - 1;
+						int   targetIndex = sasm.instrStreamSize;
     					int   funcIndex   = currentFuncIndex;
     
     					if (AddLabel(&sasm.labelTable, pIdentifier, targetIndex, funcIndex) == -1)
@@ -227,7 +228,7 @@ namespace _asm_
     		case ASM_TOKEN_TYPE_CLOSE_BRACE:
     			{
     				isInFunction = FALSE;
-    				if (strcmp(pCurrentFunc->strName, ASM_KW_MAIN_FUNC_NAME) == 0)
+    				/*if (strcmp(pCurrentFunc->strName, ASM_KW_MAIN_FUNC_NAME) == 0)
     				{
     					sasm.instrStream[sasm.currentInstrIndex].iOpcode = ASM_INSTR_EXIT;
     					sasm.instrStream[sasm.currentInstrIndex].iOpCount = 1;
@@ -241,7 +242,7 @@ namespace _asm_
     					sasm.instrStream[sasm.currentInstrIndex].iOpCount = 0;
     					sasm.instrStream[sasm.currentInstrIndex].pOplist = NULL;
     				}
-    				sasm.currentInstrIndex++;
+    				sasm.currentInstrIndex++;*/
     				break;
     			}
     
