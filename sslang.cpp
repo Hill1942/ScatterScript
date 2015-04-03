@@ -219,7 +219,7 @@ namespace _cl
 
 		for (int i = 0; i < pSymbolTable->iNodeCount; i++)
 		{
-			SymbolNode* pSymbol = GetSymbol(pSymbolTable, i);
+			pSymbol = GetSymbol(pSymbolTable, i);
 			if (pSymbol && 
 				strcmp(pSymbol->strIdentifier, identifier) == 0 &&
 				(pSymbol->iScope == scope || pSymbol->iScope == 0))
@@ -279,7 +279,7 @@ namespace _cl
 
 		for (int i = 0; i < pFunctionTable->iNodeCount; i++)
 		{
-			FuncNode* pFunction = GetFunction(pFunctionTable, i);
+			pFunction = GetFunction(pFunctionTable, i);
 			if (pFunction && 
 				strcmp(pFunction->strName, name) == 0)
 				return pFunction;

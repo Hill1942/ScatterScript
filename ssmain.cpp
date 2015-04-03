@@ -2,6 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifdef _WIN32
+#include <windows.h>
+#include <process.h>
+#endif // _WIN32
+
+
 #include "ssutil.h"
 #include "sspre.h"
 #include "ssbase_type.h"
@@ -127,10 +133,38 @@ int main(int argc, char* argv[])
 				{
 					printf("can not compile, error!");
 				}
-				break;
 
+				void clearTempAsmFile();
+
+				char* argv[4];
+
+				argv[0] = (char*) malloc(strlen("ss") + 1);
+				strcpy(argv[0], "ss");
+
+				argv[1] = (char*) malloc(strlen("-d") + 1);
+				strcpy(argv[1], "-d");
+
+				argv[2] = (char*) malloc(strlen(compiler.outAssembleFilename) + 1);
+				strcpy(argv[2], compiler.outAssembleFilename);
+
+				argv[3] = NULL;
+
+				_spawnv(_P_OVERLAY, "ss.exe", argv);
+
+				//the following code will not run, so there may be memory leak 
+				free ( argv[0] );
+				free ( argv[1] );
+				free ( argv[2] );
+
+				break;
 			}
 			break;
+
+		case 'd':
+			{
+				remove(argv[2]);
+				break;
+			}
 		default:
 			break;
 		}
@@ -163,7 +197,9 @@ void asm_run()
 
 	_asm_::BuildSSE();
 
+#ifdef DEBUG_ON
 	_asm_::BuildSSE_Info();
+#endif
 
 	_asm_::ShutDown();
 }
@@ -215,14 +251,8 @@ void compile()
 	compiler.tempVar1SymbolIndex = _cl::AddSymbol(&compiler.symbolTable, 1,
 		SCOPE_GLOBAL, SYMBOL_TYPE_VAR, TEMP_VAR_1);
 
-	
-
 	_cl::ParseSourceCode();
 
 	_IL::OutCode();
-
-	//char* params[3];
-
-
-	//_spawnv(P_WAIT, "sasm.exe", params);
 }
+

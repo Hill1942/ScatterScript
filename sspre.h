@@ -1,6 +1,8 @@
 #ifndef SSPRE_H
 #define SSPRE_H
 
+//#define DEBUG_ON                               1
+
 #define VERSION_MAJOR                          0
 #define VERSION_MINOR                          1
 

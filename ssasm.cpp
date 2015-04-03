@@ -579,7 +579,7 @@ namespace _asm_
     
     	printf("-------------------------------String Info--------------------------------\n");
     
-    	int currentNode;
+    	//int currentNode;
     	LinkListNode* pNode;
     
     	fwrite(&sasm.stringTable.iNodeCount, 4, 1, pExeFile);
@@ -642,7 +642,7 @@ namespace _asm_
     
     		fwrite(&currentHostAPICallLen, 1, 1, pExeFile);
     		fwrite(currentHostAPICall, currentHostAPICallLen, 1, pExeFile);
-    		printf("currentHostAPICallLen: \d\n", currentHostAPICallLen);
+    		printf("currentHostAPICallLen: %d\n", currentHostAPICallLen);
     		printf("currentHostAPICall: %s\n", currentHostAPICall);
     
     		pNode = pNode->pNext;
@@ -778,7 +778,7 @@ namespace _asm_
     
     	fprintf(pExeFile, "\n;-------------------------------String Info--------------------------------\n");
     
-    	int currentNode;
+    	//int currentNode;
     	LinkListNode* pNode;
     
     	swrite(&sasm.stringTable.iNodeCount, sizeof(int), 1, buf1);

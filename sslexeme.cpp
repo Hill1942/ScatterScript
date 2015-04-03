@@ -132,7 +132,7 @@ int IsStringInt(const char* str)
         return FALSE;
 
     if (strlen(str) == 0)
-        return TRUE;
+        return FALSE;
 
     for (int i = 0; i < strlen(str); i++)
     {
@@ -145,6 +145,8 @@ int IsStringInt(const char* str)
         if (str[i] == '-')
             return FALSE;
     }
+
+	return TRUE;
 }
 int IsStringFloat(const char* str)
 {
@@ -322,6 +324,8 @@ namespace _asm_
                 sasm.sourceCode[i][newLineIdex + 2] = '\0';
             }
         }
+
+		fclose(sasm.sourceFile);
     }
     
     char GetLookAheadChar()

@@ -726,7 +726,7 @@ namespace _vm
     	case ASM_OPRAND_TYPE_FLOAT:
     		return value.fFloatLiteral;
     	case ASM_OPRAND_TYPE_STRING_INDEX:
-    		return atof(value.strStringLiteral);
+    		return (float) atof(value.strStringLiteral);
     	default:
     		return 0;
     	}
