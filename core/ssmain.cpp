@@ -134,8 +134,7 @@ int main(int argc, char* argv[])
 					printf("can not compile, error!");
 				}
 
-				void clearTempAsmFile();
-
+#ifdef _WIN32
 				char* argv[4];
 
 				argv[0] = (char*) malloc(strlen("ss") + 1);
@@ -155,6 +154,7 @@ int main(int argc, char* argv[])
 				free ( argv[0] );
 				free ( argv[1] );
 				free ( argv[2] );
+#endif
 
 				break;
 			}

@@ -81,32 +81,32 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ssasm.cpp" />
-    <ClCompile Include="ssbase_type.cpp" />
-    <ClCompile Include="sscl.cpp" />
-    <ClCompile Include="ssil.cpp" />
-    <ClCompile Include="sslang.cpp" />
-    <ClCompile Include="sslexeme.cpp" />
-    <ClCompile Include="ssmain.cpp" />
-    <ClCompile Include="sssystem.cpp" />
-    <ClCompile Include="ssutil.cpp" />
-    <ClCompile Include="ssvm.cpp" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include=".gitignore" />
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ssasm.h" />
-    <ClInclude Include="ssbase_type.h" />
-    <ClInclude Include="sscl.h" />
-    <ClInclude Include="ssil.h" />
-    <ClInclude Include="sslang.h" />
-    <ClInclude Include="sslexeme.h" />
-    <ClInclude Include="sspre.h" />
-    <ClInclude Include="sssystem.h" />
-    <ClInclude Include="ssutil.h" />
-    <ClInclude Include="ssvm.h" />
+    <ClCompile Include="core\ssasm.cpp" />
+    <ClCompile Include="core\ssbase_type.cpp" />
+    <ClCompile Include="core\sscl.cpp" />
+    <ClCompile Include="core\ssil.cpp" />
+    <ClCompile Include="core\sslang.cpp" />
+    <ClCompile Include="core\sslexeme.cpp" />
+    <ClCompile Include="core\ssmain.cpp" />
+    <ClCompile Include="core\sssystem.cpp" />
+    <ClCompile Include="core\ssutil.cpp" />
+    <ClCompile Include="core\ssvm.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="core\ssasm.h" />
+    <ClInclude Include="core\ssbase_type.h" />
+    <ClInclude Include="core\sscl.h" />
+    <ClInclude Include="core\ssil.h" />
+    <ClInclude Include="core\sslang.h" />
+    <ClInclude Include="core\sslexeme.h" />
+    <ClInclude Include="core\sspre.h" />
+    <ClInclude Include="core\sssystem.h" />
+    <ClInclude Include="core\ssutil.h" />
+    <ClInclude Include="core\ssvm.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

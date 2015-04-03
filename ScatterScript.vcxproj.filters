@@ -1,31 +1,79 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="ssmain.cpp" />
-    <ClCompile Include="ssasm.cpp" />
-    <ClCompile Include="ssbase_type.cpp" />
-    <ClCompile Include="sscl.cpp" />
-    <ClCompile Include="sslang.cpp" />
-    <ClCompile Include="sslexeme.cpp" />
-    <ClCompile Include="sssystem.cpp" />
-    <ClCompile Include="ssvm.cpp" />
-    <ClCompile Include="ssutil.cpp" />
-    <ClCompile Include="ssil.cpp" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include=".gitignore" />
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ssasm.h" />
-    <ClInclude Include="ssbase_type.h" />
-    <ClInclude Include="sscl.h" />
-    <ClInclude Include="sslang.h" />
-    <ClInclude Include="sslexeme.h" />
-    <ClInclude Include="sspre.h" />
-    <ClInclude Include="sssystem.h" />
-    <ClInclude Include="ssutil.h" />
-    <ClInclude Include="ssvm.h" />
-    <ClInclude Include="ssil.h" />
+    <Filter Include="core">
+      <UniqueIdentifier>{0cf1dbc3-c518-427a-ac18-1fbdeaa3e284}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ssdk">
+      <UniqueIdentifier>{57270b6d-48f2-46d3-a38f-32b1cee7aeb1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="core\ssasm.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ssbase_type.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\sscl.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ssil.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\sslang.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\sslexeme.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ssmain.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\sssystem.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ssutil.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ssvm.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="core\ssasm.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ssbase_type.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\sscl.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ssil.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\sslang.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\sslexeme.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\sspre.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\sssystem.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ssutil.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ssvm.h">
+      <Filter>core</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
