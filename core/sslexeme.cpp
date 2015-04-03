@@ -695,6 +695,12 @@ namespace _cl
     					isAddCurrentChar = FALSE;
     					currentLexemeState = CL_LEX_STATE_STRING;
     				}
+					else if (currentChar == -51)
+					{
+						isAddCurrentChar = FALSE;
+						currentLexemeState = CL_LEX_STATE_END;
+						isLexemeDone = TRUE;
+					}
     				else
     				{
     					ExitOnInvalidInputError(currentChar);
@@ -926,6 +932,12 @@ namespace _cl
     			tokenType = CL_TOKEN_TYPE_STRING;
     			break;
     		}
+
+		case CL_LEX_STATE_END:
+			{
+				tokenType = CL_TOKEN_TYPE_END_OF_STREAM;
+				break;
+			}
     	default:
     		tokenType = CL_TOKEN_TYPE_END_OF_STREAM;
     		break;

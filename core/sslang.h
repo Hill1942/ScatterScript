@@ -179,6 +179,14 @@ namespace _vm
 		int iStackFrameSize;
 	};
 
+	struct HostFunction
+	{
+		int isActive;
+		int threadIndex;
+		char* strName;
+
+	};
+
 	struct HostAPICallTable
 	{
 		char** ppStrCalls;

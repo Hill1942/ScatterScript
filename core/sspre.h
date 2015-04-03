@@ -1,7 +1,7 @@
 #ifndef SSPRE_H
 #define SSPRE_H
 
-//#define DEBUG_ON                               1
+#define DEBUG_ON                               1
 
 #define VERSION_MAJOR                          0
 #define VERSION_MINOR                          1
@@ -204,6 +204,7 @@
 #define CL_LEX_STATE_STRING                    8
 #define CL_LEX_STATE_STRING_ESCAPE             9
 #define CL_LEX_STATE_STRING_CLOSE_QUOTE        10
+#define CL_LEX_STATE_END                       -1
 
 #define CL_TOKEN_TYPE_END_OF_STREAM            0
 #define CL_TOKEN_TYPE_INT                      1

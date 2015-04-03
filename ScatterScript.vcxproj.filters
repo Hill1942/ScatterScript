@@ -43,6 +43,12 @@
     <ClCompile Include="core\ssvm.cpp">
       <Filter>core</Filter>
     </ClCompile>
+    <ClCompile Include="ssdk\ssio.cpp">
+      <Filter>ssdk</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ssfuncs.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\ssasm.h">
@@ -73,6 +79,12 @@
       <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="core\ssvm.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="ssdk\ssio.h">
+      <Filter>ssdk</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ssfuncs.h">
       <Filter>core</Filter>
     </ClInclude>
   </ItemGroup>

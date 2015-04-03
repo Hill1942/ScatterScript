@@ -88,6 +88,7 @@
     <ClCompile Include="core\ssasm.cpp" />
     <ClCompile Include="core\ssbase_type.cpp" />
     <ClCompile Include="core\sscl.cpp" />
+    <ClCompile Include="core\ssfuncs.cpp" />
     <ClCompile Include="core\ssil.cpp" />
     <ClCompile Include="core\sslang.cpp" />
     <ClCompile Include="core\sslexeme.cpp" />
@@ -95,11 +96,13 @@
     <ClCompile Include="core\sssystem.cpp" />
     <ClCompile Include="core\ssutil.cpp" />
     <ClCompile Include="core\ssvm.cpp" />
+    <ClCompile Include="ssdk\ssio.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\ssasm.h" />
     <ClInclude Include="core\ssbase_type.h" />
     <ClInclude Include="core\sscl.h" />
+    <ClInclude Include="core\ssfuncs.h" />
     <ClInclude Include="core\ssil.h" />
     <ClInclude Include="core\sslang.h" />
     <ClInclude Include="core\sslexeme.h" />
@@ -107,6 +110,7 @@
     <ClInclude Include="core\sssystem.h" />
     <ClInclude Include="core\ssutil.h" />
     <ClInclude Include="core\ssvm.h" />
+    <ClInclude Include="ssdk\ssio.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
