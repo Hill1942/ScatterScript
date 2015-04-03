@@ -283,6 +283,8 @@ namespace _cl
 		int        jumpTargetIndex;
 		int        tempVar0SymbolIndex;
 		int        tempVar1SymbolIndex;
+
+		int        isOutCode;
 	};
 
 	SymbolNode* GetSymbol(LinkList* pSymbolTable, int index);

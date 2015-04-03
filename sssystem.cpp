@@ -453,8 +453,10 @@ namespace _cl
 		compiler.currLexerState.currentLexemeStart = 0;
 		compiler.currLexerState.currentLexemeEnd   = 0;
 
-		compiler.scriptHeader.iIsMainFuncExist = FALSE;
-		compiler.scriptHeader.iStackSize       = 0;
+		compiler.scriptHeader.iIsMainFuncExist     = FALSE;
+		compiler.scriptHeader.iStackSize           = 0;
+
+		compiler.isOutCode                         = FALSE;
 		
 		InitLinkList(&compiler.sourceCode);
 		InitLinkList(&compiler.functionTable);

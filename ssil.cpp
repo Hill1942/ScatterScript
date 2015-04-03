@@ -255,6 +255,8 @@ extern _cl::Compiler compiler;
 		 }
 
 		 fclose(compiler.outAssembleFile);
+		 
+		 compiler.isOutCode = TRUE;
 	 }
 
 

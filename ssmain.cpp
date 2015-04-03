@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <process.h>
 
 #include "ssutil.h"
 #include "sspre.h"
@@ -36,7 +35,7 @@ int main(int argc, char* argv[])
 		option[2] = '\0';
 		switch (option[1])
 		{
-		case 'c':
+		case 's':
 			{
 				strcpy(compiler.scriptSourceFile, argv[2]);
 				int ExtOffset = strrchr(compiler.scriptSourceFile, '.') - compiler.scriptSourceFile;
@@ -60,9 +59,7 @@ int main(int argc, char* argv[])
 					strcat(compiler.outAssembleFilename, ASM_SOURCE_EXTENSION);
 				}
 
-				
 				compile();
-
 				break;
 			}
 			
@@ -87,7 +84,52 @@ int main(int argc, char* argv[])
 				asm_run();
 			}
 			break;
-		case 'o':
+		case 'c':
+			{
+				strcpy(compiler.scriptSourceFile, argv[2]);
+				int ExtOffset = strrchr(compiler.scriptSourceFile, '.') - compiler.scriptSourceFile;
+				if (compiler.scriptSourceFile[ExtOffset + 1] != 's' || 
+					compiler.scriptSourceFile[ExtOffset + 2] != 's')
+				{
+					printf("Not valid .ss file!\n");
+					exit(0);
+				}
+
+				if (argv[3])
+				{
+					strcpy(compiler.outAssembleFilename, argv[3]);
+					if (! strstr(compiler.outAssembleFilename, ASM_SOURCE_EXTENSION))
+						strcat(compiler.outAssembleFilename, ASM_SOURCE_EXTENSION);
+
+					strcpy(sasm.exeFileName, argv[3]);
+					if (! strstr(sasm.exeFileName, EXE_EXTENSION))
+						strcat(sasm.exeFileName, EXE_EXTENSION);
+				}
+				else
+				{
+					strncpy(compiler.outAssembleFilename, compiler.scriptSourceFile, ExtOffset);
+					compiler.outAssembleFilename[ExtOffset] = '\0';
+					strcat(compiler.outAssembleFilename, ASM_SOURCE_EXTENSION);
+
+					strncpy(sasm.exeFileName, compiler.outAssembleFilename, ExtOffset);
+					sasm.exeFileName[ExtOffset] = '\0';
+					strcat(sasm.exeFileName, EXE_EXTENSION);
+				}
+
+				compile();
+
+				if (compiler.isOutCode)
+				{
+					strcpy(sasm.sourceFileName, compiler.outAssembleFilename);
+					asm_run();
+				}
+				else
+				{
+					printf("can not compile, error!");
+				}
+				break;
+
+			}
 			break;
 		default:
 			break;
