@@ -139,6 +139,7 @@ namespace _vm
 		union
 		{
 			int   iIntLiteral;
+			int   iNaNLiteral;
 			float fFloatLiteral;
 			char* strStringLiteral;
 			int   iStackIndex;

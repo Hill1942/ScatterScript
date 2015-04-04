@@ -88,6 +88,7 @@
 #define ASM_OPRAND_TYPE_FUNC_INDEX             6
 #define ASM_OPRAND_TYPE_HOST_API_CALL_INDEX    7
 #define ASM_OPRAND_TYPE_REG                    8
+#define ASM_OPRAND_TYPE_NAN                    9
 #define ASM_OPRAND_TYPE_NULL                   -1
 											   
 #define ASM_OPRAND_FLAG_TYPE_INT               1

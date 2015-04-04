@@ -4,12 +4,21 @@
 
 namespace _vm
 {
-#define DEFINE_BUILT_IN_FUNC(ss_func_name) \
+#define BUILT_IN_FUNC_DEFINE(ss_func_name) \
 	void ss_func_name(Value* params, int paramCount)
 
-	DEFINE_BUILT_IN_FUNC(ssprint);
-	DEFINE_BUILT_IN_FUNC(ssfopen);
-	DEFINE_BUILT_IN_FUNC(ssgetc);
+	namespace io
+	{
+		BUILT_IN_FUNC_DEFINE(ssprint);
+		BUILT_IN_FUNC_DEFINE(ssfopen);
+		BUILT_IN_FUNC_DEFINE(ssfclose);
+		BUILT_IN_FUNC_DEFINE(ssfgetc);
+		BUILT_IN_FUNC_DEFINE(ssfgets);
+		BUILT_IN_FUNC_DEFINE(ssfwrite);
+
+	}
+
+	
 
 
 }

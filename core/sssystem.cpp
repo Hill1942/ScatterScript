@@ -379,9 +379,12 @@ namespace _vm
 
 	void InitBuiltInFuncs()
 	{
-		AddBuiltInFunc(&vm_script.builtInFuncTable, "ssprint", 1, ssprint);
-		AddBuiltInFunc(&vm_script.builtInFuncTable, "ssfopen", 2, ssfopen);
-		AddBuiltInFunc(&vm_script.builtInFuncTable, "ssgetc", 1, ssgetc);
+		AddBuiltInFunc(&vm_script.builtInFuncTable, "ssprint",  1, io::ssprint);
+		AddBuiltInFunc(&vm_script.builtInFuncTable, "ssfopen",  2, io::ssfopen);
+		AddBuiltInFunc(&vm_script.builtInFuncTable, "ssfclose", 1, io::ssfclose);
+		AddBuiltInFunc(&vm_script.builtInFuncTable, "ssfgetc",  1, io::ssfgetc);
+		AddBuiltInFunc(&vm_script.builtInFuncTable, "ssfgets",  2, io::ssfgets);
+		AddBuiltInFunc(&vm_script.builtInFuncTable, "ssfwrite", 2, io::ssfwrite);
 	}
     
     void ShutDown()
@@ -463,9 +466,12 @@ namespace _cl
 
 	void InitBuiltInFuncs()
 	{
-		AddBuiltInFunc(&compiler.builInFuncTable, "ssprint", 1);
-		AddBuiltInFunc(&compiler.builInFuncTable, "ssfopen", 2);
-		AddBuiltInFunc(&compiler.builInFuncTable, "ssgetc", 1);
+		AddBuiltInFunc(&compiler.builInFuncTable, "ssprint",  1);
+		AddBuiltInFunc(&compiler.builInFuncTable, "ssfopen",  2);
+		AddBuiltInFunc(&compiler.builInFuncTable, "ssfclose", 1);
+		AddBuiltInFunc(&compiler.builInFuncTable, "ssfgetc",  1);
+		AddBuiltInFunc(&compiler.builInFuncTable, "ssfgets",  2);
+		AddBuiltInFunc(&compiler.builInFuncTable, "ssfwrite", 2);
 	}
  
 	void Init()

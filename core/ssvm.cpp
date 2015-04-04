@@ -243,8 +243,45 @@ namespace _vm
     		switch (opCode)
     		{
     		case ASM_INSTR_MOV:
-    
     		case ASM_INSTR_ADD:
+				{
+					Value dest = GetOpValue(0);
+					Value source = GetOpValue(1);
+					if (opCode == ASM_INSTR_MOV)
+					{
+						if (GetOpValuePointer(0) == GetOpValuePointer(1))
+							break;
+
+						CopyValue(&dest, source);
+
+					}
+					else if (opCode == ASM_INSTR_ADD)
+					{
+						if (dest.iType == ASM_OPRAND_TYPE_STRING_INDEX || 
+							source.iType == ASM_OPRAND_TYPE_STRING_INDEX)
+						{
+							char* appendString = GetOpValueAsString(1);
+							int newStringLength = strlen(dest.strStringLiteral) + strlen(appendString);
+							char* newString = (char*) malloc(newStringLength + 1);
+
+							strcpy(newString, dest.strStringLiteral);
+							strcat(newString, appendString);
+
+							free(dest.strStringLiteral);
+							dest.strStringLiteral = newString;
+						}
+						else
+						{
+							if (dest.iType == ASM_OPRAND_TYPE_INT)
+								dest.iIntLiteral += GetOpValueAsInt(1);
+							else
+								dest.fFloatLiteral += GetOpValueAsFloat(1);
+						}
+					}
+
+					*GetOpValuePointer(0) = dest;
+					break;
+				}
     		case ASM_INSTR_SUB:
     		case ASM_INSTR_MUL:
     		case ASM_INSTR_DIV:
@@ -259,76 +296,72 @@ namespace _vm
     			{
     				Value dest = GetOpValue(0);
     				Value source = GetOpValue(1);
-    
-    				switch (opCode)
-    				{
-    				case ASM_INSTR_MOV:
-    					if (GetOpValuePointer(0) == GetOpValuePointer(1))
-    						break;
-    
-    					CopyValue(&dest, source);
-    					break;
-    				case ASM_INSTR_ADD:
-    					if (dest.iType == ASM_OPRAND_TYPE_INT)
-    						dest.iIntLiteral += GetOpValueAsInt(1);
-    					else
-    						dest.fFloatLiteral += GetOpValueAsFloat(1);
-    					break;
-    				case ASM_INSTR_SUB:
-    					if (dest.iType == ASM_OPRAND_TYPE_INT)
-    						dest.iIntLiteral -= GetOpValueAsInt(1);
-    					else
-    						dest.fFloatLiteral -= GetOpValueAsFloat(1);
-    					break;
-    				case ASM_INSTR_MUL:
-    					if (dest.iType == ASM_OPRAND_TYPE_INT)
-    						dest.iIntLiteral *= GetOpValueAsInt(1);
-    					else
-    						dest.fFloatLiteral *= GetOpValueAsFloat(1);
-    					break;
-    				case ASM_INSTR_DIV:
-    					if (dest.iType == ASM_OPRAND_TYPE_INT)
-    						dest.iIntLiteral /= GetOpValueAsInt(1);
-    					else
-    						dest.fFloatLiteral /= GetOpValueAsFloat(1);
-    					break;
-    				case ASM_INSTR_MOD:
-    					if (dest.iType == ASM_OPRAND_TYPE_INT)
-    						dest.iIntLiteral %= GetOpValueAsInt(1);
-    					break;
-    				case ASM_INSTR_EXP:
-    					if (dest.iType == ASM_OPRAND_TYPE_INT)
-    						dest.iIntLiteral = (int) pow((float)dest.iIntLiteral, GetOpValueAsInt(1));
-    					else
-    						dest.fFloatLiteral = (float) pow((float)dest.iIntLiteral, GetOpValueAsFloat(1));
-    					break;
-    
-    				case ASM_INSTR_AND:
-    					if (dest.iType == ASM_OPRAND_TYPE_INT)
-    						dest.iIntLiteral &= GetOpValueAsInt(1);
-    					break;
-    				case ASM_INSTR_OR:
-    					if (dest.iType == ASM_OPRAND_TYPE_INT)
-    						dest.iIntLiteral |= GetOpValueAsInt(1);
-    					break;
-    				case ASM_INSTR_XOR:
-    					if (dest.iType == ASM_OPRAND_TYPE_INT)
-    						dest.iIntLiteral ^= GetOpValueAsInt(1);
-    					break;
-    				case ASM_INSTR_SHL:
-    					if (dest.iType == ASM_OPRAND_TYPE_INT)
-    						dest.iIntLiteral <<= GetOpValueAsInt(1);
-    					break;
-    				case ASM_INSTR_SHR:
-    					if (dest.iType == ASM_OPRAND_TYPE_INT)
-    						dest.iIntLiteral >>= GetOpValueAsInt(1);
-    					break;
-    				default:
-    					break;
-    				}
+
+					if (dest.iType == ASM_OPRAND_TYPE_STRING_INDEX || 
+						source.iType == ASM_OPRAND_TYPE_STRING_INDEX)
+					{
+						dest.iType = ASM_OPRAND_TYPE_NAN;
+						dest.iNaNLiteral = 0;
+					}
+					else
+					{
+						switch (opCode)
+						{	
+						case ASM_INSTR_SUB:
+							if (dest.iType == ASM_OPRAND_TYPE_INT)
+								dest.iIntLiteral -= GetOpValueAsInt(1);
+							else
+								dest.fFloatLiteral -= GetOpValueAsFloat(1);
+							break;
+						case ASM_INSTR_MUL:
+							if (dest.iType == ASM_OPRAND_TYPE_INT)
+								dest.iIntLiteral *= GetOpValueAsInt(1);
+							else
+								dest.fFloatLiteral *= GetOpValueAsFloat(1);
+							break;
+						case ASM_INSTR_DIV:
+							if (dest.iType == ASM_OPRAND_TYPE_INT)
+								dest.iIntLiteral /= GetOpValueAsInt(1);
+							else
+								dest.fFloatLiteral /= GetOpValueAsFloat(1);
+							break;
+						case ASM_INSTR_MOD:
+							if (dest.iType == ASM_OPRAND_TYPE_INT)
+								dest.iIntLiteral %= GetOpValueAsInt(1);
+							break;
+						case ASM_INSTR_EXP:
+							if (dest.iType == ASM_OPRAND_TYPE_INT)
+								dest.iIntLiteral = (int) pow((float)dest.iIntLiteral, GetOpValueAsInt(1));
+							else
+								dest.fFloatLiteral = (float) pow((float)dest.iIntLiteral, GetOpValueAsFloat(1));
+							break;
+
+						case ASM_INSTR_AND:
+							if (dest.iType == ASM_OPRAND_TYPE_INT)
+								dest.iIntLiteral &= GetOpValueAsInt(1);
+							break;
+						case ASM_INSTR_OR:
+							if (dest.iType == ASM_OPRAND_TYPE_INT)
+								dest.iIntLiteral |= GetOpValueAsInt(1);
+							break;
+						case ASM_INSTR_XOR:
+							if (dest.iType == ASM_OPRAND_TYPE_INT)
+								dest.iIntLiteral ^= GetOpValueAsInt(1);
+							break;
+						case ASM_INSTR_SHL:
+							if (dest.iType == ASM_OPRAND_TYPE_INT)
+								dest.iIntLiteral <<= GetOpValueAsInt(1);
+							break;
+						case ASM_INSTR_SHR:
+							if (dest.iType == ASM_OPRAND_TYPE_INT)
+								dest.iIntLiteral >>= GetOpValueAsInt(1);
+							break;
+						default:
+							break;
+						}
+					}
     
     				*GetOpValuePointer(0) = dest;
-    
     				break;
     			}
     
@@ -947,6 +980,15 @@ namespace _vm
     }
     void PopFrame(int size)
     {
+		Value null_value;
+		null_value.iType = -1;
+		null_value.iIntLiteral = 0;
+		int topIndex = vm_script.stack.iTopIndex;
+		for (int i = 0; i < size; i++)
+		{
+			//CopyValue(&vm_script.stack.pElement[topIndex - i -1], null_value);
+			vm_script.stack.pElement[topIndex - i -1] = null_value;
+		}
     	vm_script.stack.iTopIndex -= size;
     }
 
