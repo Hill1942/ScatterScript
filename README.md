@@ -3,6 +3,7 @@ ScatterScript
 
 A Simple Script Language
 
+
 ### Grammar
 
 - Like C language, you can use control structures: **if...else**, **while**, **continue**, **break**, but `no` **for** and **switch**
@@ -77,6 +78,7 @@ write **out** to **file**
         return 0;
     }
     ```
+    
     This example shows how to read a file and print out all its content to console
 
 ### Usage
