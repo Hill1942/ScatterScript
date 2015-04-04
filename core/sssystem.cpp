@@ -380,7 +380,8 @@ namespace _vm
 	void InitBuiltInFuncs()
 	{
 		AddBuiltInFunc(&vm_script.builtInFuncTable, "ssprint", 1, ssprint);
-		AddBuiltInFunc(&vm_script.builtInFuncTable, "sstest", 0, sstest);
+		AddBuiltInFunc(&vm_script.builtInFuncTable, "ssfopen", 2, ssfopen);
+		AddBuiltInFunc(&vm_script.builtInFuncTable, "ssgetc", 1, ssgetc);
 	}
     
     void ShutDown()
@@ -463,7 +464,8 @@ namespace _cl
 	void InitBuiltInFuncs()
 	{
 		AddBuiltInFunc(&compiler.builInFuncTable, "ssprint", 1);
-		AddBuiltInFunc(&compiler.builInFuncTable, "sstest", 0);
+		AddBuiltInFunc(&compiler.builInFuncTable, "ssfopen", 2);
+		AddBuiltInFunc(&compiler.builInFuncTable, "ssgetc", 1);
 	}
  
 	void Init()

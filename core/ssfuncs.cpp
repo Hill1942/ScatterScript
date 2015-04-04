@@ -23,24 +23,59 @@ namespace _vm
 		switch(param.iType)
 		{
 		case ASM_OPRAND_TYPE_INT:
-			printf("%d\n", param.iIntLiteral);
+			printf("%d", param.iIntLiteral);
 			break;
 		case ASM_OPRAND_TYPE_FLOAT:
-			printf("%f\n", param.fFloatLiteral);
+			printf("%f", param.fFloatLiteral);
 			break;
 		case ASM_OPRAND_TYPE_STRING_INDEX:
-			printf("%s\n", param.strStringLiteral);
+			printf("%s", param.strStringLiteral);
 			break;
 		default:
 			break;
 		}
 	}
 
-	void sstest(Value* params, int paramCount)
+	void ssfopen(Value* params, int paramCount)
 	{
-		char* chr = "hello";
+		if (paramCount != 2)
+		{
+			printf("vm error, ssfopen must take 2 parameter!\n");
+			return;
+		}
 
-		ReturnValue_String(chr);
+		Value filename = params[0];
+		Value mode     = params[1];
+
+		FILE* pFile = fopen(filename.strStringLiteral, mode.strStringLiteral);
+
+		ReturnValue_Pointer(pFile);
+	}
+
+	void ssgetc(Value* params, int paramCount)
+	{
+		if (paramCount != 1)
+		{
+			printf("vm error, ssgetc must take 1 parameter!\n");
+			return;
+		}
+
+		Value fileHandler = params[0];
+		FILE* pFile = (FILE*)fileHandler.iIntLiteral;
+
+		char str[2];
+		str[0] = getc(pFile);
+		if (str[0] != -1) 
+		{
+			str[1] = '\0';
+			ReturnValue_String(str);
+		}
+		else
+		{
+		   ReturnValue_Int(0);
+		}
 		
 	}
+
+	
 }

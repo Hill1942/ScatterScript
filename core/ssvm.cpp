@@ -475,9 +475,16 @@ namespace _vm
     								isJump = TRUE;
     							break;
     						case ASM_OPRAND_TYPE_STRING_INDEX:
-    							if (strcmp(op0.strStringLiteral, op1.strStringLiteral) == 0)
-    								isJump = TRUE;
-    							break;
+								if (op0.strStringLiteral == NULL || op1.strStringLiteral == NULL)
+								{
+									isJump = TRUE;
+								} 
+								else
+								{
+									if (strcmp(op0.strStringLiteral, op1.strStringLiteral) != 0)
+										isJump = TRUE;
+								}
+								break;
     						default:
     							break;
     						}
@@ -497,8 +504,16 @@ namespace _vm
     								isJump = TRUE;
     							break;
     						case ASM_OPRAND_TYPE_STRING_INDEX:
-    							if (strcmp(op0.strStringLiteral, op1.strStringLiteral) != 0)
-    								isJump = TRUE;
+								if (op0.strStringLiteral == NULL || op1.strStringLiteral == NULL)
+								{
+									isJump = TRUE;
+								} 
+								else
+								{
+									if (strcmp(op0.strStringLiteral, op1.strStringLiteral) != 0)
+										isJump = TRUE;
+								}
+										
     							break;
     						default:
     							break;
@@ -649,7 +664,7 @@ namespace _vm
 					Value* params = (Value*) malloc(sizeof(Value) * paramCount);
 					for (int i = 0; i < paramCount; i++)
 					{
-						params[i] = vm_script.stack.pElement[iTopIndex - (i + 1)];
+						params[paramCount - i - 1] = vm_script.stack.pElement[iTopIndex - (i + 1)];
 					}
 
 					pBuiltInFunc->pf(params, paramCount);
@@ -942,6 +957,16 @@ namespace _vm
 		returnValue.strStringLiteral = str;
 
 		CopyValue(&vm_script._RetVal, returnValue);
+	}
+	void ReturnValue_Int(int integer)
+	{
+		vm_script._RetVal.iType = ASM_OPRAND_TYPE_INT;
+		vm_script._RetVal.iIntLiteral = integer;
+	}
+	void ReturnValue_Floatt(float fnum)
+	{
+		vm_script._RetVal.iType = ASM_OPRAND_TYPE_FLOAT;
+		vm_script._RetVal.fFloatLiteral = fnum;
 	}
 }
 

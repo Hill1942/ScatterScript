@@ -3,7 +3,8 @@
 
 namespace _vm
 {
-	#define GET_STACK_INDEX(index) \
+
+#define GET_STACK_INDEX(index) \
 	(index < 0 ? index += vm_script.stack.iFrameIndex : index)
 
 
@@ -40,6 +41,9 @@ namespace _vm
     void PopFrame(int size);
 
 	void ReturnValue_String(char* str);
+	void ReturnValue_Int(int integer);
+	void ReturnValue_Floatt(float fnum);
+#define ReturnValue_Pointer(p) ReturnValue_Int((int)p)
 
     
 }

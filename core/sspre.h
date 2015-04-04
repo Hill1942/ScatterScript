@@ -285,6 +285,7 @@
 #define CL_KW_CONTINUE                         "continue"
 #define CL_KW_FUNC                             "func"
 #define CL_KW_RETURN                           "return"
+#define CL_KW_FILE_END                         '-51'
 
 #define ERROR_MSG_INVALID_INPUT             \
 	"Invalid input"

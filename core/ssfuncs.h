@@ -4,8 +4,14 @@
 
 namespace _vm
 {
-	void ssprint(Value* params, int paramCount);
-	void sstest(Value* params, int paramCount);
+#define DEFINE_BUILT_IN_FUNC(ss_func_name) \
+	void ss_func_name(Value* params, int paramCount)
+
+	DEFINE_BUILT_IN_FUNC(ssprint);
+	DEFINE_BUILT_IN_FUNC(ssfopen);
+	DEFINE_BUILT_IN_FUNC(ssgetc);
+
+
 }
 
 
