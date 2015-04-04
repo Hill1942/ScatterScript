@@ -132,7 +132,7 @@ extern _cl::Compiler compiler;
 								 break;
 
 							 case IL_OPRAND_TYPE_FLOAT:
-							 	 fprintf(compiler.outAssembleFile, "%df", oprand->fFloatLiteral);
+							 	 fprintf(compiler.outAssembleFile, "%f", oprand->fFloatLiteral);
 							 	 break;
 							 
 							 case IL_OPRAND_TYPE_STRING_INDEX:
