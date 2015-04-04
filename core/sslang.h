@@ -112,6 +112,7 @@ namespace _asm_
 	};
 
 	int AddString(LinkList* pStringTable, char* str);
+	char* GetString(LinkList* pStringTable, int index);
 
 	FuncNode* GetFunctionByName(LinkList* pFunctionTable, char* name);
 	int AddFunction(LinkList* pFunctionTable, char* name, int entryPoint);
@@ -184,7 +185,16 @@ namespace _vm
 		int isActive;
 		int threadIndex;
 		char* strName;
+	};
 
+	typedef void (*BuiltInFuncPointer)(Value*, int paramCount);
+
+	struct BuiltInFunc
+	{
+		int iIndex;
+		char strName[MAX_INDENT_SIZE];
+		int iParamCount;
+		BuiltInFuncPointer pf;
 	};
 
 	struct HostAPICallTable
@@ -208,7 +218,11 @@ namespace _vm
 		RuntimeStack     stack;
 		Function*        pFuncTable;
 		HostAPICallTable hostAPICallTable;
+		LinkList         builtInFuncTable;
 	};
+
+	BuiltInFunc* GetBuiltInFunc(LinkList* builtInFuncTable, char* name);
+	int AddBuiltInFunc(LinkList* builtInFuncTable, char* name, int paramCount, BuiltInFuncPointer pf);
 }
 
 
@@ -238,6 +252,13 @@ namespace _cl
 		int  isHostAPI;
 		int  iParamCount;
 		LinkList codeStream;
+	};
+
+	struct BuiltInFunc
+	{
+		int iIndex;
+		char strName[MAX_INDENT_SIZE];
+		int  iParamCount;
 	};
 
 	struct Expression
@@ -274,6 +295,7 @@ namespace _cl
 		LinkList   functionTable;
 		LinkList   symbolTable;
 		LinkList   stringTable;
+		LinkList   builInFuncTable;
 
 		char       outAssembleFilename[MAX_FILENAME_SIZE];
 		FILE*      outAssembleFile;
@@ -308,6 +330,11 @@ namespace _cl
 	int         AddString(LinkList* pStringTable, char* str);
 	char*       GetString(LinkList* pStringTable, int index);
 
+	int AddBuiltInFunc(LinkList* builtInFuncTable, char* name, int paramCount);
+
+	BuiltInFunc* GetBuiltInFunc(LinkList* builtInFuncTable, int index);
+	BuiltInFunc* GetBuiltInFunc(LinkList* builtInFuncTable, char* name);
+
 }
 
 namespace _IL
@@ -326,6 +353,7 @@ namespace _IL
 				int   iSymbolIndex;
 				int   iJumpTargetIndex;
 				int   iFuncIndex;
+				int   iBuiltInFuncIndex;
 				int   iRegCode;
 			};
 			int iOffset;
@@ -363,11 +391,16 @@ namespace _IL
 	void        AddILCodeOprand_AbsArrayIndex(LinkList* pFuncTable, int funcIndex, int instrIndex, int arrayIndex, int offset);
 	void        AddILCodeOprand_RelArrayIndex(LinkList* pFuncTable, int funcIndex, int instrIndex, int arrayIndex, int offsetSymbolIndex);
 	void        AddILCodeOprand_Func(LinkList* pFuncTable, int funcIndex, int instrIndex, int opFuncIndex);
+	void        AddILCodeOprand_BuiltInFunc(LinkList* pFuncTable, int funcIndex, int instrIndex, int opFuncIndex);
 	void        AddILCodeOprand_Reg(LinkList* pFuncTable, int funcIndex, int instrIndex, int regCode);
 	void        AddILCodeOprand_JumpTarget(LinkList* pFuncTable, int funcIndex, int instrIndex, int targetIndex);
 
 	int         GetNextJumpTargetIndex();
 	void        AddILCodeJumpTarget(LinkList* pFuncTable, int funcIndex, int targetIndex);
+
+	
+
+	
 
 }
 

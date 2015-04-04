@@ -188,7 +188,8 @@
 #define IL_OPRAND_TYPE_REL_ARRAY_INDEX         5
 #define IL_OPRAND_TYPE_JUMP_TARGET_INDEX       6
 #define IL_OPRAND_TYPE_FUNC_INDEX              7
-#define IL_OPRAND_TYPE_REG                     8
+#define IL_OPRAND_TYPE_BUILTIN_FUNC_INDEX      8
+#define IL_OPRAND_TYPE_REG                     9
 
 #define IL_CODE_NODE_INSTR                     0
 #define IL_CODE_NODE_SOURCE_LINE               1

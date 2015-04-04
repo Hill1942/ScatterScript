@@ -161,7 +161,12 @@ extern _cl::Compiler compiler;
 							 	 fprintf(compiler.outAssembleFile, "%s", 
 									  _cl::GetFunction(&compiler.functionTable, oprand->iFuncIndex)->strName);
 							 	 break;
-							 
+
+							 case IL_OPRAND_TYPE_BUILTIN_FUNC_INDEX:
+								 fprintf(compiler.outAssembleFile, "%s", 
+									 _cl::GetBuiltInFunc(&compiler.builInFuncTable, oprand->iFuncIndex)->strName);
+								 break;
+
 							 case IL_OPRAND_TYPE_REG:
 							 	 fprintf(compiler.outAssembleFile, "_retval");
 							 	 break;

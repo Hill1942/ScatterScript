@@ -212,6 +212,8 @@ namespace _vm
     	vm_script.iIsPaused = FALSE;
     
     	PushFrame(vm_script.iGlobalDataSize);
+		// Note: We plus one extra stack element to compensate for
+		// the function index that usually sits on top of stack
     	PushFrame(vm_script.pFuncTable[mainFuncIndex].iStackFrameSize + 1);
     }
     
@@ -634,6 +636,30 @@ namespace _vm
     			}
     		case ASM_INSTR_CALLHOST:
     			{
+					Value hostAPICall = GetOpValue(0);
+					int hostAPICallIndex = hostAPICall.iHostAPICallIndex;
+
+					char* hostAPIFuncName = vm_script.hostAPICallTable.ppStrCalls[hostAPICallIndex];
+
+					BuiltInFunc* pBuiltInFunc = GetBuiltInFunc(&vm_script.builtInFuncTable, hostAPIFuncName);
+
+					int iTopIndex = vm_script.stack.iTopIndex;
+					int paramCount = pBuiltInFunc->iParamCount;
+
+					Value* params = (Value*) malloc(sizeof(Value) * paramCount);
+					for (int i = 0; i < paramCount; i++)
+					{
+						params[i] = vm_script.stack.pElement[iTopIndex - (i + 1)];
+					}
+
+					pBuiltInFunc->pf(params, paramCount);
+
+					PopFrame(paramCount);
+
+
+
+					//Value returnValue = GetReturnValue();
+					//Push(returnValue);
     				break;
     			}
     
@@ -908,6 +934,15 @@ namespace _vm
     {
     	vm_script.stack.iTopIndex -= size;
     }
+
+	void ReturnValue_String(char* str)
+	{
+		Value returnValue;
+		returnValue.iType =  ASM_OPRAND_TYPE_STRING_INDEX;
+		returnValue.strStringLiteral = str;
+
+		CopyValue(&vm_script._RetVal, returnValue);
+	}
 }
 
 

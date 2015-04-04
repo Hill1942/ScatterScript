@@ -38,6 +38,9 @@ namespace _vm
     Value Pop();
     void PushFrame(int size);
     void PopFrame(int size);
+
+	void ReturnValue_String(char* str);
+
     
 }
 

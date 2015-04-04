@@ -17,6 +17,7 @@ namespace _asm_
 namespace _vm
 {
 	void Init();
+	void InitBuiltInFuncs();
 	void ShutDown();
 }
 

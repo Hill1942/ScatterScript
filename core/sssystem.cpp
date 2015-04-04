@@ -8,6 +8,8 @@
 #include "ssbase_type.h"
 #include "sslang.h"
 #include "sslexeme.h"
+#include "ssvm.h"
+#include "ssfuncs.h"
 #include "sssystem.h"
 
 extern _asm_::ASM sasm;
@@ -369,7 +371,17 @@ namespace _vm
     	vm_script.stack.pElement = NULL;
     	vm_script.pFuncTable = NULL;
     	vm_script.hostAPICallTable.ppStrCalls = NULL;
+
+		InitLinkList(&vm_script.builtInFuncTable);
+
+		InitBuiltInFuncs();
     }
+
+	void InitBuiltInFuncs()
+	{
+		AddBuiltInFunc(&vm_script.builtInFuncTable, "ssprint", 1, ssprint);
+		AddBuiltInFunc(&vm_script.builtInFuncTable, "sstest", 0, sstest);
+	}
     
     void ShutDown()
     {
@@ -447,6 +459,12 @@ namespace _cl
     	printf("Error: expected %c\n", c);
     	exit(0);
     }
+
+	void InitBuiltInFuncs()
+	{
+		AddBuiltInFunc(&compiler.builInFuncTable, "ssprint", 1);
+		AddBuiltInFunc(&compiler.builInFuncTable, "sstest", 0);
+	}
  
 	void Init()
 	{
@@ -462,6 +480,9 @@ namespace _cl
 		InitLinkList(&compiler.functionTable);
 		InitLinkList(&compiler.symbolTable);
 		InitLinkList(&compiler.stringTable);
+		InitLinkList(&compiler.builInFuncTable);
+
+		InitBuiltInFuncs();
 	}
 
 	void ShutDown()

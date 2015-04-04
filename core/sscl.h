@@ -28,6 +28,7 @@ namespace _cl
 	void ParseReturn();
 	void ParseAssign();
 	void ParseFunctionCall();
+	void ParseBuildInFuncCall();
 
 }
 

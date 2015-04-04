@@ -192,6 +192,38 @@ namespace _asm_
 
 }
 
+namespace _vm
+{
+	BuiltInFunc* GetBuiltInFunc(LinkList* builtInFuncTable, char* name)
+	{
+		BuiltInFunc* pBuiltInFunc;
+		LinkListNode* pNode = builtInFuncTable->pHead;
+		for (int i = 0; i < builtInFuncTable->iNodeCount; i++)
+		{
+			pBuiltInFunc = (BuiltInFunc*) pNode->pData;
+			if (strcmp(name, pBuiltInFunc->strName) == 0)
+				return pBuiltInFunc;
+			pNode = pNode->pNext;
+		}
+
+		return NULL;
+	}
+	int AddBuiltInFunc(LinkList* builtInFuncTable, char* name, int paramCount, BuiltInFuncPointer pf)
+	{
+		if (GetBuiltInFunc(builtInFuncTable, name))
+			return -1;
+
+		BuiltInFunc* pNewFunction = (BuiltInFunc*) malloc(sizeof(BuiltInFunc));
+
+		strcpy(pNewFunction->strName, name);
+		pNewFunction->iIndex = AddNode(builtInFuncTable, pNewFunction);
+		pNewFunction->iParamCount = paramCount;
+		pNewFunction->pf          = pf;
+
+		return pNewFunction->iIndex;
+	}
+}
+
 namespace _cl
 {
 	SymbolNode* GetSymbol(LinkList* pSymbolTable, int index)
@@ -341,6 +373,50 @@ namespace _cl
 
 		return AddNode(pStringTable, pStringNode);
 	}
+
+	BuiltInFunc* GetBuiltInFunc(LinkList* builtInFuncTable, int index)
+	{
+		BuiltInFunc* pBuiltInFunc;
+		LinkListNode* pNode = builtInFuncTable->pHead;
+		for (int i = 0; i < builtInFuncTable->iNodeCount; i++)
+		{
+			pBuiltInFunc = (BuiltInFunc*) pNode->pData;
+			if (index == i)
+				return pBuiltInFunc;
+			pNode = pNode->pNext;
+		}
+
+		return NULL;
+	}
+
+	BuiltInFunc* GetBuiltInFunc(LinkList* builtInFuncTable, char* name)
+	{
+		BuiltInFunc* pBuiltInFunc;
+		LinkListNode* pNode = builtInFuncTable->pHead;
+		for (int i = 0; i < builtInFuncTable->iNodeCount; i++)
+		{
+			pBuiltInFunc = (BuiltInFunc*) pNode->pData;
+			if (strcmp(name, pBuiltInFunc->strName) == 0)
+				return pBuiltInFunc;
+			pNode = pNode->pNext;
+		}
+
+		return NULL;
+	}
+
+	int AddBuiltInFunc(LinkList* builtInFuncTable, char* name, int paramCount)
+	{
+		if (GetBuiltInFunc(builtInFuncTable, name))
+			return -1;
+
+		BuiltInFunc* pNewFunction = (BuiltInFunc*) malloc(sizeof(BuiltInFunc));
+
+		strcpy(pNewFunction->strName, name);
+		pNewFunction->iIndex = AddNode(builtInFuncTable, pNewFunction);
+		pNewFunction->iParamCount = paramCount;
+
+		return pNewFunction->iIndex;
+	}
 }
 
 namespace _IL
@@ -478,6 +554,18 @@ namespace _IL
 
 		AddILCodeOprand(pFuncTable, funcIndex, instrIndex, value);
 	}
+
+	void AddILCodeOprand_BuiltInFunc(LinkList* pFuncTable, int funcIndex, 
+		int instrIndex, int opFuncIndex)
+	{
+		Oprand value;
+		value.iType = IL_OPRAND_TYPE_BUILTIN_FUNC_INDEX;
+		value.iBuiltInFuncIndex = opFuncIndex;
+
+		AddILCodeOprand(pFuncTable, funcIndex, instrIndex, value);
+	}
+
+	
 	void AddILCodeOprand_Reg(LinkList* pFuncTable, int funcIndex, 
 		                     int instrIndex, int regCode)
 	{

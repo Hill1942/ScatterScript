@@ -9,6 +9,7 @@
 #include "ssil.h"
 #include "sssystem.h"
 #include "sscl.h"
+#include "ssfuncs.h"
 
 extern _cl::Compiler compiler;
 
@@ -94,7 +95,6 @@ namespace _cl
 				break;
 		}
 	}
-
 
 	void TestLexer()
 	{
@@ -360,10 +360,6 @@ namespace _cl
 			ParseFunction();
 			break;
 
-		/*case CL_TOKEN_TYPE_KEYWORD_HOST:
-			ParseHost();
-			break; */
-
 		case CL_TOKEN_TYPE_KEYWORD_IF:
 			ParseIf();
 			break;
@@ -398,6 +394,14 @@ namespace _cl
 				{
 					_IL::AddILCodeSourceLine(&compiler.functionTable, compiler.currentScope, GetCurrentSourceLine());
 					ParseFunctionCall();
+
+					ReadToken(CL_TOKEN_TYPE_DELIM_SEMICOLON);
+				} 
+				else if (GetBuiltInFunc(&compiler.builInFuncTable, GetCurrentLexeme()))
+				{
+					_IL::AddILCodeSourceLine(&compiler.functionTable, compiler.currentScope, GetCurrentSourceLine());
+
+					ParseBuildInFuncCall();
 
 					ReadToken(CL_TOKEN_TYPE_DELIM_SEMICOLON);
 				}
@@ -446,18 +450,6 @@ namespace _cl
 		if (AddSymbol(&compiler.symbolTable, size, compiler.currentScope,
 			SYMBOL_TYPE_VAR, strIdentifier) == -1)
 			ExitOnCodeError("identifier redefinition");
-
-		ReadToken(CL_TOKEN_TYPE_DELIM_SEMICOLON);
-	}
-	void ParseHost()
-	{
-		ReadToken(CL_TOKEN_TYPE_IDENT);
-
-		if (AddFunction(&compiler.functionTable, TRUE, GetCurrentLexeme()) == -1)
-			ExitOnCodeError("Function redefinition");
-
-		ReadToken(CL_TOKEN_TYPE_DELIM_OPEN_PAREN);
-		ReadToken(CL_TOKEN_TYPE_DELIM_CLOSE_PAREN);
 
 		ReadToken(CL_TOKEN_TYPE_DELIM_SEMICOLON);
 	}
@@ -1021,6 +1013,19 @@ namespace _cl
 						_IL::AddILCodeOprand_Reg(&compiler.functionTable, compiler.currentScope,
 							instrIndex, REG_CODE_RETVAL);
 					}
+					else if (GetBuiltInFunc(&compiler.builInFuncTable, GetCurrentLexeme())) 
+					{
+						ParseBuildInFuncCall();
+
+						instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, compiler.currentScope,
+							IL_INSTR_PUSH);
+						_IL::AddILCodeOprand_Reg(&compiler.functionTable, compiler.currentScope,
+							instrIndex, REG_CODE_RETVAL);
+					}
+					else
+					{
+						ExitOnCodeError("non-defined function");
+					}
 				}
 				break;
 			}
@@ -1511,6 +1516,45 @@ namespace _cl
 		int instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, compiler.currentScope,
 			callInstr);
 		_IL::AddILCodeOprand_Func(&compiler.functionTable, compiler.currentScope,
+			instrIndex, pFunction->iIndex);
+	}
+	void ParseBuildInFuncCall()
+	{
+		BuiltInFunc* pFunction = GetBuiltInFunc(&compiler.builInFuncTable, GetCurrentLexeme());
+
+		int paramCount = 0;
+
+		ReadToken(CL_TOKEN_TYPE_DELIM_OPEN_PAREN);
+
+		while(TRUE) 
+		{
+			if (GetLookAheadChar() != ')')
+			{
+				ParseExpression();
+
+				paramCount++;
+
+				if (paramCount > pFunction->iParamCount)
+					ExitOnCodeError("Too many parameters");
+
+				if (GetLookAheadChar() != ')')
+					ReadToken(CL_TOKEN_TYPE_DELIM_COMMA);
+			}
+			else
+			{
+				break;
+			}
+		}
+
+		ReadToken(CL_TOKEN_TYPE_DELIM_CLOSE_PAREN);
+
+		if (paramCount < pFunction->iParamCount)
+			ExitOnCodeError("Too few parameters");
+
+		//call (func name)
+		int instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, compiler.currentScope,
+			IL_INSTR_CALLHOST);
+		_IL::AddILCodeOprand_BuiltInFunc(&compiler.functionTable, compiler.currentScope,
 			instrIndex, pFunction->iIndex);
 	}
 
