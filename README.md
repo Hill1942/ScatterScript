@@ -5,9 +5,9 @@ A Simple Script Language
 
 ### Grammar
 
-- Like C language, you can use control structures: **if...else**, **while**, **continue**, **break**, but **<span style="color:red;">no</span>** **for** and **switch**
+- Like C language, you can use control structures: **if...else**, **while**, **continue**, **break**, but `no` **for** and **switch**
 
-- Like C language, you have a entry point: main function. In ScatterScript, the entry point the **_main function**
+- In C language, you have a entry point: main function. It's the same in ScatterScript, but the entry point is **_main** function, which takes no parameter!
 
 - Like JavScript, you can declare a variable by using keyword **var**, and define a fuction by using keyword **func**
 
@@ -40,22 +40,25 @@ A Simple Script Language
   }
   ```
 
+### Built-In Function
 
+- `sprint( out )`  
+print **out** to console. **out** can be a integer, float-number or string.
 
 ### Usage
 
-- **<span style="font-size:16px">CompileToExe</span>**: <span style="color: red; font-weight:bold">ss</span> <span style="color: blue; font-weight:bold">-c</span> `souce-file` `out-file(optional)`
-  + example: <span style="color:#B51C1C">ss -c test.ss</span>  
+- **<span style="font-size:16px">CompileToExe</span>**:ss -c `souce-file` `out-file(optional)`
+  + example: ss -c test.ss  
 This will create the final byte-code **test.sse**
 
-- **<span style="font-size:16px">CompileToAsm</span>**: <span style="color: red; font-weight:bold">ss</span> <span style="color: blue; font-weight:bold">-s</span> `souce-file` `out-file(optional)`
-  + example: <span style="color:#B51C1C">ss -s test.ss</span>  
+- **<span style="font-size:16px">CompileToAsm</span>**: ss -s `souce-file` `out-file(optional)`
+  + example: ss -s test.ss  
 This will create the equivalent assemble file **test.ssam**
 
-- **<span style="font-size:16px">Assemble</span>**: <span style="color: red; font-weight:bold">ss</span> <span style="color: blue; font-weight:bold">-a</span> `asm-souce-file` `out-file(optional)`
-  + example: <span style="color:#B51C1C">ss -a test.ssam main</span>  
+- **<span style="font-size:16px">Assemble</span>**: ss -a `asm-souce-file` `out-file(optional)`
+  + example: ss -a test.ssam main  
 This will convert assemble file to the final byte-code **main.sse**. 
 
-- **<span style="font-size:16px">Run</span>**: <span style="color: red; font-weight:bold">ss</span> `sse-file`
-  + example: <span style="color: #B51C1C">ss main.sse</span>   
+- **<span style="font-size:16px">Run</span>**: ss `sse-file`
+  + example:  ss main.sse   
 This will run executable file **main.sse**
