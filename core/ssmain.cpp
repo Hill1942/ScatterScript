@@ -46,9 +46,10 @@ int main(int argc, char* argv[])
 				strcpy(compiler.scriptSourceFile, argv[2]);
 				int ExtOffset = strrchr(compiler.scriptSourceFile, '.') - compiler.scriptSourceFile;
 				if (compiler.scriptSourceFile[ExtOffset + 1] != 's' || 
-					compiler.scriptSourceFile[ExtOffset + 2] != 's')
+					compiler.scriptSourceFile[ExtOffset + 2] != 'c' ||
+					compiler.scriptSourceFile[ExtOffset + 3] != 's')
 				{
-					printf("Not valid .ss file!\n");
+					printf("Not valid .scs file!\n");
 					exit(0);
 				}
 
@@ -95,7 +96,8 @@ int main(int argc, char* argv[])
 				strcpy(compiler.scriptSourceFile, argv[2]);
 				int ExtOffset = strrchr(compiler.scriptSourceFile, '.') - compiler.scriptSourceFile;
 				if (compiler.scriptSourceFile[ExtOffset + 1] != 's' || 
-					compiler.scriptSourceFile[ExtOffset + 2] != 's')
+					compiler.scriptSourceFile[ExtOffset + 2] != 'c' ||
+					compiler.scriptSourceFile[ExtOffset + 3] != 's')
 				{
 					printf("Not valid .ss file!\n");
 					exit(0);

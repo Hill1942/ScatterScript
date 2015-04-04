@@ -1,0 +1,34 @@
+func sum(end)
+{
+	var start;
+	start = 0;
+	while (end > 0)
+	{
+		start += end;
+		end -= 1;
+	}
+	return start;
+}
+
+func _main()
+{
+	
+
+	var out;
+	out = sum(10);
+
+	var result;
+
+	if (out > (33 + 2) * 2)
+	{
+		result = 1;
+	}
+	else
+	{
+		result = 0;
+	}
+
+	return 0;
+
+
+}

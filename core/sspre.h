@@ -7,7 +7,7 @@
 #define VERSION_MINOR                          1
 
 #define ASM_SOURCE_EXTENSION                   ".ssam"
-#define	SOURCE_EXTENSION                       ".ss"
+#define	SOURCE_EXTENSION                       ".scs"
 #define EXE_EXTENSION                          ".sse"
 #define SSE_ID_STRING                          "sse0"
 

@@ -1,0 +1,11 @@
+func _main()
+{
+	var a;
+
+	a = 8.34;
+
+	ssprint(a);
+
+	return 0;
+}
+
