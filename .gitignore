@@ -6,7 +6,7 @@ Debug/
 *.suo
 *.ssam
 *.sse
-*.ss
+*.scs
 *.info
 *.ilk
 *.pdb
