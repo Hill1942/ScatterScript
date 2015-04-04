@@ -54,6 +54,30 @@ hello-world example:
         return 0;
     }
     ```
+- `ssfopen( filename, mode)`   
+Like fopen in C language, **filename** is the file to open, mode is the open mode, which can be: "r", "r+", "w", "w+", "a", "a+", etc
+- `ssfgetc( file )`  
+read a character from the **file**  
+- `ssfgets( file, count)`  
+read a line from **file**, or read **count-1** characters  
+- `ssfclose( file)`  
+close file  
+- `ssfwrite( file, out)`  
+write **out** to **file**  
+ example:
+    ```
+    func _main() {
+        var file;
+        file = ssfopen("data", "r");
+        char c = ssfgetc(file);
+        while (c != false) {
+            ssprint(c);
+            c = ssfgetc(file);
+        }
+        return 0;
+    }
+    ```
+    This example shows how to read a file and print out all its content to console
 
 ### Usage
 
