@@ -43,7 +43,17 @@ A Simple Script Language
 ### Built-In Function
 
 - `sprint( out )`  
-print **out** to console. **out** can be a integer, float-number or string.
+print **out** to console. **out** can be a integer, float-number or string.  
+hello-world example:
+    ```
+    func _main() {
+        var out;
+        out = "hello, world!";
+        ssprint(out);
+
+        return 0;
+    }
+    ```
 
 ### Usage
 
