@@ -70,7 +70,7 @@ write **out** to **file**
     func _main() {
         var file;
         file = ssfopen("data", "r");
-        char c = ssfgetc(file);
+        var c = ssfgetc(file);
         while (c != false) {
             ssprint(c);
             c = ssfgetc(file);
