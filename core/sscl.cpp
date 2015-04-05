@@ -314,6 +314,7 @@ namespace _cl
 			return TRUE;
 	}
 
+
 	void ParseSourceCode()
 	{
 		ResetLexer();
@@ -445,13 +446,51 @@ namespace _cl
 			size = atoi(GetCurrentLexeme());
 
 			ReadToken(CL_TOKEN_TYPE_DELIM_CLOSE_BRACE);
+
+			if (AddSymbol(&compiler.symbolTable, size, compiler.currentScope,
+				SYMBOL_TYPE_VAR, strIdentifier) == -1)
+				ExitOnCodeError("identifier redefinition");
 		}
+		else
+		{
+			if (AddSymbol(&compiler.symbolTable, size, compiler.currentScope,
+				SYMBOL_TYPE_VAR, strIdentifier) == -1)
+				ExitOnCodeError("identifier redefinition");
 
-		if (AddSymbol(&compiler.symbolTable, size, compiler.currentScope,
-			SYMBOL_TYPE_VAR, strIdentifier) == -1)
-			ExitOnCodeError("identifier redefinition");
+			SymbolNode* pSymbol = GetSymbol(&compiler.symbolTable, GetCurrentLexeme(), compiler.currentScope);
 
-		ReadToken(CL_TOKEN_TYPE_DELIM_SEMICOLON);
+			if (GetLookAheadChar() == '=') 
+			{
+				_IL::AddILCodeSourceLine(&compiler.functionTable, compiler.currentScope, GetCurrentSourceLine());
+
+				if ( GetNextToken() != CL_TOKEN_TYPE_OPERATOR || 
+					GetCurrentOperator() != CL_OPERATOR_TYPE_ASSIGN )
+					ExitOnCodeError("\"=\" expected");
+
+				ParseExpression();
+
+				ReadToken(CL_TOKEN_TYPE_DELIM_SEMICOLON);
+
+				//pop t0 (get the value of expression)
+				int instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, compiler.currentScope, IL_INSTR_POP);
+				_IL::AddILCodeOprand_Variable(&compiler.functionTable, compiler.currentScope,
+					instrIndex, compiler.tempVar0SymbolIndex);
+
+				
+
+				//move (var), t0
+				instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, 
+					compiler.currentScope, IL_INSTR_MOV);
+				_IL::AddILCodeOprand_Variable(&compiler.functionTable, compiler.currentScope, 
+					instrIndex, pSymbol->iIndex);
+				_IL::AddILCodeOprand_Variable(&compiler.functionTable, compiler.currentScope,
+					instrIndex, compiler.tempVar0SymbolIndex);
+			}
+			else
+			{
+				ReadToken(CL_TOKEN_TYPE_DELIM_SEMICOLON);
+			}
+		}	
 	}
 	void ParseFunction()
 	{
@@ -977,11 +1016,13 @@ namespace _cl
 
 						ReadToken(CL_TOKEN_TYPE_DELIM_CLOSE_BRACE);
 
+						//pop t0
 						instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, compiler.currentScope,
 							IL_INSTR_POP);
 						_IL::AddILCodeOprand_Variable(&compiler.functionTable, compiler.currentScope,
 							instrIndex, compiler.tempVar0SymbolIndex);
 
+						//push t0
 						instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, compiler.currentScope,
 							IL_INSTR_PUSH);
 						_IL::AddILCodeOprand_RelArrayIndex(&compiler.functionTable, compiler.currentScope,

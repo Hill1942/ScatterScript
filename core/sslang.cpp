@@ -527,22 +527,23 @@ namespace _IL
 		AddILCodeOprand(pFuncTable, funcIndex, instrIndex, value);
 	}
 	void AddILCodeOprand_AbsArrayIndex(LinkList* pFuncTable, int funcIndex, 
-		                               int instrIndex, int arrayIndex, int offset)
+		                               int instrIndex, int arraySymbolIndex, int offset)
 	{
 		Oprand value;
 		value.iType = IL_OPRAND_TYPE_ABS_ARRAY_INDEX;
-		value.iSymbolIndex = arrayIndex;
+		value.iSymbolIndex = arraySymbolIndex;
 		value.iOffset = offset;
 
 		AddILCodeOprand(pFuncTable, funcIndex, instrIndex, value);
 	}
 	void AddILCodeOprand_RelArrayIndex(LinkList* pFuncTable, int funcIndex, 
-		                               int instrIndex, int arrayIndex, int offsetSymbolIndex)
+		                               int instrIndex, int arraySymbolIndex, int offsetSymbolIndex)
 	{
 		Oprand value;
 		value.iType = IL_OPRAND_TYPE_REL_ARRAY_INDEX;
-		value.iSymbolIndex = offsetSymbolIndex;
-
+		value.iSymbolIndex = arraySymbolIndex;
+		value.iOffsetSymbolIndex = offsetSymbolIndex;
+															 
 		AddILCodeOprand(pFuncTable, funcIndex, instrIndex, value);
 	}
 	void AddILCodeOprand_Func(LinkList* pFuncTable, int funcIndex, 

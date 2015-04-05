@@ -462,55 +462,57 @@ namespace _asm_
     
     void BuildSSE() 
     {
-    	/*char exeFilename[MAX_FILENAME_SIZE];
-    	char* exeDir = "bin\\";
-    	strcpy(exeFilename, exeDir);
-    	strcat(exeFilename, sasm.exeFilename);*/
-    
     	FILE* pExeFile = fopen(sasm.exeFileName, "wb");
     	if (! pExeFile)
     		ExitOnError("Could not open executable for output");
     	
     	fwrite(SSE_ID_STRING, 4, 1, pExeFile);
+#ifdef LOG_ON
     	printf("sse_id_string: %s\n", SSE_ID_STRING);
-    
+#endif    
     	char versionMajor = VERSION_MAJOR;
     	char versionMinor = VERSION_MINOR;
     
     	fwrite(&versionMajor, 1, 1, pExeFile);
     	fwrite(&versionMinor, 1, 1, pExeFile);
+#ifdef LOG_ON
     	printf("version: %d.%d\n", versionMajor, versionMinor);
     
     	printf("-------------------------------Global Info--------------------------------\n");
-    
+#endif     
     	fwrite(&sasm.header.iStackSize, 4, 1, pExeFile);
     	fwrite(&sasm.header.iGlobalDataSize, 4, 1, pExeFile);
+#ifdef LOG_ON
     	printf("stackSize: %d\n", sasm.header.iStackSize);
     	printf("globalDataSize: %d\n", sasm.header.iGlobalDataSize);
-    
+#endif
     	char isMainExist = 0;
     	if (sasm.header.iIsMainFuncPresent)
     		isMainExist = 1;
     
     	fwrite(&isMainExist, 1, 1, pExeFile);
     	fwrite(&sasm.header.iMainFuncIndex, 4, 1, pExeFile);
+#ifdef LOG_ON
     	if (isMainExist)
     		printf("main func exists, and the main func index is: %d\n", sasm.header.iMainFuncIndex);
     	else
     		printf("main func not exists\n");
     
     	printf("-------------------------------Instr Info--------------------------------\n");
-    
+#endif    
     	fwrite(&sasm.instrStreamSize, 4, 1, pExeFile);
     	for (int i = 0; i < sasm.instrStreamSize; i++)
     	{
     		short opCode = sasm.instrStream[i].iOpcode;
     		fwrite(&opCode, 2, 1, pExeFile);
+#ifdef LOG_ON
     		printf("opCode: %d\n", opCode);
-    
+#endif    
     		char opCount = sasm.instrStream[i].iOpCount;
     		fwrite(&opCount, 1, 1, pExeFile);
+#ifdef LOG_ON
     		printf("opCount: %d\n", opCount);
+#endif
     
     		for (int j = 0; j < opCount; j++)
     		{
@@ -518,72 +520,95 @@ namespace _asm_
     
     			char opType = currentOp.iType;
     			fwrite(&opType, 1, 1, pExeFile);
+#ifdef LOG_ON
     			printf("opType: %d\n", opType);
+#endif
     
     			switch (currentOp.iType)
     			{
     			case ASM_OPRAND_TYPE_INT:
     				fwrite(&currentOp.iIntLiteral, sizeof(int), 1, pExeFile);
+#ifdef LOG_ON
     				printf("opIntLiteral: %d\n", currentOp.iIntLiteral);
+#endif
     				break;
     
     			case ASM_OPRAND_TYPE_FLOAT:
     				fwrite(&currentOp.fFloatLiteral, sizeof(float), 1, pExeFile);
+#ifdef LOG_ON
     				printf("opFloatLiteral: %f\n", currentOp.fFloatLiteral);
+#endif
     				break;
     				
     			case ASM_OPRAND_TYPE_STRING_INDEX:
     				fwrite(&currentOp.iStringTableIndex, sizeof(int), 1, pExeFile);
+#ifdef LOG_ON
     				printf("opStringIndex: %d\n", currentOp.iStringTableIndex);
+#endif
     				break;
     
     			case ASM_OPRAND_TYPE_INSTR_INDEX:
     				fwrite(&currentOp.iInstrIndex, sizeof(int), 1, pExeFile);
+#ifdef LOG_ON
     				printf("opInstrIndex: %d\n", currentOp.iInstrIndex);
+#endif
     				break;
     
     			case ASM_OPRAND_TYPE_ABS_STACK_INDEX:
     				fwrite(&currentOp.iStackIndex, sizeof(int), 1, pExeFile);
+#ifdef LOG_ON
     				printf("opStackIndex: %d\n", currentOp.iStackIndex);
+#endif
     				break;
     
     			case ASM_OPRAND_TYPE_REL_STACK_INDEX:
     				fwrite(&currentOp.iStackIndex, sizeof(int), 1, pExeFile);
     				fwrite(&currentOp.iOffsetIndex, sizeof(int), 1, pExeFile);
+#ifdef LOG_ON
     				printf("opStackIndex: %d\n", currentOp.iStackIndex);
     				printf("opOffsetIndex: %d\n", currentOp.iOffsetIndex);
+#endif
     				break;
     
     			case ASM_OPRAND_TYPE_FUNC_INDEX:
     				fwrite(&currentOp.iFuncIndex, sizeof(int), 1, pExeFile);
+#ifdef LOG_ON
     				printf("opFuncIndex: %d\n", currentOp.iFuncIndex);
+#endif
     				break;
     
     			case ASM_OPRAND_TYPE_HOST_API_CALL_INDEX:
     				fwrite(&currentOp.iHostAPICallIndex, sizeof(int), 1, pExeFile);
+#ifdef LOG_ON
     				printf("opHostApiIndex: %d\n", currentOp.iHostAPICallIndex);
+#endif
     				break;;
     
     			case ASM_OPRAND_TYPE_REG:
     				fwrite(&currentOp.iReg, sizeof(int), 1, pExeFile);
+#ifdef LOG_ON
     				printf("opReg: %d\n", currentOp.iReg);
+#endif
     				break;
     
     			default:
     				break;
     			}
     		}
-    
+#ifdef LOG_ON
     		printf("\n");
+#endif
     	}
-    
+#ifdef LOG_ON   
     	printf("-------------------------------String Info--------------------------------\n");
-    
+#endif    
     	//int currentNode;
     	LinkListNode* pNode;
     
     	fwrite(&sasm.stringTable.iNodeCount, 4, 1, pExeFile);
+#ifdef LOG_ON
     	printf("string number: %d\n\n", sasm.stringTable.iNodeCount);
+#endif
     	pNode = sasm.stringTable.pHead;
     
     	char paramCount;
@@ -595,44 +620,51 @@ namespace _asm_
     
     		fwrite(&currentStrLen, 4, 1, pExeFile);
     		fwrite(currentString, currentStrLen, 1, pExeFile);
+#ifdef LOG_ON
     		printf("strlen: %d\n", currentStrLen);
     		printf("string: %s\n", currentString);
     
     		printf("\n");
-    
+#endif    
     		pNode = pNode->pNext;
     	}
-    
+#ifdef LOG_ON
     	printf("-------------------------------Func Info--------------------------------\n");
-    
+#endif    
     	fwrite(&sasm.functionTable.iNodeCount, 4, 1, pExeFile);
+#ifdef LOG_ON
     	printf("function number: %d\n\n", sasm.functionTable.iNodeCount);
-    
+#endif    
     	pNode = sasm.functionTable.pHead;
     
     	for (int i = 0; i < sasm.functionTable.iNodeCount; i++)
     	{
     		FuncNode* pFunc = (FuncNode*) pNode->pData;
     		fwrite(&pFunc->iEntryPoint, sizeof(int), 1, pExeFile);
+#ifdef LOG_ON
     		printf("func entry point: %d\n", pFunc->iEntryPoint);
-    
+#endif    
     		paramCount = pFunc->iParamCount;
     		fwrite(&paramCount, 1, 1, pExeFile);
+#ifdef LOG_ON
     		printf("func paramCount: %d\n", paramCount);
-    
+#endif    
     		fwrite(&pFunc->iLocalDataSize, sizeof(int), 1, pExeFile);
+#ifdef LOG_ON
     		printf("func localDataSize: %d\n", pFunc->iLocalDataSize);
-    
+#endif    
     		pNode = pNode->pNext;
-    
+#ifdef LOG_ON    
     		printf("\n");
+#endif
     	}
-    
+#ifdef LOG_ON    
     	printf("-------------------------------HostAPI Info--------------------------------\n");
-    
+#endif    
     	fwrite(&sasm.hostAPICallTable.iNodeCount, 4, 1, pExeFile);
+#ifdef LOG_ON
     	printf("host api number: %d\n\n", sasm.hostAPICallTable.iNodeCount);
-    
+#endif    
     	pNode = sasm.hostAPICallTable.pHead;
     
     	for (int i = 0; i < sasm.hostAPICallTable.iNodeCount; i++)
@@ -642,11 +674,12 @@ namespace _asm_
     
     		fwrite(&currentHostAPICallLen, 1, 1, pExeFile);
     		fwrite(currentHostAPICall, currentHostAPICallLen, 1, pExeFile);
+#ifdef LOG_ON
     		printf("currentHostAPICallLen: %d\n", currentHostAPICallLen);
     		printf("currentHostAPICall: %s\n", currentHostAPICall);
-    
-    		pNode = pNode->pNext;
     		printf("\n");
+#endif
+			pNode = pNode->pNext;
     	}
     
     	fclose(pExeFile);

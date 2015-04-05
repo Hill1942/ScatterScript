@@ -152,7 +152,7 @@ extern _cl::Compiler compiler;
 							 	 break;
 							 
 							 case IL_OPRAND_TYPE_REL_ARRAY_INDEX:
-							 	 fprintf(compiler.outAssembleFile, "%s[%s]", oprand->iIntLiteral,
+							 	 fprintf(compiler.outAssembleFile, "%s[%s]",
 									  _cl::GetSymbol(&compiler.symbolTable, oprand->iSymbolIndex)->strIdentifier,
 									  _cl::GetSymbol(&compiler.symbolTable, oprand->iOffsetSymbolIndex)->strIdentifier);
 							 	 break;

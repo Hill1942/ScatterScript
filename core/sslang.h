@@ -343,23 +343,19 @@ namespace _IL
 	struct Oprand
 	{
 		int iType;
-		union 
+		union
 		{
-			int iType;
-			union
-			{
-				int   iIntLiteral;
-				float fFloatLiteral;
-				int   iStringIndex;
-				int   iSymbolIndex;
-				int   iJumpTargetIndex;
-				int   iFuncIndex;
-				int   iBuiltInFuncIndex;
-				int   iRegCode;
-			};
-			int iOffset;
-			int iOffsetSymbolIndex;
+			int   iIntLiteral;
+			float fFloatLiteral;
+			int   iStringIndex;
+			int   iSymbolIndex;
+			int   iJumpTargetIndex;
+			int   iFuncIndex;
+			int   iBuiltInFuncIndex;
+			int   iRegCode;
 		};
+		int iOffset;
+		int iOffsetSymbolIndex;
 	};
 
 	struct ILCodeInstr
@@ -389,8 +385,8 @@ namespace _IL
 	void        AddILCodeOprand_Float(LinkList* pFuncTable, int funcIndex, int instrIndex, float fValue);
 	void        AddILCodeOprand_String(LinkList* pFuncTable, int funcIndex, int instrIndex, int stringIndex);
 	void        AddILCodeOprand_Variable(LinkList* pFuncTable, int funcIndex, int instrIndex, int symbolIndex);
-	void        AddILCodeOprand_AbsArrayIndex(LinkList* pFuncTable, int funcIndex, int instrIndex, int arrayIndex, int offset);
-	void        AddILCodeOprand_RelArrayIndex(LinkList* pFuncTable, int funcIndex, int instrIndex, int arrayIndex, int offsetSymbolIndex);
+	void        AddILCodeOprand_AbsArrayIndex(LinkList* pFuncTable, int funcIndex, int instrIndex, int arraySymbolIndex, int offset);
+	void        AddILCodeOprand_RelArrayIndex(LinkList* pFuncTable, int funcIndex, int instrIndex, int arraySymbolIndex, int offsetSymbolIndex);
 	void        AddILCodeOprand_Func(LinkList* pFuncTable, int funcIndex, int instrIndex, int opFuncIndex);
 	void        AddILCodeOprand_BuiltInFunc(LinkList* pFuncTable, int funcIndex, int instrIndex, int opFuncIndex);
 	void        AddILCodeOprand_Reg(LinkList* pFuncTable, int funcIndex, int instrIndex, int regCode);

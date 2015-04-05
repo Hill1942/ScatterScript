@@ -253,13 +253,13 @@ namespace _vm
 							break;
 
 						CopyValue(&dest, source);
-
 					}
 					else if (opCode == ASM_INSTR_ADD)
 					{
 						if (dest.iType == ASM_OPRAND_TYPE_STRING_INDEX || 
 							source.iType == ASM_OPRAND_TYPE_STRING_INDEX)
 						{
+							//dest.strStringLiteral = GetOpValueAsString(0);
 							char* appendString = GetOpValueAsString(1);
 							int newStringLength = strlen(dest.strStringLiteral) + strlen(appendString);
 							char* newString = (char*) malloc(newStringLength + 1);
