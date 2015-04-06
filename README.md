@@ -9,12 +9,14 @@ A Simple Script Language
 version, and select **Build Solution** in menu **BUILD**  
 And the development environment is Windows 7 Professional
 - For Linux users: run the following 4 command in terminal
+
   ```
   mkdir build
   cd build
   cmake ..
   make
   ```
+
 - For Mac OS X users: sorry, I don't have a mac, so you need to get the source code and adapt to mac version by yourself!   >_<
 
 
