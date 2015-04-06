@@ -390,6 +390,8 @@ namespace _asm_
             }
         }
         sasm.lexer.iIndex1 = sasm.lexer.iIndex0;
+
+		int isGetEscapeChar = FALSE;
     
         //move iIndex1 to the location of next token end
         while (TRUE)
@@ -403,6 +405,7 @@ namespace _asm_
                 }
                 if (sasm.sourceCode[sasm.lexer.iCurrentSourceLine][sasm.lexer.iIndex1] == '\\')
                 {
+					//isGetEscapeChar = TRUE;
                     sasm.lexer.iIndex1 += 2;
                     continue;
                 }
@@ -427,9 +430,52 @@ namespace _asm_
         unsigned int currentTargetIndex = 0;
         for (int i = sasm.lexer.iIndex0; i < sasm.lexer.iIndex1; i++)
         {
-            if (sasm.lexer.iState == ASM_LEX_STATE_IN_STRING)
-                if (sasm.sourceCode[sasm.lexer.iCurrentSourceLine][i] == '\\')
-                    i++;
+			if (sasm.lexer.iState == ASM_LEX_STATE_IN_STRING)
+				if (sasm.sourceCode[sasm.lexer.iCurrentSourceLine][i] == '\\')
+				{
+					switch (sasm.sourceCode[sasm.lexer.iCurrentSourceLine][i + 1])
+					{
+					case 'a':
+						 sasm.lexer.pCurrentLexeme[currentTargetIndex] = '\n';
+						 break;
+					case 'b':
+						sasm.lexer.pCurrentLexeme[currentTargetIndex] = '\b';
+						break;
+					case 'f':
+						sasm.lexer.pCurrentLexeme[currentTargetIndex] = '\f';
+						break;
+					case 'n':
+						sasm.lexer.pCurrentLexeme[currentTargetIndex] = '\n';
+						break;
+					case 'r':
+						sasm.lexer.pCurrentLexeme[currentTargetIndex] = '\r';
+						break;
+					case 't':
+						sasm.lexer.pCurrentLexeme[currentTargetIndex] = '\t';
+						break;
+					case 'v':
+						sasm.lexer.pCurrentLexeme[currentTargetIndex] = '\n';
+						break;
+					case '\\':
+						sasm.lexer.pCurrentLexeme[currentTargetIndex] = '\\';
+						break;
+					case '\'':
+						sasm.lexer.pCurrentLexeme[currentTargetIndex] = '\'';
+						break;
+					case '"':
+						sasm.lexer.pCurrentLexeme[currentTargetIndex] = '\"';
+						break;
+					case '0':
+						sasm.lexer.pCurrentLexeme[currentTargetIndex] = '\0';
+						break;
+
+					default:
+						break;
+					}
+					currentTargetIndex += 1;
+					i++;
+					continue;
+				}
             sasm.lexer.pCurrentLexeme[currentTargetIndex] = sasm.sourceCode[sasm.lexer.iCurrentSourceLine][i];
             currentTargetIndex++;
         }
@@ -646,6 +692,7 @@ namespace _cl
     	int  isAddCurrentChar;
     
     	int  isLexemeDone = FALSE;
+		int  isEscapeChar = FALSE;
     	while (TRUE)
     	{
     		currentChar = GetNextChar();
@@ -801,23 +848,43 @@ namespace _cl
     
     		case CL_LEX_STATE_STRING:
     			{
-    				if (currentChar == '"')
-    				{
-    					isAddCurrentChar = FALSE;
-    					currentLexemeState = CL_LEX_STATE_STRING_CLOSE_QUOTE;
-    				}
-    				else if (currentChar == '\\')
-    				{
-    					isAddCurrentChar = FALSE;
-    					currentLexemeState = CL_LEX_STATE_STRING_ESCAPE;
-    				}
+					if (isEscapeChar)
+					{
+						isEscapeChar = FALSE;
+						isAddCurrentChar = TRUE;
+					}
+					else 
+					{
+						if (currentChar == '"')
+						{
+							isAddCurrentChar = FALSE;
+							currentLexemeState = CL_LEX_STATE_STRING_CLOSE_QUOTE;
+						}
+						else if (currentChar == '\\')
+						{
+							isEscapeChar = TRUE;
+							isAddCurrentChar = TRUE;
+						}
+						else
+						{
+							isAddCurrentChar = TRUE;
+						}
+					}
     
     				break;
     			}
     
     		case CL_LEX_STATE_STRING_ESCAPE:
     			{
-    				currentLexemeState = CL_LEX_STATE_STRING;
+					/*switch (currentChar)
+					{
+					case 'n':
+
+					default:
+						break;
+					}
+					isEscapeChar = TRUE;
+    				currentLexemeState = CL_LEX_STATE_STRING;*/
     
     				break;
     			}
