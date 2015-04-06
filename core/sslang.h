@@ -108,6 +108,7 @@ namespace _asm_
 		int          instrStreamSize;
 		int          isSetStackSizeFound;
 		int          currentInstrIndex;
+		int          isBuildInfo;
 
 		InstrLookup  instrLookup[MAX_INSTR_LOOKUP_COUNT];
 	};

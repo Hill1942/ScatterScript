@@ -88,11 +88,23 @@ int main(int argc, char* argv[])
 					strcat(sasm.exeFileName, EXE_EXTENSION);
 				}
 
+				sasm.isBuildInfo = TRUE;
+
 				asm_run();
 			}
 			break;
 		case 'c':
+		case 'd':	
 			{
+				switch (option[1])
+				{
+				case 'c':
+					sasm.isBuildInfo = FALSE;
+					break;
+				case 'd':
+					sasm.isBuildInfo = TRUE;
+					break;
+				}
 				strcpy(compiler.scriptSourceFile, argv[2]);
 				int ExtOffset = strrchr(compiler.scriptSourceFile, '.') - compiler.scriptSourceFile;
 				if (compiler.scriptSourceFile[ExtOffset + 1] != 's' || 
@@ -199,9 +211,8 @@ void asm_run()
 
 	_asm_::BuildSSE();
 
-#ifdef DEBUG_ON
-	_asm_::BuildSSE_Info();
-#endif
+	if (sasm.isBuildInfo)
+		_asm_::BuildSSE_Info();
 
 	_asm_::ShutDown();
 }
