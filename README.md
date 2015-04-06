@@ -12,19 +12,13 @@ A Simple Script Language
 
 - Like JavScript, you can declare a variable by using keyword **var**, and define a fuction by using keyword **func**
 
-- You must first declare a variable, and then assign value
-     ```
-     var aaa;
-     aaa = 10;
-     ```
 - Data Type: Integer, Float-point number, String
 
 - Example:
   ```
   func sum(end)
   {
-	  var start;
-	  start = 0;
+	  var start = 0;
 	  while (end > 0)
 	  {
 		  start += end;
@@ -35,8 +29,7 @@ A Simple Script Language
 
   func _main()
   {
-	  var out;
-	  out = sum(10);
+	  var out = sum(10);
 	  return 0;
   }
   ```
@@ -48,8 +41,7 @@ print **out** to console. **out** can be a integer, float-number or string.
 hello-world example:
     ```
     func _main() {
-        var out;
-        out = "hello, world!";
+        var out = "hello, world!";
         ssprint(out);
 
         return 0;
@@ -68,8 +60,7 @@ write **out** to **file**
  example:
     ```
     func _main() {
-        var file;
-        file = ssfopen("data", "r");
+        var file = ssfopen("data", "r");
         var c = ssfgetc(file);
         while (c != false) {
             ssprint(c);
