@@ -899,25 +899,25 @@ namespace _cl
 				ILInstr = IL_INSTR_MUL;
 				break;
 			case CL_OPERATOR_TYPE_DIV:
-				ILInstr = IL_INSTR_MUL;
+				ILInstr = IL_INSTR_DIV;
 				break;
 			case CL_OPERATOR_TYPE_MOD:
-				ILInstr = IL_INSTR_MUL;
+				ILInstr = IL_INSTR_MOD;
 				break;
 			case CL_OPERATOR_TYPE_AND:
-				ILInstr = IL_INSTR_MUL;
+				ILInstr = IL_INSTR_AND;
 				break;
 			case CL_OPERATOR_TYPE_OR:
-				ILInstr = IL_INSTR_MUL;
+				ILInstr = IL_INSTR_OR;
 				break;
 			case CL_OPERATOR_TYPE_XOR:
-				ILInstr = IL_INSTR_MUL;
+				ILInstr = IL_INSTR_XOR;
 				break;
 			case CL_OPERATOR_TYPE_SHIFT_LEFT:
-				ILInstr = IL_INSTR_MUL;
+				ILInstr = IL_INSTR_SHL;
 				break;
 			case CL_OPERATOR_TYPE_SHIFT_RIGHT:
-				ILInstr = IL_INSTR_MUL;
+				ILInstr = IL_INSTR_SHR;
 				break;
 			default:
 				break;
