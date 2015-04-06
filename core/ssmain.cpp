@@ -233,6 +233,7 @@ void vm_run(char* exeFilename)
 			break;
 		}
 		printf(".\n");
+		exit(0);
 	}
 
 	_vm::ResetScript();
