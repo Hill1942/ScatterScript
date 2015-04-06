@@ -2,6 +2,7 @@
 command-lang/
 Debug/
 bin/*.txt
+build/
 *.opensdf
 *.sdf
 *.suo
