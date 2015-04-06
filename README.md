@@ -12,7 +12,15 @@ A Simple Script Language
 
 - Like JavScript, you can declare a variable by using keyword **var**, and define a fuction by using keyword **func**
 
-- Data Type: Integer, Float-point number, String
+- Data Type: Integer, Float-point number, String and Array  
+Note: Array can not be initialized when you declare it. You can only initialize an array by doing so:
+  ```
+  var a[3];
+  a[0] = 0;
+  a[1] = "ddd";
+  a[2] = 34;  
+  // or using a while loop
+  ```
 
 - Example:
   ```
@@ -74,9 +82,10 @@ write **out** to **file**
 
 ### Usage
 
-- **<span style="font-size:16px">CompileToExe</span>**:ss -c `souce-file` `out-file(optional)`
+- **<span style="font-size:16px">CompileToExe</span>**:ss -c(-d) `souce-file` `out-file(optional)`
   + example: ss -c test.ss  
-This will create the final byte-code **test.sse**
+This will create the final byte-code **test.sse**  
+Option `-d` means debug mode: generate a **test.sse.info**, which contains comment info for sse file
 
 - **<span style="font-size:16px">CompileToAsm</span>**: ss -s `souce-file` `out-file(optional)`
   + example: ss -s test.ss  
@@ -85,6 +94,7 @@ This will create the equivalent assemble file **test.ssam**
 - **<span style="font-size:16px">Assemble</span>**: ss -a `asm-souce-file` `out-file(optional)`
   + example: ss -a test.ssam main  
 This will convert assemble file to the final byte-code **main.sse**. 
+
 
 - **<span style="font-size:16px">Run</span>**: ss `sse-file`
   + example:  ss main.sse   
