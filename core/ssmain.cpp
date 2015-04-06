@@ -7,8 +7,6 @@
 #include <process.h>
 #endif // _WIN32
 
-
-#include "ssutil.h"
 #include "sspre.h"
 #include "ssbase_type.h"
 #include "sslang.h"
@@ -91,8 +89,9 @@ int main(int argc, char* argv[])
 				sasm.isBuildInfo = TRUE;
 
 				asm_run();
+
+				break;
 			}
-			break;
 		case 'c':
 		case 'd':	
 			{
@@ -170,9 +169,15 @@ int main(int argc, char* argv[])
 				free ( argv[2] );
 #endif
 
+			#ifdef __linux__
+			char delLine[256];
+			strcpy(delLine, "rm ");
+			strcat(delLine, compiler.outAssembleFilename);
+			system(delLine);
+			#endif
+
 				break;
 			}
-			break;
 
 		case 'r':
 			{

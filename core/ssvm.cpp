@@ -3,8 +3,6 @@
 #include <string.h>
 #include <math.h>
 
-#include <windows.h>
-
 #include "sspre.h"
 #include "ssbase_type.h"
 #include "sslang.h"
@@ -817,7 +815,7 @@ namespace _vm
     	switch (value.iType)
     	{
     	case ASM_OPRAND_TYPE_INT:
-    		_itoa(value.iIntLiteral, str, 10);
+			sprintf(str, "%d", value.iIntLiteral);
     		return str;
     	case ASM_OPRAND_TYPE_FLOAT:
     		sprintf(str, "%f", value.fFloatLiteral);
@@ -1019,7 +1017,7 @@ namespace _vm
 		vm_script._RetVal.iType = ASM_OPRAND_TYPE_INT;
 		vm_script._RetVal.iIntLiteral = integer;
 	}
-	void ReturnValue_Floatt(float fnum)
+	void ReturnValue_Float(float fnum)
 	{
 		vm_script._RetVal.iType = ASM_OPRAND_TYPE_FLOAT;
 		vm_script._RetVal.fFloatLiteral = fnum;

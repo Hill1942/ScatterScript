@@ -42,8 +42,8 @@ namespace _vm
 
 	void ReturnValue_String(char* str);
 	void ReturnValue_Int(int integer);
-	void ReturnValue_Floatt(float fnum);
-#define ReturnValue_Pointer(p) ReturnValue_Int((int)p)
+	void ReturnValue_Float(float fnum);
+#define ReturnValue_Pointer(p) ReturnValue_Int((intptr_t)p)
 
     
 }

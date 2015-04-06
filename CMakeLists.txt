@@ -3,21 +3,12 @@ project(ScatterScript)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-set(SOURCE_FILES
-    scatter-asm/ssutil.cpp
-    scatter-asm/ssutil.h
-    scatter-asm/ssbase_type.cpp
-    scatter-asm/ssbase_type.h
-    scatter-asm/sstype.cpp
-    scatter-asm/sstype.h
-    scatter-asm/sslexeme.cpp
-    scatter-asm/sslexeme.h
-    scatter-asm/ssasm.cpp
-    scatter-asm/ssasm.h
-    LICENSE
-    README.md)
+aux_source_directory(. SRC_LIST)
+aux_source_directory(core CORE_SRC)
+aux_source_directory(ssdk SSDK_SRC)
 
-include_directories(.)
-include_directories(scatter-asm)
+list(APPEND SRC_LIST ${CORE_SRC})
+list(APPEND SRC_LIST ${SSDK_SRC})
 
-add_executable(ScatterScript ${SOURCE_FILES})
+
+add_executable(ss ${SRC_LIST})
