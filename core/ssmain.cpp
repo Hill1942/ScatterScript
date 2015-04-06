@@ -142,8 +142,8 @@ int main(int argc, char* argv[])
 				argv[0] = (char*) malloc(strlen("ss") + 1);
 				strcpy(argv[0], "ss");
 
-				argv[1] = (char*) malloc(strlen("-d") + 1);
-				strcpy(argv[1], "-d");
+				argv[1] = (char*) malloc(strlen("-r") + 1);
+				strcpy(argv[1], "-r");
 
 				argv[2] = (char*) malloc(strlen(compiler.outAssembleFilename) + 1);
 				strcpy(argv[2], compiler.outAssembleFilename);
@@ -162,7 +162,7 @@ int main(int argc, char* argv[])
 			}
 			break;
 
-		case 'd':
+		case 'r':
 			{
 				remove(argv[2]);
 				break;
