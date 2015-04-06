@@ -60,7 +60,7 @@ Note: Array can not be initialized when you declare it. You can only initialize 
 
 ### Built-In Function
 
-- `sprint( out )`  
+- `ssprint( out )`  
 print **out** to console. **out** can be a integer, float-number or string.  
 hello-world example:
     ```
@@ -78,7 +78,7 @@ read a character from the **file**
 - `ssfgets( file, count)`  
 read a line from **file**, or read **count-1** characters  
 - `ssfclose( file)`  
-close file  
+close file
 - `ssfwrite( file, out)`  
 write **out** to **file**  
  example:
