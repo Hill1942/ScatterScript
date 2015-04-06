@@ -601,7 +601,7 @@ namespace _cl
 					break;
 				case CL_OPERATOR_TYPE_LESS:
 					instrIndex = _IL::AddILCodeInstr(&compiler.functionTable,
-						compiler.currentScope, IL_INSTR_JE);
+						compiler.currentScope, IL_INSTR_JL);
 					break;
 				case CL_OPERATOR_TYPE_LESS_EQUAL:
 					instrIndex = _IL::AddILCodeInstr(&compiler.functionTable,
@@ -1004,8 +1004,8 @@ namespace _cl
 				{
 					if (GetLookAheadChar() == '[')
 					{
-						if (pSymbol->iSize == 1)
-							ExitOnCodeError("Invalid array");
+						//if (pSymbol->iSize == 1)
+							//ExitOnCodeError("Invalid array");
 
 						ReadToken(CL_TOKEN_TYPE_DELIM_OPEN_BRACE);
 
@@ -1293,6 +1293,8 @@ namespace _cl
 	}
 	void ParseFor()
 	{
+		int instrIndex;
+
 		if (compiler.currentScope == SCOPE_GLOBAL)
 			ExitOnCodeError("for illegal in global scope");
 
@@ -1404,8 +1406,8 @@ namespace _cl
 		int isArray = FALSE;
 		if (GetLookAheadChar() == '[')
 		{
-			if (pSymbol->iSize == 1)
-				ExitOnCodeError("Invalid array");
+			//if (pSymbol->iSize == 1)
+				//ExitOnCodeError("Invalid array");
 
 			ReadToken(CL_TOKEN_TYPE_DELIM_OPEN_BRACE);
 

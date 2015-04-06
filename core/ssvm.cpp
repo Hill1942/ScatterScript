@@ -94,6 +94,7 @@ namespace _vm
     			case ASM_OPRAND_TYPE_REL_STACK_INDEX:
     				fread(&pOplist[j].iStackIndex, sizeof(int), 1, pScriptFile);
     				fread(&pOplist[j].iOffsetIndex, sizeof(int), 1, pScriptFile);
+					fread(&pOplist[j].iSize, sizeof(int), 1, pScriptFile);
     				break;
     			case ASM_OPRAND_TYPE_FUNC_INDEX:
     				fread(&pOplist[j].iFuncIndex, sizeof(int), 1, pScriptFile);
@@ -259,7 +260,8 @@ namespace _vm
 						if (dest.iType == ASM_OPRAND_TYPE_STRING_INDEX || 
 							source.iType == ASM_OPRAND_TYPE_STRING_INDEX)
 						{
-							//dest.strStringLiteral = GetOpValueAsString(0);
+							dest.iType = ASM_OPRAND_TYPE_STRING_INDEX;
+							dest.strStringLiteral = GetOpValueAsString(0);
 							char* appendString = GetOpValueAsString(1);
 							int newStringLength = strlen(dest.strStringLiteral) + strlen(appendString);
 							char* newString = (char*) malloc(newStringLength + 1);
@@ -929,10 +931,17 @@ namespace _vm
     	case ASM_OPRAND_TYPE_REL_STACK_INDEX:
     		int baseIndex = opValue.iStackIndex;
     		int offsetIndex = opValue.iOffsetIndex;
+			int size        = opValue.iSize;
     
     		Value stackValue = GetStackValue(offsetIndex);
+
+			if (stackValue.iIntLiteral + 1 > size) 
+			{			
+				printf("vm detects an array has been out of index!\n");
+				exit(0);
+			}
     
-    		return baseIndex + stackValue.iIntLiteral;
+    		return baseIndex - stackValue.iIntLiteral;
     	}
     	return 0;
     }
@@ -970,6 +979,11 @@ namespace _vm
     
     	Value value;
     	CopyValue(&value, vm_script.stack.pElement[topIndex]);
+
+		Value null_value;
+		null_value.iType = -1;
+		null_value.iIntLiteral = 0;
+		vm_script.stack.pElement[topIndex] = null_value;
     
     	return value;
     }

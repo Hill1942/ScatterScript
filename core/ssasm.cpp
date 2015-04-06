@@ -369,8 +369,9 @@ namespace _asm_
     								}
     								else
     								{
-    									if (GetSizeByIdent(pIdentifier, currentFuncIndex) == 1)
-    										ExitOnCodeError(ERROR_MSG_INVALID_ARRAY);
+										int arraySize = GetSizeByIdent(pIdentifier, currentFuncIndex);
+    									//if (GetSizeByIdent(pIdentifier, currentFuncIndex) == 1)
+    										//ExitOnCodeError(ERROR_MSG_INVALID_ARRAY);
     									if (GetNextToken() != ASM_TOKEN_TYPE_OPEN_BRACKET)
     										ExitOnCharExpectedError('[');
     
@@ -379,13 +380,16 @@ namespace _asm_
     									{
     										int offsetIndex = atoi(GetCurrentLexeme());
     										pOpList[i].iType = ASM_OPRAND_TYPE_ABS_STACK_INDEX;
-    										pOpList[i].iStackIndex = baseIndex + offsetIndex;
+
+											//must not be global , because in global, baseIndex is positive
+    										pOpList[i].iStackIndex = baseIndex - offsetIndex;
     									} 
     									else if (indexToken == ASM_TOKEN_TYPE_IDENT)
     									{
     										char* pStrIndexIdent = GetCurrentLexeme();
     										if (!GetSymbol(&sasm.symbolTable, pStrIndexIdent, currentFuncIndex))
     											ExitOnCodeError(ERROR_MSG_UNDEFINED_IDENT);
+											//if size > 1, then the index is also an array, which is not supported
     										if (GetSizeByIdent(pStrIndexIdent, currentFuncIndex) > 1)
     											ExitOnCodeError(ERROR_MSG_INVALID_ARRAY_INDEX);
     
@@ -393,6 +397,7 @@ namespace _asm_
     										pOpList[i].iType = ASM_OPRAND_TYPE_REL_STACK_INDEX;
     										pOpList[i].iStackIndex = baseIndex;
     										pOpList[i].iOffsetIndex = offsetIndex;
+											pOpList[i].iSize = arraySize;
     									}
     									else
     									{
@@ -564,9 +569,11 @@ namespace _asm_
     			case ASM_OPRAND_TYPE_REL_STACK_INDEX:
     				fwrite(&currentOp.iStackIndex, sizeof(int), 1, pExeFile);
     				fwrite(&currentOp.iOffsetIndex, sizeof(int), 1, pExeFile);
+					fwrite(&currentOp.iSize, sizeof(int), 1, pExeFile);
 #ifdef LOG_ON
     				printf("opStackIndex: %d\n", currentOp.iStackIndex);
     				printf("opOffsetIndex: %d\n", currentOp.iOffsetIndex);
+					printf("opSize: %d\n", currentOp.iSize);
 #endif
     				break;
     
@@ -784,6 +791,8 @@ namespace _asm_
     				fprintf(pExeFile, "%-20s; opStackIndex: %d\n", buf1, currentOp.iStackIndex);
     				swrite(&currentOp.iOffsetIndex, sizeof(int), 1, buf1);
     				fprintf(pExeFile, "%-20s; opOffsetIndex: %d\n", buf1, currentOp.iOffsetIndex);
+					swrite(&currentOp.iSize, sizeof(int), 1, buf1);
+					fprintf(pExeFile, "%-20s; opSize: %d\n", buf1, currentOp.iSize);
     				break;
     
     			case ASM_OPRAND_TYPE_FUNC_INDEX:

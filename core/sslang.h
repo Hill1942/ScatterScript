@@ -22,6 +22,7 @@ namespace _asm_
 			int   iHostAPICallIndex;
 			int   iReg;
 		};
+		int iSize;
 		int iOffsetIndex;
 	};
 
@@ -149,6 +150,7 @@ namespace _vm
 			int   iReg;
 		};
 		int iOffsetIndex;
+		int iSize;
 	};
 
 	struct Instruction
