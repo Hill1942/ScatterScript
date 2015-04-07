@@ -17,8 +17,7 @@ And the development environment is Windows 7 Professional
   make
   ```
 
-- For Mac OS X users: sorry, I don't have a mac, so you need to get the source code and adapt to mac version by yourself!   >_<
-
+- For Mac OS X users: Open in Xcode 6.0 or higher, and build!
 
 ### Grammar
 
