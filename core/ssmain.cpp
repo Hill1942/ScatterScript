@@ -175,6 +175,15 @@ int main(int argc, char* argv[])
 			strcat(delLine, compiler.outAssembleFilename);
 			system(delLine);
 			#endif
+                
+#ifdef __APPLE__
+            char delLine[256];
+            strcpy(delLine, "rm ");
+            strcat(delLine, compiler.outAssembleFilename);
+            system(delLine);
+            
+#endif
+                
 
 				break;
 			}
