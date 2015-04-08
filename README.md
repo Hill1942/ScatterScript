@@ -114,3 +114,35 @@ This will convert assemble file to the final byte-code **main.sse**.
 - **<span style="font-size:16px">Run</span>**: ss `sse-file`
   + example:  ss main.sse   
 This will run executable file **main.sse**
+
+### Finally:
+
+ScatterScript is just a **toy language**, when I try to get the prime number from 1-250000 by using the following code:
+```
+func _main() {
+	var i = 2;
+	var a = 2;
+	var top = 250000;
+	var cop = 500;
+	while (i <= top) {
+		a = 2;
+		while (a <= cop) {
+			if ((i % a == 0) && (i != a)) {
+				a+=1;
+				break;
+			} else {
+				if (a == cop) {
+					ssprint(i);
+					ssprint("\n");
+				}
+			}
+			a+=1;
+		}
+		i+=1;
+	}
+	return 0;
+}
+```
+
+ScatterScript takes 139.70s, however, CPython takes 7.17s and Nodejs only takes 1.36s
+
