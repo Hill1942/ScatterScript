@@ -565,12 +565,12 @@ namespace _cl
 			opType = GetCurrentOperator();
 
 			ParseSubExpression();
-
+			//pop t1
 			instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, compiler.currentScope,
 				IL_INSTR_POP);
 			_IL::AddILCodeOprand_Variable(&compiler.functionTable, compiler.currentScope,
 				instrIndex, compiler.tempVar1SymbolIndex);
-
+			//pop t0
 			instrIndex = _IL::AddILCodeInstr(&compiler.functionTable, compiler.currentScope,
 				IL_INSTR_POP);
 			_IL::AddILCodeOprand_Variable(&compiler.functionTable, compiler.currentScope,
