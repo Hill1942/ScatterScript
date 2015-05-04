@@ -3,6 +3,7 @@ command-lang/
 Debug/
 bin/*.txt
 build/
+*.DS_Store
 *.opensdf
 *.sdf
 *.suo
